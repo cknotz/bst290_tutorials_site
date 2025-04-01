@@ -1,0 +1,27 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "R Tutorials for BST290"
+  navbar:
+    background: primary
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - href: index.qmd
+        text: Home
+      - href: tutorial_0.qmd
+        text: Tutorial 0
+      - href: tutorial_1.qmd
+        text: Tutorial 1
+
+format:
+  html:
+    theme: flatly
+    css: styles.css
+    toc: true
+
+
+

@@ -1,0 +1,9 @@
+---
+title: "Welcome!"
+---
+
+**Currently work in progress!!!**
+
+This website features all `R` tutorials for the BST290 *Kvantitativ forskningsmetode* course. Simply use the menu on the side to navigate to and between the different tutorials and use the search field to find tutorials with specific contents.
+
+That's it :-) Lykke til!
