@@ -285,8 +285,8 @@ window.Quarto = {
   <li><a href="#estimating-the-confidence-interval-using-a-built-in-function" id="toc-estimating-the-confidence-interval-using-a-built-in-function" class="nav-link" data-scroll-target="#estimating-the-confidence-interval-using-a-built-in-function">Estimating the confidence interval using a built-in function</a>
   <ul class="collapse">
   <li><a href="#using-t.test" id="toc-using-t.test" class="nav-link" data-scroll-target="#using-t.test">Using <code>t.test()</code></a></li>
-  </ul></li>
   <li><a href="#adjusting-the-level-of-confidence" id="toc-adjusting-the-level-of-confidence" class="nav-link" data-scroll-target="#adjusting-the-level-of-confidence">Adjusting the level of confidence</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#voluntary-calculating-a-confidence-interval-by-hand" id="toc-voluntary-calculating-a-confidence-interval-by-hand" class="nav-link" data-scroll-target="#voluntary-calculating-a-confidence-interval-by-hand">(Voluntary) Calculating a confidence interval “by hand”</a>
@@ -435,9 +435,8 @@ window.Quarto = {
 <p>You also see the sample mean of 7.86014 mentioned again at the bottom of the output.</p>
 <div style="page-break-after: always;"></div>
 </section>
-</section>
-<section id="adjusting-the-level-of-confidence" class="level2">
-<h2 class="anchored" data-anchor-id="adjusting-the-level-of-confidence">Adjusting the level of confidence</h2>
+<section id="adjusting-the-level-of-confidence" class="level3">
+<h3 class="anchored" data-anchor-id="adjusting-the-level-of-confidence">Adjusting the level of confidence</h3>
 <p>It is easy to get a different level of confidence: You just change the level with the <code>conf.level</code> option (“argument”). For example, to get a 90% confidence interval, you run:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="at">x =</span> ess<span class="sc">$</span>stflife_num, <span class="at">conf.level =</span> <span class="fl">0.90</span>)</span>
@@ -470,6 +469,7 @@ window.Quarto = {
 </div>
 <p><em>And that is it!</em> You now know how to calculate a confidence interval for a sample mean in <code>R</code>. You may have noticed that we spent quite a bit of time on data cleaning at the beginning while the “meat part” — the actual estimation – was short. This reflects the central aspect of data analysis in <code>R</code>: The easy things are difficult, but the difficult things are easy.</p>
 <div style="page-break-after: always;"></div>
+</section>
 </section>
 </section>
 <section id="conclusion" class="level1">
@@ -987,7 +987,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom","closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","closeEffect":"zoom","selector":".lightbox","openEffect":"zoom","loop":false});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

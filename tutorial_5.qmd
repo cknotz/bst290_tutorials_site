@@ -125,7 +125,7 @@ You also see the sample mean of `r round(mean(ess$stflife_num), digits = 5)` men
 
 
 \newpage
-## Adjusting the level of confidence
+### Adjusting the level of confidence
 
 It is easy to get a different level of confidence: You just change the level with the `conf.level` option ("argument"). For example, to get a 90% confidence interval, you run:
 ```{r ci90, echo=T, eval=T, collapse=T}

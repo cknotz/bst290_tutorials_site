@@ -198,11 +198,13 @@ Now that we know that there is a positive association between age and religiosit
 
 The `cor.test()` function allows you to run the significance test that is explained in Kellstedt and Whitten (2018, 183-184). To use this function, you just specify the two variables you want to use. It will take care of the `NA`s by itself.
 
-*Important to know:* There are different ways in which you can use this function:
+::: {.callout-important title="There are different ways in which you can use this function:"}
 
 * By default, the function tests if the correlation coefficient is *different from 0* or not. In other words, it tests if the two variables are associated *in some way*, be it positive or negative. (This is also the procedure that is described in Kellstedt and Whitten). 
 * You can also let the function test more specifically if the correlation coefficient is *larger than 0*---if there is a positive correlation. To do that, you set the `alternative` option to `"greater"`.
 * And you can test specifically if the correlation coefficient is *smaller than 0*---if there is a negative relationship. In that case, you set `alternative="less"`.
+
+:::
 
 \newpage
 ### Testing if the true *r* is equal to 0 or not (default setting)

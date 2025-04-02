@@ -165,30 +165,6 @@ In human language:
 You can *save* the result with the assignment operator (`<-`) as shown on the previous page with `select()`.
 
 \newpage
-## `drop_na()`: Getting rid of missing values (`NA`s)
-
-If you are working with any real-life dataset, there will usually be some missing observations: For example, some survey respondents may have refused to answer some questions, or did not know what to say. Such missing observations will be stored as `NA` ("not available") in `R`.
-
-It is often helpful to be able to get rid off `NA`s. This is for example the case when you make graphs --- unless you exclude the `NA`s, they will show up in your graph, and that is often not helpful.^[Dropping `NA`s during data cleaning also helps you avoid having to use the `na.rm` option when you calculate summary statistics.]
-
-You can exclude `NA`s from your dataset with the `drop_na()` function from the `tidyverse`. You can use this function in two ways:
-
-1. If you use it without any further specifications, it simply drops all observations from the dataset if they have any missing information *on any variable* (in this case, the code also saves the result as `ess_noNAs`):
-```{r dropna1, eval=F, echo=T}
-ess_noNAs <- drop_na(ess)
-```
-
-**Careful:** Using `drop_na()` in this general way is a kind of "nuclear option" --- and, like other types of nuclear options, this approach can have serious negative consequences! For example, if you have survey data and there is one respondent who refused to state their income but answered all other questions, then that respondent will have an `NA` on the income-variable --- and only there. By using `drop_na()` in its general form, *all* information about that respondent will be removed, even if only the income-variable is missing for them. *Therefore: You always need to be very careful when you exclude missing observations --- and document your code, so that you can always go back and change things if you need to!*
-
-2. An alternative way is to exclude only those observations that have missing information on a specific variable:
-```{r dropna2, eval=F, echo=T}
-ess_noNAs <- drop_na(ess, agea)
-```
-
-In this second case, you would drop only those observations that have `NA`s on the `agea` variable (i.e, respondents who did not state how old they are) --- regardless of how the other variables look like. You can also specify more than one variable here, if you like.
-
-
-\newpage
 # Connecting operations with the "pipe" (`%>%` or `|>`)
 
 So far you were doing one operation at a time: First selecting variables, then filtering observations, then dropping `NA`s.
