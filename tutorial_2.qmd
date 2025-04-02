@@ -1,5 +1,6 @@
 ---
 title: "Tutorial 2: Importing & exploring your data"
+author: "Carlo Knotz"
 bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 format:
   html:
