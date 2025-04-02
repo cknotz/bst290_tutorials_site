@@ -1,5 +1,5 @@
 ---
-title: "`R` Tutorial 0: Installation & Setup"
+title: "Tutorial 0: Installation & Setup"
 author: "Carlo Knotz"
 bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 format:
@@ -11,8 +11,12 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial0_install-setup.pdf){.btn .btn-outline-primary .btn role="button"} 
+
 \newpage
 # Introduction
+
 
 To successfully complete the *Kvantitativ forskningsmetode* course, you need to work with `R` and `RStudio`.
 

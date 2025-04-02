@@ -11,6 +11,8 @@ editor_options:
   chunk_output_type: console
 ---
 
+[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial1_firststeps.pdf){.btn .btn-outline-primary .btn role="button"} 
+
 # Introduction
 
 In the previous tutorial, you have learned how you can install `R` and `RStudio` and how you install add-on packages.

@@ -6,18 +6,16 @@ website:
   title: "R Tutorials for BST290"
   navbar:
     background: primary
+  back-to-top-navigation: true
+  page-navigation: true
   sidebar:
     style: "docked"
     search: true
     contents:
       - href: index.qmd
-        text: Home
       - href: tutorial_0.qmd
-        text: Tutorial 0
       - href: tutorial_1.qmd
-        text: Tutorial 1
       - href: tutorial_2.qmd
-        text: Tutorial 2
 
 format:
   html:

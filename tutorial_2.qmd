@@ -10,6 +10,8 @@ editor_options:
   chunk_output_type: console
 ---
 
+[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial2_gettingtoknow.pdf){.btn .btn-outline-primary .btn role="button"} 
+
 # Introduction
 
 You have so far learned how to install and set up `R` and `RStudio`, how you can install and load packages, how data look like in `R`, and how you write and use code. All of this was essentially a warm-up.
