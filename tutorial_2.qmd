@@ -515,14 +515,14 @@ The ESS dataset file you just downloaded is a `.dta` file --- which means this d
 
 But, luckily, there are a few packages that allow you to import these types of files into `R`. One of these is the `haven` package, and this is the one we will be using in this course.^[Other alternatives are `foreign`, `memisc`, or `readstata13`.] `haven` is a part of the `tidyverse` collection (see https://haven.tidyverse.org/), which means that you already installed it when you installed the `tidyverse` earlier. 
 
----
+::: {.callout-note title="Just in case"}
 
-*Just in case*: If `R` gives you an error message (e.g., "Package `labelled` not found), you may have to quickly install the two packages with:
+If `R` gives you an error message (e.g., "Package `labelled` not found), you may have to quickly install the two packages with:
 
  - `install.packages("haven")`
  - `install.packages("labelled")`
- 
----
+
+:::
 
 `haven` includes three functions to import the three main "commercial" dataset file formats:
 

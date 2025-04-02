@@ -907,13 +907,23 @@ window.Quarto = {
 </ul>
 <p>The ESS dataset file you just downloaded is a <code>.dta</code> file — which means this dataset is saved in the Stata file format, and <code>R</code> by itself cannot open it.</p>
 <p>But, luckily, there are a few packages that allow you to import these types of files into <code>R</code>. One of these is the <code>haven</code> package, and this is the one we will be using in this course.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> <code>haven</code> is a part of the <code>tidyverse</code> collection (see https://haven.tidyverse.org/), which means that you already installed it when you installed the <code>tidyverse</code> earlier.</p>
-<hr>
-<p><em>Just in case</em>: If <code>R</code> gives you an error message (e.g., “Package <code>labelled</code> not found), you may have to quickly install the two packages with:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Just in case">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Just in case
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If <code>R</code> gives you an error message (e.g., “Package <code>labelled</code> not found), you may have to quickly install the two packages with:</p>
 <ul>
 <li><code>install.packages("haven")</code></li>
 <li><code>install.packages("labelled")</code></li>
 </ul>
-<hr>
+</div>
+</div>
 <p><code>haven</code> includes three functions to import the three main “commercial” dataset file formats:</p>
 <ul>
 <li><code>read_sav()</code> for <code>.sav</code> files</li>
@@ -1490,7 +1500,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"selector":".lightbox","descPosition":"bottom","closeEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

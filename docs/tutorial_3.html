@@ -513,9 +513,19 @@ window.Quarto = {
 <p>The “traditional” pipe operator (<code>%&gt;%</code>) that we used so far is a part of the <code>tidyverse</code> — and it will only work if you have the <code>tidyverse</code> or one of the central packages (<code>dplyr</code>, <code>ggplot2</code>) loaded.</p>
 <p>With the release of <code>R</code> version 4.1.0, a new pipe operator was introduced: <code>|&gt;</code>. This one works like the old one, but is “native” to <code>R</code> — you shouldn’t need to load packages to be able to use it.</p>
 <p>While there are some differences in how they work, <strong>you can generally use either of them</strong> (or both) without running into any problems or getting wrong results.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
-<hr>
-<p><strong>Important:</strong> The pipe operators may not work with all functions in <code>R</code>. They should work fine with functions that come from the <code>tidyverse</code> package collection (<code>select()</code>, <code>filter()</code>, <code>drop_na()</code>,…) and it works also with <em>some</em> other functions, but this is not always the case. If you notice that your “pipeline” breaks when you add a particular function, then it is best if you just store the result after the last functioning step of your pipeline and then use that result with the “offending” function separately.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
-<hr>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The two pipe operators may not work with all functions in <code>R</code>. They should work fine with functions that come from the <code>tidyverse</code> package collection (<code>select()</code>, <code>filter()</code>, <code>drop_na()</code>,…) and they work also with <em>some</em> other functions, but this is not always the case. If you notice that your “pipeline” breaks when you add a particular function, then it is best if you just store the result after the last functioning step of your pipeline and then use that result with the “offending” function separately.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </section>
 </section>

@@ -220,11 +220,11 @@ With the release of `R` version 4.1.0, a new pipe operator was introduced: `|>`.
 
 While there are some differences in how they work, **you can generally use either of them** (or both) without running into any problems or getting wrong results.^[See also <https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/>.]
 
----
+::: {.callout-important}
 
-**Important:** The pipe operators may not work with all functions in `R`. They should work fine with functions that come from the `tidyverse` package collection (`select()`, `filter()`, `drop_na()`,...) and it works also with *some* other functions, but this is not always the case. If you notice that your "pipeline" breaks when you add a particular function, then it is best if you just store the result after the last functioning step of your pipeline and then use that result with the "offending" function separately.^[Alternatively, see this RStudio Community board discussion for a solution: https://community.rstudio.com/t/pipe-operator-does-not-work/66377]
+The two pipe operators may not work with all functions in `R`. They should work fine with functions that come from the `tidyverse` package collection (`select()`, `filter()`, `drop_na()`,...) and they work also with *some* other functions, but this is not always the case. If you notice that your "pipeline" breaks when you add a particular function, then it is best if you just store the result after the last functioning step of your pipeline and then use that result with the "offending" function separately.^[Alternatively, see this RStudio Community board discussion for a solution: https://community.rstudio.com/t/pipe-operator-does-not-work/66377]
 
----
+:::
 
 
 \newpage
