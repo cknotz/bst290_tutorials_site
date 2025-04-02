@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carlo Knotz">
+
+<title>Tutorial 11: Logistic regression for binomial dependent variables – R Tutorials for BST290</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./tutorial_10.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R Tutorials for BST290</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorial_11.html">Tutorial 11: Logistic regression for binomial dependent variables</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hei!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 0: Installation &amp; Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 1: Your first steps in <code>R</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 2: Importing &amp; exploring your data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 3: Data cleaning &amp; management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 4: Data visualization with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 5: Confidence intervals</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 6: Tabular Analysis &amp; the $\chi^2$ test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7a: <em>t</em>-test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7b: Correlation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 8: Bivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 9: Multivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 10: <em>It depends!</em> Interactive regression models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_11.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Tutorial 11: Logistic regression for binomial dependent variables</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses">Hypotheses</a>
+  <ul class="collapse">
+  <li><a href="#setup-and-data-management" id="toc-setup-and-data-management" class="nav-link" data-scroll-target="#setup-and-data-management">Setup and data management</a></li>
+  <li><a href="#data-import-and-initial-data-cleaning" id="toc-data-import-and-initial-data-cleaning" class="nav-link" data-scroll-target="#data-import-and-initial-data-cleaning">Data import and initial data cleaning</a></li>
+  <li><a href="#preparing-the-dependent-variable" id="toc-preparing-the-dependent-variable" class="nav-link" data-scroll-target="#preparing-the-dependent-variable">Preparing the dependent variable</a>
+  <ul class="collapse">
+  <li><a href="#getting-rid-of-extra-categories" id="toc-getting-rid-of-extra-categories" class="nav-link" data-scroll-target="#getting-rid-of-extra-categories">Getting rid of extra categories</a></li>
+  <li><a href="#setting-the-reference-category" id="toc-setting-the-reference-category" class="nav-link" data-scroll-target="#setting-the-reference-category">Setting the reference category</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#descriptive-statistics" id="toc-descriptive-statistics" class="nav-link" data-scroll-target="#descriptive-statistics">Descriptive statistics</a></li>
+  <li><a href="#multivariate-logistic-regression" id="toc-multivariate-logistic-regression" class="nav-link" data-scroll-target="#multivariate-logistic-regression">Multivariate logistic regression</a>
+  <ul class="collapse">
+  <li><a href="#bivariate-model" id="toc-bivariate-model" class="nav-link" data-scroll-target="#bivariate-model">Bivariate model</a></li>
+  <li><a href="#multivariate-model" id="toc-multivariate-model" class="nav-link" data-scroll-target="#multivariate-model">Multivariate model</a></li>
+  <li><a href="#presenting-the-results-as-a-table" id="toc-presenting-the-results-as-a-table" class="nav-link" data-scroll-target="#presenting-the-results-as-a-table">Presenting the results as a table</a></li>
+  </ul></li>
+  <li><a href="#calculating-meaningful-quantities-of-interest" id="toc-calculating-meaningful-quantities-of-interest" class="nav-link" data-scroll-target="#calculating-meaningful-quantities-of-interest">Calculating meaningful quantities of interest</a>
+  <ul class="collapse">
+  <li><a href="#predicted-probabilities" id="toc-predicted-probabilities" class="nav-link" data-scroll-target="#predicted-probabilities">Predicted probabilities</a></li>
+  <li><a href="#marginal-effects" id="toc-marginal-effects" class="nav-link" data-scroll-target="#marginal-effects">Marginal effects</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tutorial 11: Logistic regression for binomial dependent variables</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carlo Knotz </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a href="https://raw.github.com/cknotz/bst290_tutorials/main/tutorial11_logit.pdf" class="btn btn-outline-primary" role="button">Download as PDF</a></p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>When working as a (social) data analyst, you will often be interested in outcomes that have two distinct values: Did someone vote in the last election or not? Is someone a union member or not? Does a country go to war or experience a coup d’état in a given year or not? You will, in other words, work with dependent variables that are <em>binary</em> or <em>dichotomous</em>.</p>
+<p>In addition, your theory for your outcome or dependent variable will often specify several different potential causes. For example, a person’s decision to vote in an election might depend their age (older people tend to be more likely to vote) but also their education or income. This means that you need to use multivariate regression to really test your theory.</p>
+<p>You already know what you would use in this case if you had a <em>linear</em> dependent variable: Ordinary least squares (OLS) regression. But one of the central assumptions underlying the OLS model is that the dependent variable must be linear — and this assumption does not hold if you are interested in electoral participation, union membership, or coups.</p>
+<p>Instead, you need to use the <strong>logistic regression</strong> (a.k.a., “logit”) model. The logistic regression model is specifically designed to analyze the effects of multiple independent variables on a binary outcome or dependent variable. An alternative is the <strong>probit regression model</strong>, which works slightly differently but will usually give you almost identical results.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>In this tutorial, you will learn how you estimate and interpret a logistic regression model. Topic-wise, we continue with the example from tutorial 6 on tabular analysis: Political participation in the form of voting in a national election.</p>
+<p>Before you continue here, make sure that you have read and understood the introduction to the logistic regression model in Kellstedt &amp; Whitten (2018, Chapter 12). Otherwise, you may be able to run the code shown here but you will not understand what any of this really means.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="hypotheses" class="level1">
+<h1>Hypotheses</h1>
+<p>As in Tutorial 6, we will look at how political participation differs by gender, and now also if the relationship is robust to controlling for some other variables (age, education, trade union membership). Just to remind you, the theory and hypotheses from Tutorial 6 were as follows:</p>
+<p>The guiding hypothesis for this analysis is: <em>Women have higher rates of political participation than men.</em></p>
+<p>The corresponding <em>null hypothesis</em> is that there is <em>no difference</em> between men and women when it comes to political participation.</p>
+<p>Similar to <em>Tutorial 6</em>, we study voting as our form of political participation.</p>
+<div style="page-break-after: always;"></div>
+<section id="setup-and-data-management" class="level2">
+<h2 class="anchored" data-anchor-id="setup-and-data-management">Setup and data management</h2>
+<p>As always, the start is to load the necessary packages, which are:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># for data management &amp; visualization</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prediction) <span class="co"># to calculate predicted probabilities</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(margins) <span class="co"># to calculate marginal effects</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg) <span class="co"># to present regression results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>prediction</code> and <code>margins</code> packages may be new to you (if you did not work through the extra part of Tutorial 9 on multivariate linear regression). These two packages are used to convert the results of regression analyses into more intuitive and useful “quantities of interest”, which is especially important when it comes to logistic regression, as you will see further below.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="data-import-and-initial-data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-import-and-initial-data-cleaning">Data import and initial data cleaning</h2>
+<p>This part is exactly as before and you should now already know what to do here (see Tutorials 8 and 9 for details):</p>
+<ol type="1">
+<li>Use <code>haven::read_dta()</code> to import the ESS round 7 (2014) dataset; save it as <code>ess7</code>;</li>
+<li>Transform the dataset into the familiar format using <code>labelled:: unlabelled()</code>;</li>
+<li>Trim the dataset:
+<ul>
+<li>Keep only observations from Norway;</li>
+<li>Select the following variables: <code>essround</code>, <code>idno</code>, <code>cntry</code>, <code>vote</code>, <code>eduyrs</code>, <code>agea</code>, <code>mbtru</code>, and <code>gndr</code>;</li>
+<li>Use the pipe to link everything;</li>
+<li>Save the trimmed dataset as <code>ess7</code>;</li>
+</ul></li>
+<li>If you like, create a data dictionary using <code>labelled::generate_dictionary()</code>;</li>
+</ol>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="preparing-the-dependent-variable" class="level2">
+<h2 class="anchored" data-anchor-id="preparing-the-dependent-variable">Preparing the dependent variable</h2>
+<section id="getting-rid-of-extra-categories" class="level3">
+<h3 class="anchored" data-anchor-id="getting-rid-of-extra-categories">Getting rid of extra categories</h3>
+<p>The previous part took care of most of the data cleaning and preparation, but the dependent variable (<code>vote</code>) needs a bit more work. We go over this in detail because the situation here is one that you may often encounter in practice, so it is good to know how to deal with it.</p>
+<p>You will see more clearly what the problem is when you let <code>R</code> print out a frequency table of the variable with <code>table()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess7<span class="sc">$</span>vote)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                 Yes                   No Not eligible to vote </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                <span class="dv">1127</span>                  <span class="dv">158</span>                  <span class="dv">150</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It turns out that the <code>vote</code> variable has <em>three</em> categories: “Yes”, “No”, and “Not eligible to vote”. This is a problem because the type of logistic regression model we use here works only for dependent variables that have exactly two categories.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>This means that if we want to use the <code>vote</code> variable, we first have to get rid of one category. In this case, it makes sense to get rid of the “Not eligible” category because the people who are not eligible to vote (e.g., immigrants) have by definition a probability of 0 to vote, which means they are not that interesting to us here.</p>
+<p>Therefore, we recode the <code>vote</code> variable by setting all cases that fall into the “Not eligible” category to missing (<code>NA</code>). To do that, we use the <code>na_if()</code> function. This function simply takes a variable (specified under <code>x</code> in the function) and replaces all observations that have a particular value (specified under <code>y</code>) with <code>NA</code>. In this case, we create a new version of <code>vote</code> which is <code>NA</code> if the original version of <code>vote</code> is equal to “Not eligible” and then replace the old with the new version in the dataset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">vote =</span> <span class="fu">na_if</span>(<span class="at">x =</span> vote,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">y =</span> <span class="st">"Not eligible to vote"</span>)) <span class="ot">-&gt;</span> ess7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Important:</strong> You obviously need to save the result with the assignment operator. In this case, we use the “reversed” assignment operator and save the dataset with the new version of the <code>vote</code> variable under the old name (<code>ess7</code>).</p>
+<div style="page-break-after: always;"></div>
+<p>If we now again tabulate the vote variable, the “Not eligible” category is empty:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess7<span class="sc">$</span>vote)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                 Yes                   No Not eligible to vote </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                <span class="dv">1127</span>                  <span class="dv">158</span>                    <span class="dv">0</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But you will also notice another thing: The “Not eligible” category is now empty, and therefore no longer useful. This means we can get rid of it by using <code>droplevels()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ess7<span class="sc">$</span>vote <span class="ot">&lt;-</span> <span class="fu">droplevels</span>(ess7<span class="sc">$</span>vote)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Another check reveals that the variable is now probably coded and has exactly two categories:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess7<span class="sc">$</span>vote)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> Yes   No </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1127</span>  <span class="dv">158</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="setting-the-reference-category" class="level3">
+<h3 class="anchored" data-anchor-id="setting-the-reference-category">Setting the reference category</h3>
+<p>A last thing: When you run a logistic regression model, <code>R</code> will take one category of the dependent variable as the ‘baseline’ or ‘reference’ category and then estimate the probability of an observation falling into the <em>other</em> category. For example, if the baseline category of <code>vote</code> is “No”, then <code>R</code> will estimate the probability of falling into the “Yes” category. <em>Importantly</em>, <code>R</code> might also go the other direction and take “Yes” as the reference category. In this case, the model will still be correct — but the interpretation might be weird.</p>
+<p>To be sure that <code>R</code> picks the correct reference category, it makes sense to set it explicitly. To do this, you use the <code>relevel()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ess7<span class="sc">$</span>vote <span class="ot">&lt;-</span> <span class="fu">relevel</span>(ess7<span class="sc">$</span>vote,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">ref =</span> <span class="st">"No"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With this function, we tell <code>R</code> that it should replace the <code>vote</code> variable with a new version of itself, in which “No” is the reference or baseline category.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+</section>
+<section id="descriptive-statistics" class="level1">
+<h1>Descriptive statistics</h1>
+<p>It is always good practice to present your dependent variable to your readers in your report or thesis so that they understand what you are working with. In this case, a bar graph would make sense:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(vote) <span class="sc">%&gt;%</span> <span class="co"># we remove the NAs for the graph</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> vote)) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Participated in last national election?"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Number of observations"</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_11_files/figure-html/votegraph-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="tutorial_11_files/figure-html/votegraph-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p><em>Normally</em>, you would now also do more uni- and bivariate analyses using graphs and tables and present these (see e.g., Tutorial 9). For the sake of brevity, however, we will now move straight to the multivariate regression analysis.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="multivariate-logistic-regression" class="level1">
+<h1>Multivariate logistic regression</h1>
+<p>You probably remember that you can run a <em>linear</em> regression in <code>R</code> with the <code>lm()</code> function. Inside this function, you specify the model formula (e.g., <code>income ~ education + age + gender</code>) and the dataset (<code>data = mystudy</code>). Estimating a logistic regression model works almost the same way, with two small but important exceptions.</p>
+<p>First, we would not use the <code>lm()</code> function, which is for <strong>l</strong>inear <strong>m</strong>odels only. Instead, we use the <code>glm()</code> function, which stands for <strong>g</strong>eneralized <strong>l</strong>inear <strong>m</strong>odels. The <code>glm()</code> function allows you to estimate regression models where your dependent variable is not linear — for example, logistic regression with a binary variable, but also other types of models for different types of categorical and “non-linear” variables.</p>
+<p>And this is also the second difference: We have to tell <code>R</code> what type of dependent variable we have, and what type of model we want to use. We do this by specifying the <em>link</em> function between the dependent variable and the independent variables (see Kellstedt &amp; Whitten 2018, Chapter 12 for a detailed explanation of what a “link function” is) with the <code>family</code> option (“<em>argument</em>”). In our case, because our dependent variable <code>vote</code> is a <em>binomial</em> variable (a categorical variable with two categories) we specify <code>family="binomial"</code>.</p>
+<p>As in the case of <code>lm()</code>, you first run the model and store the results as a model object. Then you can let <code>R</code> show you a summary of the results with <code>summary()</code>.</p>
+<div style="page-break-after: always;"></div>
+<section id="bivariate-model" class="level2">
+<h2 class="anchored" data-anchor-id="bivariate-model">Bivariate model</h2>
+<p>As before, we start with a bivariate model that includes only the main independent variable, <code>gndr</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">glm</span>(vote <span class="sc">~</span> gndr ,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> ess7, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>Call<span class="sc">:</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(<span class="at">formula =</span> vote <span class="sc">~</span> gndr, <span class="at">family =</span> <span class="st">"binomial"</span>, <span class="at">data =</span> ess7)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>Coefficients<span class="sc">:</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            Estimate Std. Error z value <span class="fu">Pr</span>(<span class="sc">&gt;</span><span class="er">|</span>z<span class="sc">|</span>)    </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>(Intercept)   <span class="fl">1.8891</span>     <span class="fl">0.1144</span>  <span class="fl">16.517</span>   <span class="sc">&lt;</span><span class="fl">2e-16</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>gndrFemale    <span class="fl">0.1632</span>     <span class="fl">0.1709</span>   <span class="fl">0.955</span>     <span class="fl">0.34</span>    </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>Signif. codes<span class="sc">:</span>  <span class="dv">0</span> <span class="st">'***'</span> <span class="fl">0.001</span> <span class="st">'**'</span> <span class="fl">0.01</span> <span class="st">'*'</span> <span class="fl">0.05</span> <span class="st">'.'</span> <span class="fl">0.1</span> <span class="st">' '</span> <span class="dv">1</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>(Dispersion parameter <span class="cf">for</span> binomial family taken to be <span class="dv">1</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    Null deviance<span class="sc">:</span> <span class="fl">958.03</span>  on <span class="dv">1284</span>  degrees of freedom</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>Residual deviance<span class="sc">:</span> <span class="fl">957.12</span>  on <span class="dv">1283</span>  degrees of freedom</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  (<span class="dv">151</span> observations deleted due to missingness)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>AIC<span class="sc">:</span> <span class="fl">961.12</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>Number of Fisher Scoring iterations<span class="sc">:</span> <span class="dv">4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>At first sight, the model results look similar to what you got from <code>lm()</code>: You get coefficient estimates under <code>Estimate</code>, standard errors, <em>p</em>-values, and significance starts in addition to some summary statistics.</p>
+<p><strong>But be careful:</strong> The coefficient estimates you get from a logistic regression model are logarithmic odds-ratios (or “log-odds”) and these very difficult to interpret by themselves. All you can really directly interpret are the <em>p</em>-values and the signs of the coefficients (are they positive or negative?). In other words, all you can see is if a variable has a positive or negative effect and if that effect is statistically different from 0 — but <strong>the coefficient estimates from a logit model cannot really be interpreted as measures of how strong or weak a given effect is exactly</strong>.</p>
+<p>In this case, you can see that the dummy for females (which <code>R</code> automatically created) is positively associated with voting (i.e., women have a higher probability of voting than men), but also that the relationship is not statistically significant (and we conclude therefore that there is most likely no difference between men and women).</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="multivariate-model" class="level2">
+<h2 class="anchored" data-anchor-id="multivariate-model">Multivariate model</h2>
+<p>Next, we see what happens when we include the other independent variables and make the model multivariate:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(vote <span class="sc">~</span> gndr <span class="sc">+</span> eduyrs <span class="sc">+</span> agea <span class="sc">+</span> mbtru,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> ess7, <span class="at">family =</span> <span class="st">"binomial"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod2)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>Call<span class="sc">:</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(<span class="at">formula =</span> vote <span class="sc">~</span> gndr <span class="sc">+</span> eduyrs <span class="sc">+</span> agea <span class="sc">+</span> mbtru, <span class="at">family =</span> <span class="st">"binomial"</span>, </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> ess7)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>Coefficients<span class="sc">:</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                      Estimate Std. Error z value <span class="fu">Pr</span>(<span class="sc">&gt;</span><span class="er">|</span>z<span class="sc">|</span>)    </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>(Intercept)          <span class="sc">-</span><span class="fl">0.923511</span>   <span class="fl">0.525497</span>  <span class="sc">-</span><span class="fl">1.757</span>   <span class="fl">0.0788</span> .  </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>gndrFemale            <span class="fl">0.122934</span>   <span class="fl">0.177377</span>   <span class="fl">0.693</span>   <span class="fl">0.4883</span>    </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>eduyrs                <span class="fl">0.114889</span>   <span class="fl">0.027353</span>   <span class="fl">4.200</span> <span class="fl">2.67e-05</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>agea                  <span class="fl">0.034218</span>   <span class="fl">0.005432</span>   <span class="fl">6.300</span> <span class="fl">2.98e-10</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>mbtruYes, previously <span class="sc">-</span><span class="fl">0.418963</span>   <span class="fl">0.245144</span>  <span class="sc">-</span><span class="fl">1.709</span>   <span class="fl">0.0874</span> .  </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>mbtruNo              <span class="sc">-</span><span class="fl">0.553805</span>   <span class="fl">0.206417</span>  <span class="sc">-</span><span class="fl">2.683</span>   <span class="fl">0.0073</span> <span class="sc">**</span> </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>Signif. codes<span class="sc">:</span>  <span class="dv">0</span> <span class="st">'***'</span> <span class="fl">0.001</span> <span class="st">'**'</span> <span class="fl">0.01</span> <span class="st">'*'</span> <span class="fl">0.05</span> <span class="st">'.'</span> <span class="fl">0.1</span> <span class="st">' '</span> <span class="dv">1</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>(Dispersion parameter <span class="cf">for</span> binomial family taken to be <span class="dv">1</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    Null deviance<span class="sc">:</span> <span class="fl">957.51</span>  on <span class="dv">1282</span>  degrees of freedom</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>Residual deviance<span class="sc">:</span> <span class="fl">880.50</span>  on <span class="dv">1277</span>  degrees of freedom</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  (<span class="dv">153</span> observations deleted due to missingness)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>AIC<span class="sc">:</span> <span class="fl">892.5</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>Number of Fisher Scoring iterations<span class="sc">:</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The effect of being a woman is still the same as before: The coefficient is positive, but not significant. Thus, there is probably no difference between men and women when it comes to voting in elections.</p>
+<p>But you also see that the other variables have significant effects: Every additional year of education completed significantly raises one’s probability to participate in an election, all else held constant, and so does every additional year of age.</p>
+<p>The trade union membership variable is a categorical variable, and thus has a different interpretation: Here the (omitted) baseline or reference category is “Being a union member”, and the displayed coefficients for “Not a member” and “Previously been a member” indicate the differences to that reference category. In this case, having previously been a union member and not being a union member corresponds to a lower chance of participating in an election, and the difference is significant at conventional levels in the case of the “No” category.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="presenting-the-results-as-a-table" class="level2">
+<h2 class="anchored" data-anchor-id="presenting-the-results-as-a-table">Presenting the results as a table</h2>
+<p>As in the case of a linear regression analysis before, it is important to present these results in a proper table. And here you can again use the <code>texreg()</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screenreg</span>(<span class="fu">list</span>(mod1,mod2),</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">stars =</span> <span class="fl">0.05</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">custom.coef.names =</span> <span class="fu">c</span>(<span class="st">"Intercept"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Female"</span>,<span class="st">"Years of educ. completed"</span>,<span class="st">"Age"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Previous union member"</span>,<span class="st">"Not a union member"</span>))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">============================================</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                          Model <span class="dv">1</span>    Model <span class="dv">2</span>  </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="sc">----------------------------------------------</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>Intercept                    <span class="fl">1.89</span> <span class="sc">*</span>    <span class="sc">-</span><span class="fl">0.92</span>  </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                            (<span class="fl">0.11</span>)     (<span class="fl">0.53</span>) </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>Female                       <span class="fl">0.16</span>       <span class="fl">0.12</span>  </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                            (<span class="fl">0.17</span>)     (<span class="fl">0.18</span>) </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>Years of educ. completed                <span class="fl">0.11</span> <span class="sc">*</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                                       (<span class="fl">0.03</span>) </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>Age                                     <span class="fl">0.03</span> <span class="sc">*</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>                                       (<span class="fl">0.01</span>) </span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>Previous union member                  <span class="sc">-</span><span class="fl">0.42</span>  </span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                                       (<span class="fl">0.25</span>) </span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>Not a union member                     <span class="sc">-</span><span class="fl">0.55</span> <span class="sc">*</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>                                       (<span class="fl">0.21</span>) </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="sc">----------------------------------------------</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>AIC                        <span class="fl">961.12</span>     <span class="fl">892.50</span>  </span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>BIC                        <span class="fl">971.44</span>     <span class="fl">923.45</span>  </span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>Log Likelihood            <span class="sc">-</span><span class="fl">478.56</span>    <span class="sc">-</span><span class="fl">440.25</span>  </span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>Deviance                   <span class="fl">957.12</span>     <span class="fl">880.50</span>  </span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>Num. obs.                 <span class="dv">1285</span>       <span class="dv">1283</span>     </span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">============================================</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="er">*</span> p <span class="sc">&lt;</span> <span class="fl">0.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is also helpful to you because you get a few more helpful summary statistics like the BIC and AIC information criteria (lower values mean a better-fitting model) and the deviance (a measure that gives you an indication of how far off your model is, comparable to the RMSE in a linear regression model). The log-likelihood is a quite cryptic statistic and primarily used to evaluate the overall significance of your model.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>Still: All you can say is whether a variable has a significant effect, and in which direction that effect goes — but the main problem remains: <strong>You cannot say by how large the effect of a variable really is!</strong> To do so, you need to calculate predicted probabilities or changes in predicted probabilities — and this comes next.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="calculating-meaningful-quantities-of-interest" class="level1">
+<h1>Calculating meaningful quantities of interest</h1>
+<p>You may remember from the previous tutorials that you can use the <code>prediction</code> and <code>margins</code> packages to calculate predicted values and marginal effects based on a linear regression model result. And you can do the same with a logistic regression model, the only difference is that everything is expressed in <em>predicted probabilities</em> or changes in these probabilities.</p>
+<section id="predicted-probabilities" class="level2">
+<h2 class="anchored" data-anchor-id="predicted-probabilities">Predicted probabilities</h2>
+<p>The best place to start is with overall predicted probabilities because these are the most intuitive to interpret. To get these, we use the <code>prediction()</code> function from the <code>prediction</code> package.</p>
+<p>When we use this function, we need to specify which model we want to base the prediction on and over which values of which variable. Since our main interest is in the effect of gender, we start by getting the predicted probabilities of voting for men and women based on the multivariate model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction</span>(mod2,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Data frame with 2566 predictions from
+ glm(formula = vote ~ gndr + eduyrs + agea + mbtru, family = "binomial", 
+    data = ess7)
+with average predictions:</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   gndr      x
+   Male 0.8711
+ Female 0.8834</code></pre>
+</div>
+</div>
+<p>The numbers you get here are the predicted probabilities of voting in the usual 0-1 notation, where 1 corresponds to 100%. You can see that men have almost exactly the same probability of voting as women: 87% compared to 88%.</p>
+<p>To also get measures of uncertainty and statistical significance (<em>p</em>-values &amp; confidence intervals), we can use the <code>prediction_summary()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(mod2,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> at(gndr) Prediction      SE     z p  lower  upper
+     Male     0.8711 0.01240 70.23 0 0.8468 0.8954
+   Female     0.8834 0.01269 69.62 0 0.8585 0.9083</code></pre>
+</div>
+</div>
+<p>Here, the <em>p</em>-values tell us that both predicted probabilities are significantly different from 0: We can say that both men and women in the overall Norwegian population have a probability of voting that is higher than 0 (which is arguably not very surprising).</p>
+<p>The more interesting (but harder to see) thing is that the confidence interval for one gender include the predicted value of the other gender. For example, the confidence interval for the predicted probability of voting for men includes the predicted value for women. This reflects again the lack of a statistically significant effect of gender.</p>
+<p>And this lack of a statistically significant difference between men and women is probably easier to see when you visualize the result (as before, by “piping” the result into a `<code>ggplot()</code> graph):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(mod2,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">at(gndr)</span><span class="st">`</span>, <span class="at">y =</span> Prediction, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper)) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_linerange</span>() <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(.<span class="dv">85</span>,.<span class="dv">95</span>,.<span class="dv">01</span>),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span> <span class="co"># to get real percentages</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Gender"</span>, <span class="at">y =</span> <span class="st">"Predicted probability of voting"</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"95% confidence intervals."</span>) <span class="sc">+</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_11_files/figure-html/pred1graph-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="tutorial_11_files/figure-html/pred1graph-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The conclusion to be drawn here is then obviously that our theory is wrong and we need to stick with the null hypothesis: Gender does not matter for electoral participation.</p>
+<div style="page-break-after: always;"></div>
+<p>You can of course use the <code>prediction()</code> function also to get predicted probabilities for numeric independent variables. And, in this case, this also gets us a more interesting result.</p>
+<p>For example, let’s look at how the effect of education (<code>eduyrs</code>) on voting when expressed in predicted probabilities. To get these (plus measures of uncertainty), we use the <code>prediction_summary()</code> function and specify a sequence of values of <code>eduyrs</code> over which these should be calculated:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(mod2,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">at =</span> <span class="fu">list</span>(<span class="at">eduyrs =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">25</span>, <span class="at">by =</span> <span class="dv">1</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> at(eduyrs) Prediction       SE      z          p  lower  upper
+          0     0.6256 0.078460  7.973  1.547e-15 0.4718 0.7794
+          1     0.6496 0.071000  9.149  5.764e-20 0.5104 0.7887
+          2     0.6728 0.063614 10.577  3.811e-26 0.5482 0.7975
+          3     0.6954 0.056396 12.330  6.234e-35 0.5848 0.8059
+          4     0.7171 0.049430 14.507  1.099e-47 0.6202 0.8139
+          5     0.7378 0.042792 17.243  1.266e-66 0.6540 0.8217
+          6     0.7577 0.036551 20.730  1.857e-95 0.6861 0.8293
+          7     0.7766 0.030769 25.239 1.514e-140 0.7163 0.8369
+          8     0.7944 0.025505 31.148 5.406e-213 0.7444 0.8444
+          9     0.8113 0.020819 38.969  0.000e+00 0.7705 0.8521
+         10     0.8271 0.016781 49.290  0.000e+00 0.7942 0.8600
+         11     0.8420 0.013483 62.448  0.000e+00 0.8155 0.8684
+         12     0.8558 0.011041 77.513  0.000e+00 0.8341 0.8774
+         13     0.8686 0.009558 90.882  0.000e+00 0.8499 0.8874
+         14     0.8806 0.009012 97.708  0.000e+00 0.8629 0.8982
+         15     0.8916 0.009177 97.150  0.000e+00 0.8736 0.9096
+         16     0.9017 0.009731 92.664  0.000e+00 0.8827 0.9208
+         17     0.9111 0.010412 87.501  0.000e+00 0.8907 0.9315
+         18     0.9196 0.011063 83.127  0.000e+00 0.8979 0.9413
+         19     0.9274 0.011605 79.919  0.000e+00 0.9047 0.9502
+         20     0.9346 0.012005 77.845  0.000e+00 0.9110 0.9581
+         21     0.9411 0.012258 76.771  0.000e+00 0.9170 0.9651
+         22     0.9470 0.012369 76.563  0.000e+00 0.9227 0.9712
+         23     0.9523 0.012350 77.112  0.000e+00 0.9281 0.9765
+         24     0.9572 0.012218 78.340  0.000e+00 0.9332 0.9811
+         25     0.9616 0.011990 80.194  0.000e+00 0.9381 0.9851</code></pre>
+</div>
+</div>
+<p>If you now look at the numbers under <code>Prediction</code>, you can see how the probability of voting increases from around 62% for someone with no education to around 96% for someone with 25 years of education. That is an increase of more than 30 percentage points, which is not exactly small.</p>
+<div style="page-break-after: always;"></div>
+<p>A visualization should again make this even easier to see:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(mod2,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">at =</span> <span class="fu">list</span>(<span class="at">eduyrs =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">25</span>, <span class="at">by =</span> <span class="dv">1</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">at(eduyrs)</span><span class="st">`</span>, <span class="at">y =</span> Prediction, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span> <span class="co"># to get real percentages</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Years of education completed"</span>,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Predicted probability of voting"</span>) <span class="sc">+</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_11_files/figure-html/pred2vis-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="tutorial_11_files/figure-html/pred2vis-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The graph clearly shows the strong increase in the probability to vote as education increases. Also visible is that the estimates are more uncertain (wider confidence intervals) at low values of the <code>eduyrs</code> variable and get narrower for higher values. This most likely reflects that fact that there are only very few observations with less than 10 years of education in the dataset.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="marginal-effects" class="level2">
+<h2 class="anchored" data-anchor-id="marginal-effects">Marginal effects</h2>
+<p>In addition to the overall predicted probabilities, we would usually also like to know by <em>how much exactly</em> a change in an independent variable changes these probabilities. These <em>marginal effects</em> (i.e., changes in predicted probabilities associated with a change in a given independent variable) are easier to interpret and more similar in nature to the regression coefficients you get from linear regression model.</p>
+<p>Getting these marginal effects (plus measures of uncertainty) is possible with the <code>margins_summary()</code> function from the <code>margins</code> package.</p>
+<p>You might appreciate the fact that using this function is fairly simple (at least in its basic form):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> mod2)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>               factor     AME     SE       z      p   lower   upper</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                 agea  <span class="fl">0.0034</span> <span class="fl">0.0005</span>  <span class="fl">6.3349</span> <span class="fl">0.0000</span>  <span class="fl">0.0024</span>  <span class="fl">0.0045</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>               eduyrs  <span class="fl">0.0116</span> <span class="fl">0.0028</span>  <span class="fl">4.2093</span> <span class="fl">0.0000</span>  <span class="fl">0.0062</span>  <span class="fl">0.0170</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>           gndrFemale  <span class="fl">0.0124</span> <span class="fl">0.0178</span>  <span class="fl">0.6951</span> <span class="fl">0.4870</span> <span class="sc">-</span><span class="fl">0.0225</span>  <span class="fl">0.0472</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>              mbtruNo <span class="sc">-</span><span class="fl">0.0563</span> <span class="fl">0.0216</span> <span class="sc">-</span><span class="fl">2.6089</span> <span class="fl">0.0091</span> <span class="sc">-</span><span class="fl">0.0986</span> <span class="sc">-</span><span class="fl">0.0140</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a> mbtruYes, previously <span class="sc">-</span><span class="fl">0.0406</span> <span class="fl">0.0251</span> <span class="sc">-</span><span class="fl">1.6168</span> <span class="fl">0.1059</span> <span class="sc">-</span><span class="fl">0.0897</span>  <span class="fl">0.0086</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>All we have to specify here is the model we want to base the calculations on, and the function automatically gives us the changes in the predicted probabilities associated with a given variable.</p>
+<p>And the result is also fairly easy to interpret: Every additional year of age increases the probability of voting by 0.34 percentage points (0.0034 <span class="math inline">\(\times\)</span> 100), while every additional year of education increases it by 1.16 percentage points. As the <em>p</em>-values indicate, these effects are significant.</p>
+<p>You can also see that the predicted probability of voting for women is about 1.24 percentage points higher than that for men, but again that this is not statistically different from 0. And finally, those who are not a union member or who have previously been members have predicted probabilities of voting that are about 4 and 5.6 percentage points lower compared to current union members.</p>
+<div style="page-break-after: always;"></div>
+<p>These results can of course also be visualized:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> mod2) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> factor, <span class="at">x =</span> AME, <span class="at">xmin =</span> lower, <span class="at">xmax =</span> upper)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">shape =</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="co"># shape = 1 gives hollow dots</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_linerange</span>() <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"gray"</span>) <span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Age"</span>,<span class="st">"Years of educ. compl."</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Female"</span>,<span class="st">"Not a union member"</span>,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Previous union member"</span>)) <span class="sc">+</span> </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span> <span class="co"># to get real percentages</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Effect of variables on pred. probability of voting"</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">""</span>, <span class="at">caption =</span> <span class="st">"95% confidence intervals."</span>) <span class="sc">+</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_11_files/figure-html/margs1plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="tutorial_11_files/figure-html/margs1plot-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Again, you see that:</p>
+<ul>
+<li>Gender makes no difference (the effect of being a woman is not significantly different from 0).</li>
+<li>Age and education have positive effects, and these are significantly different from 0.</li>
+<li>Compared to currently being a union member (the omitted baseline category of the union membership variable), having previously been part of a union does not <em>significantly</em> change one’s probability of voting.</li>
+<li>However, not being a union member does significantly reduce the probability of voting compared to the omitted baseline category, being a union member.</li>
+</ul>
+<!-- \newpage -->
+<!-- # Exercises -->
+<!-- Now that you know how to run and interpret the results of a logistic regression model, you can directly apply these skills and see if there is a significant effect of gender when it comes to the other form of political participation we are interested in here, signing a petition. -->
+<!-- 1. Inspect the `sngptit` variable and apply any necessary cleaning operations to turn it into a proper binomial variable; -->
+<!-- 2. Visualize the distribution of this variable in a suitable graph; -->
+<!-- 3. Run a bivariate and then a multivariate logistic regression model in which you estimate the effects of gender, age, education, and trade union membership on the probability of signing a petition; -->
+<!-- 4. Interpret the results using predicted probabilities and marginal effects. Do this once for gender and then for one other numeric variable; -->
+<!-- 5. Present all results as graphs or properly formatted tables; -->
+
+
+</section>
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>If you want a thorough introduction to the logit and probit models as well as a number of other regression models for non-linear dependent variables, you can read Long, J. S. (1997). <em>Regression Models for Categorical and Limited Dependent Variables</em>. Sage, London. To learn about the even more advanced conditional logit model and its extensions, which are often used in research on voter behavior, you can read Train, K. E. (1993). <em>Qualitative Choice Analysis. Theory, Econometrics, and an Application to Automobile Demand</em>. MIT Press, Cambridge, 3rd edition, and Train, K. E. (2009). <em>Discrete Choice Methods with Simulation.</em> Cambridge University Press, Cambridge, 2nd edition.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>There are of course other models for more complex variables, see e.g., Long, J. S. (1997). <em>Regression Models for Categorical and Limited Dependent Variables</em>. Sage, London; or Train, K. E. (1993). <em>Qualitative Choice Analysis. Theory, Econometrics, and an Application to Automobile Demand</em>. MIT Press, Cambridge, 3rd edition.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>You can see if your model as a whole is significantly better at predicting your outcome by using a likelihood-ratio test (see Long 1997, Chapter 4). In <code>R</code>, you get this by running an “empty” model (e.g., <code>mod0 &lt;- glm(vote ~ 1 , data = ess7)</code>) and then comparing the empty model with your main specification with the <code>anova()</code> function (e.g., <code>anova(mod0,mod2)</code>).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./tutorial_10.html" class="pagination-link" aria-label="Tutorial 10: *It depends!* Interactive regression models">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Tutorial 10: <em>It depends!</em> Interactive regression models</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","openEffect":"zoom","loop":false,"closeEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

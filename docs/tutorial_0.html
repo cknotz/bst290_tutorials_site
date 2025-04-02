@@ -107,6 +107,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -155,7 +184,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Welcome!</span></a>
+ <span class="menu-text">Hei!</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -174,6 +203,66 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./tutorial_2.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial 2: Importing &amp; exploring your data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 3: Data cleaning &amp; management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 4: Data visualization with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 5: Confidence intervals</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 6: Tabular Analysis &amp; the $\chi^2$ test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7a: <em>t</em>-test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7b: Correlation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 8: Bivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 9: Multivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 10: <em>It depends!</em> Interactive regression models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 11: Logistic regression for binomial dependent variables</span></a>
   </div>
 </li>
     </ul>
@@ -211,7 +300,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages">Loading packages</a>
   <ul class="collapse">
   <li><a href="#loading-an-entire-package-with-library" id="toc-loading-an-entire-package-with-library" class="nav-link" data-scroll-target="#loading-an-entire-package-with-library">Loading an entire package with <code>library()</code></a></li>
-  <li><a href="#good-to-know-loading-only-a-specific-tool-from-a-package-with-the-double-colon-method" id="toc-good-to-know-loading-only-a-specific-tool-from-a-package-with-the-double-colon-method" class="nav-link" data-scroll-target="#good-to-know-loading-only-a-specific-tool-from-a-package-with-the-double-colon-method">Good to know: Loading only a specific tool from a package with the “double-colon” method</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
@@ -275,16 +363,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installing-r-rstudio" class="level1">
 <h1>Installing <code>R</code> &amp; <code>RStudio</code></h1>
 <p>You will of course first need to install both <code>R</code> and <code>RStudio</code> before you can use them. You can download <code>R</code> and <code>RStudio</code> from <a href="https://posit.co/download/rstudio-desktop/" class="uri">https://posit.co/download/rstudio-desktop/</a> (no need to go for the pro-versions; the free <em>Desktop</em> version is more than sufficient!).</p>
-<p>If you like, you can also watch the following two videos that will guide you through the installation process:</p>
-<ul>
-<li>Install <code>R</code>: <a href="https://vimeo.com/203516510" class="uri">https://vimeo.com/203516510</a></li>
-<li>Install <code>RStudio</code>: <a href="https://vimeo.com/203516968" class="uri">https://vimeo.com/203516968</a></li>
-</ul>
-<hr>
-<p><strong>IMPORTANT: You absolutely need to install the latest versions of R and RStudio!</strong></p>
+<p>If you like, you can also watch a video that will guide you through the installation process: <a href="https://vimeo.com/415501284" target="_blank">https://vimeo.com/415501284</a>. The video is a <em>bit</em> outdated (the website for <em>RStudio</em> is different now), but the most important information is still correct.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="You absolutely need to install the latest versions of R and RStudio!">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+You absolutely need to install the latest versions of R and RStudio!
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>If your operating system (Windows, MacOS, Linux) is too old to support the latest versions of R and RStudio, then you have to update your operating system first.</p>
 <p><strong>No, there really is no other way. If you do not have the latest versions of R and RStudio installed because you refuse to update your computer, then you will run into problems.</strong></p>
-<hr>
+</div>
+</div>
 <!-- \newpage -->
 <!-- --- -->
 <!-- **Are you using a Windows computer issued by UiS?** Then you have a few additional steps to do (unfortunately). See here: https://uis.service-now.com/tp?id=tp_kb_article&sys_id=c27faef6db692b44651cb29a689619a8  -->
@@ -364,9 +457,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="keeping-everything-organized-projects-and-working-directories">Keeping everything organized: Projects and working directories</h2>
 <p>Once you really start working with <code>R</code>, you will use a lot of different files: Dataset files go into <code>R</code>, and all the different graphs and tables that present the results of your analysis come out again. In addition, you will have one or more code files that document your code (more on that comes below). Obviously, <em>you need to keep an overview over the different files and where they are on your computer.</em></p>
 <p><code>RStudio</code> offers you a great way to keep all these files organized: <em>Projects</em>. A project automatically organizes all the files you need to work with in a given context (e.g., this course) and makes sure that any outputs you create (e.g., graphs) are stored somewhere where you can find them.</p>
-<hr>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>You should have <em>one</em> (and only one) project for this course in <code>RStudio</code>. This project includes all the files (dataset files, code files, output) that you work with during this course. All these files should be stored in <em>one</em> (and only one) folder on your computer. Your project will be associated with that folder.</p>
-<hr>
+</div>
+</div>
 <p>Follow these steps to create the project:</p>
 <ol type="1">
 <li>Open <em>File Explorer</em> (on Windows) or <em>Finder</em> (on Mac) and create a folder on your computer where you want to store all the <code>R</code>-related files for this course (for example as <code>Documents/Uni/3rd_semester/BST290/R_files</code>).</li>
@@ -408,14 +511,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>If you are connected to the internet, <code>R</code> will now download and install the package automatically. This might take a bit, and a lot of computer code gibberish will appear on your screen — no reason to worry, this is normal!</p>
 <div style="page-break-after: always;"></div>
-<hr>
-<p><strong>Important:</strong> In some cases, <code>R</code> might ask you questions during the installation process (this applies to all package installations, now and in the future):</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In some cases, <code>R</code> might ask you questions during the installation process (this applies to all package installations, now and in the future):</p>
 <ol type="1">
 <li>If it asks you to <em>update</em> packages, choose “CRAN packages only” (press <code>2</code>)</li>
 <li>If it asks you whether you want to “<em>install from sources that need compilation</em>”, <strong>choose “No”</strong> (press <code>N</code>)</li>
 </ol>
 <p>(Did you by accident choose a wrong answer to one of the questions above? No worries, just re-run the <code>install.packages("tidyverse")</code> command above to start the installation process again.)</p>
-<hr>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </section>
 <section id="what-you-should-see" class="level2">
@@ -441,9 +554,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You will now see a lot more computer code gibberish running over your screen — again, nothing to worry about as long as you get the same result as earlier.</p>
-<hr>
-<p><strong>For Windows users:</strong> <em>R</em> might give you a warning that you should have something called <em>RTools</em> installed — this is not necessary for now! Just move on. If you want to install <em>RTools</em> anyways, you can do this in a few more steps. You can find an instruction here: <a href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html" class="uri">https://cran.r-project.org/bin/windows/Rtools/rtools40.html</a>.</p>
-<hr>
+<div class="callout callout-style-default callout-warning callout-titled" title="For Windows users">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+For Windows users
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>R</code> might give you a warning that you should have something called <em>RTools</em> installed — this is not necessary for now! Just move on. If you want to install <em>RTools</em> anyways, you can do this in a few more steps. You can find an instruction here: <a href="https://cran.r-project.org/bin/windows/Rtools/rtools40.html" class="uri">https://cran.r-project.org/bin/windows/Rtools/rtools40.html</a>.</p>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 <p>Next, you use the <code>remotes</code> package to download and install the <code>bst290</code> package from <em>GitHub</em>. To do so, type the following code into the <em>Console</em> and press Enter:</p>
 <div class="cell">
@@ -492,13 +615,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bst290)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>There should now not be any warnings, etc.</p>
-<div style="page-break-after: always;"></div>
-</section>
-<section id="good-to-know-loading-only-a-specific-tool-from-a-package-with-the-double-colon-method" class="level3">
-<h3 class="anchored" data-anchor-id="good-to-know-loading-only-a-specific-tool-from-a-package-with-the-double-colon-method">Good to know: Loading only a specific tool from a package with the “double-colon” method</h3>
-<p>You can also directly “call” specific functions from a package using the “double-colon” method: `<code>package::function()</code>. You can use this directly, without loading the entire package first.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Good to know: Loading only a specific part of a package with the 'double-colon' method">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Good to know: Loading only a specific part of a package with the ‘double-colon’ method
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can also directly “call” specific functions from a package using the “double-colon” method: <code>package::function()</code>. You can use this directly, without loading the entire package first.</p>
 <p>Maybe you notice that you already used that method earlier, when you installed the <code>bst290</code> package: <code>remotes::install_github()</code>. In this case, you used just this <em>one specific</em> function from the <code>remotes</code> package.</p>
-<div style="page-break-after: always;"></div>
+</div>
+</div>
 </section>
 </section>
 </section>
@@ -949,8 +1079,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Welcome!">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome!</span>
+      <a href="./index.html" class="pagination-link" aria-label="Hei!">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Hei!</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
@@ -960,7 +1090,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"descPosition":"bottom","closeEffect":"zoom","openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom","loop":false,"selector":".lightbox"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

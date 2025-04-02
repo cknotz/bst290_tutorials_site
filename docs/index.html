@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Welcome! – R Tutorials for BST290</title>
+<title>Hei! – R Tutorials for BST290</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -68,6 +68,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -93,7 +122,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome!</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Hei!</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -116,7 +145,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Welcome!</span></a>
+ <span class="menu-text">Hei!</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -137,6 +166,66 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Tutorial 2: Importing &amp; exploring your data</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 3: Data cleaning &amp; management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 4: Data visualization with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 5: Confidence intervals</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 6: Tabular Analysis &amp; the $\chi^2$ test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7a: <em>t</em>-test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7b: Correlation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 8: Bivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 9: Multivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 10: <em>It depends!</em> Interactive regression models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 11: Logistic regression for binomial dependent variables</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -150,7 +239,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Welcome!</h1>
+<h1 class="title">Hei!</h1>
 </div>
 
 
@@ -167,10 +256,22 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><strong>[This site is currently work in progress!!!]</strong></p>
-<p>This website features all <code>R</code> tutorials for the BST290 <em>Kvantitativ forskningsmetode</em> course. Simply use the menu on the side to navigate to and between the different tutorials and use the search field to find tutorials with specific contents.</p>
+<p>This website features all <code>R</code> tutorials for the BST290 <em>Kvantitativ forskningsmetode</em> course. Simply use the menu on the side to navigate to and between the different tutorials and use the search field (top right) to find tutorials with specific contents.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>To make reading the tutorials easier and quicker, <strong>download them as PDFs and print them out</strong>. There are download buttons at the beginning of each tutorial. You <em>can</em> read all the material “on screen” if you really want to, but that is not recommended. Ideally, you read each of the tutorials first on paper and you use this website mainly to quickly look things up later.</p>
+</div>
+</div>
 <p>If you have questions, notice something that is wrong or is not shown properly, please send an email to <a href="mailto:carlo.knotz@uis.no">carlo.knotz@uis.no</a>.</p>
-<p>That’s it :-) Lykke til!</p>
+<p>That’s it. Lykke til!</p>
 
 
 

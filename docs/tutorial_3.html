@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carlo Knotz">
+
+<title>Tutorial 3: Data cleaning &amp; management – R Tutorials for BST290</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./tutorial_4.html" rel="next">
+<link href="./tutorial_2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R Tutorials for BST290</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorial_3.html">Tutorial 3: Data cleaning &amp; management</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hei!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 0: Installation &amp; Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 1: Your first steps in <code>R</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 2: Importing &amp; exploring your data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Tutorial 3: Data cleaning &amp; management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 4: Data visualization with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 5: Confidence intervals</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 6: Tabular Analysis &amp; the $\chi^2$ test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7a: <em>t</em>-test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7b: Correlation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 8: Bivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 9: Multivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 10: <em>It depends!</em> Interactive regression models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 11: Logistic regression for binomial dependent variables</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#trimming-your-dataset" id="toc-trimming-your-dataset" class="nav-link" data-scroll-target="#trimming-your-dataset">Trimming your dataset</a>
+  <ul class="collapse">
+  <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select"><code>select()</code></a>
+  <ul class="collapse">
+  <li><a href="#using-select" id="toc-using-select" class="nav-link" data-scroll-target="#using-select">Using <code>select()</code></a></li>
+  <li><a href="#saving-the-result" id="toc-saving-the-result" class="nav-link" data-scroll-target="#saving-the-result">Saving the result</a></li>
+  <li><a href="#removing-de-selecting-variables" id="toc-removing-de-selecting-variables" class="nav-link" data-scroll-target="#removing-de-selecting-variables">Removing (de-selecting) variables</a></li>
+  </ul></li>
+  <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter"><code>filter()</code></a></li>
+  <li><a href="#drop_na-getting-rid-of-missing-values-nas" id="toc-drop_na-getting-rid-of-missing-values-nas" class="nav-link" data-scroll-target="#drop_na-getting-rid-of-missing-values-nas"><code>drop_na()</code>: Getting rid of missing values (<code>NA</code>s)</a></li>
+  </ul></li>
+  <li><a href="#connecting-operations-with-the-pipe-or" id="toc-connecting-operations-with-the-pipe-or" class="nav-link" data-scroll-target="#connecting-operations-with-the-pipe-or">Connecting operations with the “pipe” (<code>%&gt;%</code> or <code>|&gt;</code>)</a>
+  <ul class="collapse">
+  <li><a href="#storing-the-result-of-your-pipeline" id="toc-storing-the-result-of-your-pipeline" class="nav-link" data-scroll-target="#storing-the-result-of-your-pipeline">Storing the result of your “pipeline”</a></li>
+  <li><a href="#the-new-pipe-operator" id="toc-the-new-pipe-operator" class="nav-link" data-scroll-target="#the-new-pipe-operator">The new pipe operator (<code>|&gt;</code>)</a></li>
+  </ul></li>
+  <li><a href="#creating-new-variables-with-mutate" id="toc-creating-new-variables-with-mutate" class="nav-link" data-scroll-target="#creating-new-variables-with-mutate">Creating new variables with <code>mutate()</code></a>
+  <ul class="collapse">
+  <li><a href="#simple-transformations-with-numeric-variables" id="toc-simple-transformations-with-numeric-variables" class="nav-link" data-scroll-target="#simple-transformations-with-numeric-variables">Simple transformations with numeric variables</a></li>
+  <li><a href="#advanced-mutate-dummy-coding-variables" id="toc-advanced-mutate-dummy-coding-variables" class="nav-link" data-scroll-target="#advanced-mutate-dummy-coding-variables">Advanced <code>mutate()</code>: “Dummy-coding” variables</a>
+  <ul class="collapse">
+  <li><a href="#dummy-coding-a-numeric-variable" id="toc-dummy-coding-a-numeric-variable" class="nav-link" data-scroll-target="#dummy-coding-a-numeric-variable">Dummy-coding a numeric variable</a></li>
+  <li><a href="#dummy-coding-an-ordinal-or-categorical-variable" id="toc-dummy-coding-an-ordinal-or-categorical-variable" class="nav-link" data-scroll-target="#dummy-coding-an-ordinal-or-categorical-variable">Dummy-coding an ordinal or categorical variable</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#calculating-summary-statistics-with-summarize" id="toc-calculating-summary-statistics-with-summarize" class="nav-link" data-scroll-target="#calculating-summary-statistics-with-summarize">Calculating summary statistics with <code>summarize()</code></a>
+  <ul class="collapse">
+  <li><a href="#simple-summary-statistics" id="toc-simple-summary-statistics" class="nav-link" data-scroll-target="#simple-summary-statistics">Simple summary statistics</a></li>
+  <li><a href="#combining-summarize-group_by" id="toc-combining-summarize-group_by" class="nav-link" data-scroll-target="#combining-summarize-group_by">Combining <code>summarize()</code> &amp; <code>group_by()</code></a></li>
+  <li><a href="#other-statistics-multiple-statistics-in-one-operation" id="toc-other-statistics-multiple-statistics-in-one-operation" class="nav-link" data-scroll-target="#other-statistics-multiple-statistics-in-one-operation">Other statistics &amp; multiple statistics in one operation</a>
+  <ul class="collapse">
+  <li><a href="#other-summary-statistics" id="toc-other-summary-statistics" class="nav-link" data-scroll-target="#other-summary-statistics">Other summary statistics</a></li>
+  <li><a href="#multiple-summary-statistics" id="toc-multiple-summary-statistics" class="nav-link" data-scroll-target="#multiple-summary-statistics">Multiple summary statistics</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#variable-types-and-transformations" id="toc-variable-types-and-transformations" class="nav-link" data-scroll-target="#variable-types-and-transformations">Variable types and transformations</a>
+  <ul class="collapse">
+  <li><a href="#identifying-variable-types" id="toc-identifying-variable-types" class="nav-link" data-scroll-target="#identifying-variable-types">Identifying variable types</a></li>
+  <li><a href="#changing-storage-types" id="toc-changing-storage-types" class="nav-link" data-scroll-target="#changing-storage-types">Changing storage types</a></li>
+  <li><a href="#data-cleaning-and-transformations-with-factors" id="toc-data-cleaning-and-transformations-with-factors" class="nav-link" data-scroll-target="#data-cleaning-and-transformations-with-factors">Data cleaning and transformations with <em>factors</em></a>
+  <ul class="collapse">
+  <li><a href="#factor-to-numeric" id="toc-factor-to-numeric" class="nav-link" data-scroll-target="#factor-to-numeric"><em>Factor</em> to numeric</a></li>
+  <li><a href="#factor-to-character" id="toc-factor-to-character" class="nav-link" data-scroll-target="#factor-to-character"><em>Factor</em> to character</a></li>
+  <li><a href="#more-tools-for-working-with-factors" id="toc-more-tools-for-working-with-factors" class="nav-link" data-scroll-target="#more-tools-for-working-with-factors">More tools for working with <em>factors</em></a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#summing-up-next-steps" id="toc-summing-up-next-steps" class="nav-link" data-scroll-target="#summing-up-next-steps">Summing up &amp; next steps</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tutorial 3: Data cleaning &amp; management</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carlo Knotz </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a href="https://raw.github.com/cknotz/bst290_tutorials/main/tutorial3_datacleaning.pdf" class="btn btn-outline-primary" role="button">Download as PDF</a></p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In the previous tutorial, you learned how you can import a dataset and do some initial exploratory data analysis (EDA) to get familiar with it.</p>
+<p>In a real data analysis project, these would of course only be the very first steps. Usually, you will discover some smaller and larger issues with your data during the initial EDA, for example that you have to trim and clean the dataset, and that you may need to recode some variables or create new ones. In more extreme cases, your dataset can be disorganized or contain irrelevant information, or the variables in them can be stored in the wrong way.</p>
+<p>This process of cleaning and organizing a dataset, and of creating new variables is called <em>data management</em> (or ‘munging’, ‘wrangling’, or ‘data manipulation’). It is the process of turning a raw dataset, which usually contains irrelevant observations or variables and where some variables need to be transformed or newly constructed, into the neat and tidy dataset you use in your statistical analysis.</p>
+<p>Let’s be honest for a moment: Data cleaning is often not very entertaining, and is generally the thing that is most difficult to get through when you are just starting and you do not yet have a good intuition or “muscle memory” for working with data. In that case, data cleaning can be a major hurdle and source of frustration.</p>
+<p>Fortunately, things have improved a lot with the arrival of the <code>tidyverse</code> (see https://www.tidyverse.org/). As mentioned in the first tutorial, the <code>tidyverse</code> collection includes several packages that make data cleaning, and even otherwise difficult operations much easier and quicker.</p>
+<p>Still: Expect to be struggling with these things at the beginning, and that this tutorial will likely be the one that feels most dull and confusing. Just hang in there, and ask if you really need help!</p>
+<p>In this tutorial, you will first learn how to do basic data cleaning and preparation tasks with functions from the <code>tidyverse</code> (sections 4-6). In section 7, you will learn how to change how a particular variable is stored (e.g., from <code>numeric</code> to <code>character</code>). Here, you will use functions from ‘base <code>R</code>’.</p>
+<p>As in the previous tutorial, you will first practice all these operations with the small <code>ess</code> dataset from the <code>bst290</code> package. Later, when doing the exercises, you will apply what you have learned to real-life data from the ESS.</p>
+<hr>
+<p><em>Hvis du ønsker å lese en norsk tekst <strong>i tillegg</strong>: “Lær deg R”, Kapittel 6. OBS: Boken bruker en annen ‘dialekt’ (<code>base R</code>) enn den vi bruker her (<code>tidyverse</code>).</em></p>
+<hr>
+<!-- \newpage -->
+<!-- # Data cleaning and management: Main steps -->
+<!-- In general, data cleaning and management involves the following main steps: -->
+<!-- 1. "Trimming" a dataset by (de-)selecting variables and filtering observations;  -->
+<!-- 2. Possibly getting rid of missing observations (`NA`s); -->
+<!-- 3. Creating (or 'mutating') new variables from existing ones; -->
+<!-- In addition, you may sometimes also have to: -->
+<!-- 4. Aggregate and summarize your dataset; -->
+<!-- The first part of this tutorial will show you how you do these data cleaning operations. As mentioned previously, you will learn how to do this with functions from the `tidyverse`.  -->
+<div style="page-break-after: always;"></div>
+</section>
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<p>You need to use two packages, the <code>bst290</code> package and now also the <code>tidyverse</code> package (which you should have installed at the beginning of the course). The first step is therefore to load the two packages and then the practice dataset:</p>
+<p>The start of your script file should look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loads packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bst290) </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Loads dataset</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(ess)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="trimming-your-dataset" class="level1">
+<h1>Trimming your dataset</h1>
+<p>A typical research dataset (e.g., data from the <em>ESS</em>) will usually contain many more variables than you need for your analysis.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Therefore, it is very useful to know how to get rid of variables that are irrelevant for what you want to do.</p>
+<p>You may also remember that the full ESS dataset included more than 40.000 observations for more than 20 countries. It can happen that you need to work with all of these observations, but there are also many times when you only need data for a single country (such as in this course!). In that case, you need to exclude the irrelevant observations.</p>
+<p>Fortunately, dealing with these two problems is easy. The <code>tidyverse</code> (or, more precisely, the <code>dplyr</code> package in the <code>tidyverse</code>) contains two functions that make this easy:</p>
+<ul>
+<li><code>select()</code>: To (de-)select <em>variables</em></li>
+<li><code>filter()</code>: To filter <em>observations</em> in or out</li>
+</ul>
+<div style="page-break-after: always;"></div>
+<section id="select" class="level2">
+<h2 class="anchored" data-anchor-id="select"><code>select()</code></h2>
+<p>The small <code>ess</code> practice dataset includes 22 variables. Let’s assume that you really need only the ID number (<code>idno</code>), age (<code>agea</code>), and gender (<code>gndr</code>) variables for an analysis. You therefore want to reduce your dataset to these three variables and get rid of all the others.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The <code>select()</code> function allows you to do that.</p>
+<section id="using-select" class="level3">
+<h3 class="anchored" data-anchor-id="using-select">Using <code>select()</code></h3>
+<p>Here is how you keep specific variables with <code>select()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="at">.data =</span> ess, idno, agea, gndr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here you tell <code>R</code>:</p>
+<ol type="1">
+<li>That you want to select variables with the <code>select()</code> function;</li>
+<li>That you want to select from the <code>ess</code> dataset (with <code>.data = ess</code>). It is important that you do not forget to add a dot before <code>data</code>;<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
+<li>Then you simply list the variables you want to select, separated by commas;</li>
+</ol>
+</section>
+<section id="saving-the-result" class="level3">
+<h3 class="anchored" data-anchor-id="saving-the-result">Saving the result</h3>
+<p>If you only run the function, <code>R</code> will do the operation and then simply print the result out for you — and the result is then the “trimmed” dataset. This can be helpful if you just want to test if your code works, but you usually want to store the reduced dataset so you can use it in your analysis.</p>
+<p>You can save the resulting “trimmed” dataset as a new object using the good old assignment operator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ess_selected <span class="ot">&lt;-</span> <span class="fu">select</span>(<span class="at">.data =</span> ess, idno, agea, gndr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="removing-de-selecting-variables" class="level3">
+<h3 class="anchored" data-anchor-id="removing-de-selecting-variables">Removing (de-selecting) variables</h3>
+<p>Now you know how you can <em>keep</em> certain variables in a dataset and get rid of all others. But you can also use <code>select()</code> to <em>remove</em> specific variables but leave the rest of the dataset as it is. To do this, you simply add a minus symbol (<code>-</code>) before the variables you want to get rid off.</p>
+<p>For example, to <em>remove</em> the <code>agea</code> and <code>gndr</code> variables — and keep all the others — you would run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="at">.data =</span> ess,<span class="sc">-</span>agea,<span class="sc">-</span>gndr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="filter" class="level2">
+<h2 class="anchored" data-anchor-id="filter"><code>filter()</code></h2>
+<p>Filtering observations works basically the same way, the only difference is that you have to specify <em>how</em> or by which criteria you want to select observations from the data.</p>
+<p>For example, let’s assume you wanted to remove all those observations from the <code>ess</code> dataset where respondents were younger than 40 years. This is how you would do this with <code>filter()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(<span class="at">.data =</span> ess,agea<span class="sc">&gt;=</span><span class="dv">40</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In human language:</p>
+<ol type="1">
+<li>You tell <code>R</code> that you want to filter observations from the <code>ess</code> dataset</li>
+<li>You specify a <em>condition</em> using mathematical symbols (<code>&gt;=</code>): Keep all those observations where the respondent’s age is equal to 40 or greater (<code>agea&gt;=40</code>)</li>
+</ol>
+<p>The expression <code>&gt;=</code> stands, as you probably know, for “greater than or equal to”. It is one of several you can use to filter your data:</p>
+<ul>
+<li><code>&gt;</code> “greater”</li>
+<li><code>&lt;</code> “smaller”</li>
+<li><code>&lt;=</code> “smaller or equal to”</li>
+<li><code>&gt;=</code> “greater or equal to”</li>
+<li><code>==</code> “<em>must</em> be equal to” (the double equal sign means we are extra sure here)</li>
+<li><code>!=</code> “must <em>not</em> be equal to” (generally, <code>!</code> stands for “is not”)</li>
+<li><code>%in%</code> “is included in”, usually followed by a vector (e.g., <code>cntry %in% c("Norway","Sweden","Denmark")</code>)<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
+</ul>
+<p>You can also specify <em>multiple conditions</em> in <code>filter()</code>. For example, to limit the data to women who are older than 35 you would do the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(<span class="at">.data =</span> ess, agea<span class="sc">&gt;</span><span class="dv">35</span> <span class="sc">&amp;</span> gndr<span class="sc">==</span><span class="st">"Female"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In human language:</p>
+<ol type="1">
+<li>You want respondents older than 35 (<code>agea&gt;35</code>)</li>
+<li>You want only women (<code>gndr=="Female"</code>)</li>
+<li>You make clear that both conditions have to be fulfilled at the same time with the <code>&amp;</code> (“ampersand”) symbol.</li>
+</ol>
+<p>You can <em>save</em> the result with the assignment operator (<code>&lt;-</code>) as shown on the previous page with <code>select()</code>.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="drop_na-getting-rid-of-missing-values-nas" class="level2">
+<h2 class="anchored" data-anchor-id="drop_na-getting-rid-of-missing-values-nas"><code>drop_na()</code>: Getting rid of missing values (<code>NA</code>s)</h2>
+<p>If you are working with any real-life dataset, there will usually be some missing observations: For example, some survey respondents may have refused to answer some questions, or did not know what to say. Such missing observations will be stored as <code>NA</code> (“not available”) in <code>R</code>.</p>
+<p>It is often helpful to be able to get rid off <code>NA</code>s. This is for example the case when you make graphs — unless you exclude the <code>NA</code>s, they will show up in your graph, and that is often not helpful.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>You can exclude <code>NA</code>s from your dataset with the <code>drop_na()</code> function from the <code>tidyverse</code>. You can use this function in two ways:</p>
+<ol type="1">
+<li>If you use it without any further specifications, it simply drops all observations from the dataset if they have any missing information <em>on any variable</em> (in this case, the code also saves the result as <code>ess_noNAs</code>):</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ess_noNAs <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(ess)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Careful:</strong> Using <code>drop_na()</code> in this general way is a kind of “nuclear option” — and, like other types of nuclear options, this approach can have serious negative consequences! For example, if you have survey data and there is one respondent who refused to state their income but answered all other questions, then that respondent will have an <code>NA</code> on the income-variable — and only there. By using <code>drop_na()</code> in its general form, <em>all</em> information about that respondent will be removed, even if only the income-variable is missing for them. <em>Therefore: You always need to be very careful when you exclude missing observations — and document your code, so that you can always go back and change things if you need to!</em></p>
+<ol start="2" type="1">
+<li>An alternative way is to exclude only those observations that have missing information on a specific variable:</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ess_noNAs <span class="ot">&lt;-</span> <span class="fu">drop_na</span>(ess, agea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this second case, you would drop only those observations that have <code>NA</code>s on the <code>agea</code> variable (i.e, respondents who did not state how old they are) — regardless of how the other variables look like. You can also specify more than one variable here, if you like.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="connecting-operations-with-the-pipe-or" class="level1">
+<h1>Connecting operations with the “pipe” (<code>%&gt;%</code> or <code>|&gt;</code>)</h1>
+<p>So far you were doing one operation at a time: First selecting variables, then filtering observations, then dropping <code>NA</code>s.</p>
+<p>There is also a more efficient way of doing data cleaning with the <code>tidyverse</code>: You can <em>connect</em> different operations together using the “pipe” operator: <code>%&gt;%</code>.</p>
+<p>Simply put: <em>The pipe tells <code>R</code> that it should take the result of one operation and then directly “feed” it into a following one — or, in other words, it “docks” two operations together.</em> With this operator, you can build entire “data management pipelines” where you take your starting dataset, put it through a sequence of data cleaning and management operations, and get a properly cleaned and prepped dataset out at the end.</p>
+<p>How this works will become clearer when you see the pipe in action. For example, let’s say you wanted to work with the <code>ess</code> practice dataset, but you first wanted to trim it down to only a few variables you really need <em>and</em> keep only female respondents who are older than 35.</p>
+<p>Here is how your code would look like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(idno, agea, gndr) <span class="sc">%&gt;%</span> <span class="co"># 2.</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gndr<span class="sc">==</span><span class="st">"Female"</span> <span class="sc">&amp;</span> agea<span class="sc">&gt;</span><span class="dv">35</span>) <span class="co"># 3.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In human language: We tell <code>R</code> that it should…</p>
+<ol type="1">
+<li>…take the <code>ess</code> dataset…</li>
+<li>…select the variables <code>idno</code>, <code>agea</code>, and <code>gndr</code> from it…</li>
+<li>…and then filter the data so that only women (<code>gndr=="Female"</code>) who are older than 35 (<code>agea&gt;35</code>) are kept.</li>
+</ol>
+<p>Of course, this could be continued even further.</p>
+<div style="page-break-after: always;"></div>
+<section id="storing-the-result-of-your-pipeline" class="level2">
+<h2 class="anchored" data-anchor-id="storing-the-result-of-your-pipeline">Storing the result of your “pipeline”</h2>
+<p>As before, you can save the result of your “data cleaning pipeline” as a new dataset in your <em>Environment</em>. This is useful when you want to prepare a cleaned and trimmed version of the original “raw” dataset that you can then use in your statistical analysis.</p>
+<p>Alternative 1 is to use the standard assignment operator (<code>&lt;-</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ess_clean <span class="ot">&lt;-</span> ess <span class="sc">%&gt;%</span> <span class="co"># saves the "trimmed" dataset as 'ess_clean'</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(idno, agea, gndr) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gndr<span class="sc">==</span><span class="st">"Female"</span> <span class="sc">&amp;</span> agea<span class="sc">&gt;</span><span class="dv">35</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There is also a second alternative, in which you use the “reversed” assignment operator (<code>-&gt;</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(idno, agea, gndr) <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gndr<span class="sc">==</span><span class="st">"Female"</span> <span class="sc">&amp;</span> agea<span class="sc">&gt;</span><span class="dv">35</span>) <span class="ot">-&gt;</span> ess_clean <span class="co"># as above, but now at the end of the pipeline</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, and as with the regular assingment operator, it can be a good idea to create a keyboard shortcut for the pipe operator to make typing easier (in <code>RStudio</code>, go to “Options”, then “Code”, and then “Modify keyboard shortcuts”).</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="the-new-pipe-operator" class="level2">
+<h2 class="anchored" data-anchor-id="the-new-pipe-operator">The new pipe operator (<code>|&gt;</code>)</h2>
+<p>The “traditional” pipe operator (<code>%&gt;%</code>) that we used so far is a part of the <code>tidyverse</code> — and it will only work if you have the <code>tidyverse</code> or one of the central packages (<code>dplyr</code>, <code>ggplot2</code>) loaded.</p>
+<p>With the release of <code>R</code> version 4.1.0, a new pipe operator was introduced: <code>|&gt;</code>. This one works like the old one, but is “native” to <code>R</code> — you shouldn’t need to load packages to be able to use it.</p>
+<p>While there are some differences in how they work, <strong>you can generally use either of them</strong> (or both) without running into any problems or getting wrong results.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<hr>
+<p><strong>Important:</strong> The pipe operators may not work with all functions in <code>R</code>. They should work fine with functions that come from the <code>tidyverse</code> package collection (<code>select()</code>, <code>filter()</code>, <code>drop_na()</code>,…) and it works also with <em>some</em> other functions, but this is not always the case. If you notice that your “pipeline” breaks when you add a particular function, then it is best if you just store the result after the last functioning step of your pipeline and then use that result with the “offending” function separately.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<hr>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="creating-new-variables-with-mutate" class="level1">
+<h1>Creating new variables with <code>mutate()</code></h1>
+<p>While your dataset often contains variables or observations you do not need, it is also frequently the case that you have to construct a new variable from one or more of those variables that are in your dataset. In this case, you “mutate” existing variables into a new shape.</p>
+<p>This is what the <code>mutate()</code> function is there for. With <code>mutate()</code>, you can transform your variables in (almost?) any way you need to.</p>
+<section id="simple-transformations-with-numeric-variables" class="level2">
+<h2 class="anchored" data-anchor-id="simple-transformations-with-numeric-variables">Simple transformations with numeric variables</h2>
+<p>The most basic way to transform a variable is to do a simple mathematical transformation. For example, let’s say you wanted to work with the <code>height</code> variable from the <code>ess</code> dataset. This variable records the respondents’ body heights in centimeters. When you run <code>summary(ess$height)</code>, you see that this variable ranges from 147cm (the shortest person) to 196cm (the tallest person).</p>
+<p>But you decide, for some reason, that you want that variable measured in meters, and not in centimeters. To get there, you have to divide the <code>height</code> variable by 100.</p>
+<p>Here is how you can do this with <code>mutate()</code> (plus again the pipe operator):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height_meters =</span> height<span class="sc">/</span><span class="dv">100</span>) <span class="co"># 2.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once more in human language:</p>
+<ol type="1">
+<li>“Take the <code>ess</code> dataset…”</li>
+<li>“…and mutate <code>height</code> into a new variable, <code>height_meters</code>, by dividing <code>height</code> by 100.”</li>
+</ol>
+<p>Obviously, this is just a very simple example and you can certainly take this further — for example by adding, subtracting, or multiplying two or more variables or doing more complex mathematical transformations. To get an overview over what you can do with <code>mutate()</code>, see the official help page: https://dplyr.tidyverse.org/reference/mutate.html#useful-mutate-functions</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="advanced-mutate-dummy-coding-variables" class="level2">
+<h2 class="anchored" data-anchor-id="advanced-mutate-dummy-coding-variables">Advanced <code>mutate()</code>: “Dummy-coding” variables</h2>
+<p>Next to mathematical transformations, you also often have to “dichotomize” or “dummy-code” one or more of your variables. “Dummy-coding” means that you turn a more complex variable into a simple yes/no or (1/0) “dummy” variable. To dummy-code a variable, you use the <code>if_else()</code> function <strong>within <code>mutate()</code></strong>.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<p>You can do this with numeric variables (e.g., age or years spent in education) but also categorical or ordinal variables that have more than two categories (and which are stored as <em>Factors</em>). The process differs only a bit between the two scenarios.</p>
+<section id="dummy-coding-a-numeric-variable" class="level3">
+<h3 class="anchored" data-anchor-id="dummy-coding-a-numeric-variable">Dummy-coding a numeric variable</h3>
+<p>This first example shows you how you can dummy-code a variable that is numeric. In this case, we use the age-variable <code>agea</code>, which measures the respondents’ ages in years, and we dummy-code it into a categorical variable that identifies all those respondents in our practice dataset who are older than 65 years.</p>
+<p>In other words, the task is to create a new variable that identifies older respondents. This new variable would have the value <code>1</code> whenever a respondent in the dataset is older than 65, and it would have the value <code>0</code> for all those respondents who are younger. You can create this variable on the basis of the <code>agea</code> variable with the handy <code>if_else()</code> function.</p>
+<p>In practice, the code to do this would look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">older =</span> <span class="fu">if_else</span>(<span class="at">condition =</span> agea<span class="sc">&gt;</span><span class="dv">65</span>, <span class="co"># 2.</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">true =</span> <span class="dv">1</span>, <span class="co"># 3.</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">false =</span> <span class="dv">0</span>)) <span class="co"># 4.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>mutate</code>-call in human language:</p>
+<ol type="1">
+<li>“Take the <code>ess</code> dataset and…</li>
+<li>“…create (”mutate”) a new variable called <code>older</code> based on the <em>condition</em> that the respondent’s age is greater than 65 (<code>agea&gt;65</code>).”</li>
+<li>“If that condition is <em>true</em>, the new variable <code>older</code> gets the value of <code>1</code>…”</li>
+<li>“…and if that condition is <em>false</em>, <code>older</code> gets the value of <code>0</code>.”</li>
+</ol>
+<div style="page-break-after: always;"></div>
+<p>To show you more clearly what a dummy-coded variable looks like and does, here is a cleaned-up result of the operation shown on the previous page:</p>
+<div class="cell">
+<pre><code>    idno agea older
+1  12414   22     0
+2   9438   43     0
+3  19782   58     0
+4  18876   22     0
+5  20508   84     1
+6  19716   62     0
+7  13476   68     1
+8   6762   81     1
+9  19518   59     0
+10 21336   57     0</code></pre>
+</div>
+<p>What you see here is a small part of the <code>ess</code> dataset with the first ten observations and only the <code>idno</code> and <code>agea</code> variables plus the new <code>older</code> variable. You should directly see how the <code>older</code> variable corresponds to the <code>agea</code> variable: Whenever a given respondent’s age is greater than 65 years, <code>older</code> has the value of <code>1</code>; otherwise, <code>older</code> is <code>0</code>.</p>
+<p><strong>If you wanted to use the new variable in your analysis, you would obviously have to store the result</strong> with either the regular assignment operator (<code>&lt;-</code>) or the reversed version (<code>-&gt;</code>) as shown earlier. Otherwise, <code>R</code> will only print out the entire <code>ess</code> dataset with all existing variables plus the new one (<code>older</code>) that the code creates.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="dummy-coding-an-ordinal-or-categorical-variable" class="level3">
+<h3 class="anchored" data-anchor-id="dummy-coding-an-ordinal-or-categorical-variable">Dummy-coding an ordinal or categorical variable</h3>
+<p>Often, you want to dummy-code a variable that is not numeric like <code>agea</code> but categorical or ordinal, and which is stored as a <em>Factor</em> in <code>R</code>. This is of course also possible, but the process is slightly different.</p>
+<p>To show you how this works, we will use the <code>health</code> variable that is included in the <code>ess</code> practice dataset. This variable measures how respondents subjectively perceive their own health on an ordinal scale. The categories on that scale are “Very good”, “Good”, “Fair”, “Bad”, and “Very bad”.</p>
+<p>You can also see this when you use the <code>attributes()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(ess<span class="sc">$</span>health)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>levels</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Very good"</span> <span class="st">"Good"</span>      <span class="st">"Fair"</span>      <span class="st">"Bad"</span>       <span class="st">"Very bad"</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>class</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"factor"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Under <code>$levels</code>, you see the different categories. Under <code>$class</code>, you see that it is stored as a <em>factor</em>-type variable (as it should be!).</p>
+<p>Assume now that we want to create a new variable that is based on <code>health</code>, and the new variable should identify those respondents in our dataset that perceive their own health to be at least “good”. In other words, we want to dummy-code the <code>health</code> variable into a new variable that identifies respondents who have a good or very good subjective health.</p>
+<p>Here again, we use <code>if_else()</code> within <code>mutate()</code>, but we now need to specify the condition a bit differently:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span>  <span class="co"># 1.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">health_dummy =</span> <span class="fu">if_else</span>(<span class="at">condition =</span> health <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Very good"</span>,<span class="st">"Good"</span>), <span class="co"># 2. </span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">true =</span> <span class="st">"Good health"</span>, <span class="co"># 3.</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">false =</span> <span class="st">"Not good health"</span>)) <span class="co"># 4.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Translated into “human”, the code tells <code>R</code> to:</p>
+<ol type="1">
+<li>“Take the <code>ess</code> dataset and…”</li>
+<li>“…create a new variable called <code>health_dummy</code> based on the <em>condition</em> that the <code>health</code>-variable has either the value ‘Very good’ or the value ‘Good’. (<em>Notice</em> that we use the <code>%in%</code> operator here to indicate that <code>health</code> should be eiter”Very good” or “Good”.)”</li>
+<li>“If that condition is <em>true</em>, the new variable gets the value ‘Good health’,…”</li>
+<li>“…and if that condition is <em>false</em>, the variable gets the value ‘Not good health’.</li>
+</ol>
+<p>And, as before, <strong>if you wanted to use the new variable in your analysis</strong>, you would need to store the new version of the dataset with <code>&lt;-</code> or <code>-&gt;</code>. Otherwise, <code>R</code> will only print out the entire dataset with all the variables, old and new.</p>
+<div style="page-break-after: always;"></div>
+<p>And just to show you again what the new variable does in this case, here is a cleaned-up version of the result of the code shown on the previous page:</p>
+<div class="cell">
+<pre><code>    idno    health    health_dummy
+1  12414      Good     Good health
+2   9438 Very good     Good health
+3  19782      Good     Good health
+4  18876 Very good     Good health
+5  20508 Very good     Good health
+6  19716      Fair Not good health
+7  13476      Fair Not good health
+8   6762      Fair Not good health
+9  19518 Very good     Good health
+10 21336      Good     Good health</code></pre>
+</div>
+<p>You see that all respondents who felt that their health was either “very good” or “good” got the value “Good health” on the new variable. The three respondents who judged their own health to be only “fair” got the value “Not good health”, and this would obviously be the same for all respondents that rated their own health as “bad” or “very bad”.</p>
+<hr>
+<p><strong>Good to know:</strong> When you use <code>if_else()</code>, you can decide what type of variable the new dummy-coded variable will be. If you use numbers (like in the first example where we dummy-coded <code>agea</code>), the new variable will be <code>numeric</code>. If you use text (like in the second example), the new variable will be a <code>character</code>-type variable. You can then transform this variable to a <em>factor</em> with <code>as.factor()</code>, if you like (see also below for details).</p>
+<hr>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+</section>
+<section id="calculating-summary-statistics-with-summarize" class="level1">
+<h1>Calculating summary statistics with <code>summarize()</code></h1>
+<p>A final operation that you will very often need to do is to summarize or aggregate your data. This is often the case when you want to calculate summary statistics, either over the entire dataset or for specific groups of observations.</p>
+<section id="simple-summary-statistics" class="level2">
+<h2 class="anchored" data-anchor-id="simple-summary-statistics">Simple summary statistics</h2>
+<p>To start with a simple example, let’s say you are interested in the average body height of your respondents. In the <code>ess</code> dataset, this is measured via the <code>height</code> variable.</p>
+<p>You know, of course, that you can get the average of <code>height</code> with the <code>mean()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>height,<span class="at">na.rm =</span> T)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">173.7606</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is how you would do it the <code>tidyverse</code>-way:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  mean_height</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>    <span class="fl">173.7606</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What you do here is, in essence, the same as the above: You use the <code>mean()</code> function to calculate the average of the <code>height</code> variable. The only differences are that a) you save the result <em>temporarily</em> into a new variable (<code>mean_height</code>), and b) you do not have to use the <code>$</code> sign to tell <code>R</code> where to take the <code>height</code> variable from because you already do that in the very first step (<code>ess %&gt;%</code>).</p>
+<p>If you now think that the second option is really just a more complicated and cumbersome form of the first one: True, in principle.</p>
+<p><strong>But</strong> the second option has the great advantage that it can be extended — for example to calculate summary statistics <em>over the categories of some other variable</em>. How you do this comes on the next page. </p>
+</section>
+<section id="combining-summarize-group_by" class="level2">
+<h2 class="anchored" data-anchor-id="combining-summarize-group_by">Combining <code>summarize()</code> &amp; <code>group_by()</code></h2>
+<p>You can use the <code>group_by()</code> function to group your dataset by some other variable before you calculate any summary statistics.</p>
+<p>For example, let’s say you wanted to calculate the average body height for men and women separately. This is how you would do this with <code>group_by()</code> and <code>summarize()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gndr) <span class="sc">%&gt;%</span> <span class="co"># 2.</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="co"># 3.</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A tibble: 2 × 2</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  gndr   mean_height</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>fct<span class="sc">&gt;</span>        <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> Male          <span class="fl">179.</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female        <span class="fl">168.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In human language:</p>
+<ol type="1">
+<li>“Take the <code>ess</code> dataset…”</li>
+<li>“…group the data by gender (<code>gndr</code>)…”</li>
+<li>“…and finally calculate the average height for each of the two groups. Save the result temporarily into a new variable called <code>mean_height</code>.”</li>
+</ol>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="other-statistics-multiple-statistics-in-one-operation" class="level2">
+<h2 class="anchored" data-anchor-id="other-statistics-multiple-statistics-in-one-operation">Other statistics &amp; multiple statistics in one operation</h2>
+<section id="other-summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="other-summary-statistics">Other summary statistics</h3>
+<p>The previous examples showed you how to calculate the mean value of a variable — but you can of course also calculate other summary statistics such as the variance, median, sum, or standard deviation.</p>
+<p>For example, to calculate the median age across genders you would run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gndr) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">med_age =</span> <span class="fu">median</span>(agea, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A tibble: 2 × 2</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  gndr   med_age</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>fct<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> Male      <span class="dv">51</span>  </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female    <span class="fl">42.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Similarly, if you wanted to know the number (<em>N</em>) of men and women in the sample you would use the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gndr) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">obs =</span> <span class="fu">n</span>()) </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A tibble: 2 × 2</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  gndr     obs</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>fct<span class="sc">&gt;</span>  <span class="er">&lt;</span>int<span class="sc">&gt;</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> Male      <span class="dv">75</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female    <span class="dv">68</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>n()</code> simply calculates the number of observations.</p>
+</section>
+<section id="multiple-summary-statistics" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-summary-statistics">Multiple summary statistics</h3>
+<p>You can also get multiple summary statistics at the same time. All you need to do is to add to the <code>summarize()</code> call:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gndr) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">obs =</span> <span class="fu">n</span>(),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">med_age =</span> <span class="fu">median</span>(agea, <span class="at">na.rm =</span> T),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_weight =</span> <span class="fu">mean</span>(weight, <span class="at">na.rm =</span> T))</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># A tibble: 2 × 4</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  gndr     obs med_age mean_weight</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>fct<span class="sc">&gt;</span>  <span class="er">&lt;</span>int<span class="sc">&gt;</span>   <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> Male      <span class="dv">75</span>    <span class="dv">51</span>          <span class="fl">86.8</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female    <span class="dv">68</span>    <span class="fl">42.5</span>        <span class="fl">68.9</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Last but not least, a very useful way to extend these operations is to <em>directly visualize</em> the results in a graph using <code>ggplot2</code>. You will learn how to do this in the next tutorial.</p>
+<div style="page-break-after: always;"></div>
+<p><em>A heads-up: This last part is a bit technical and you have already done quite a lot, so maybe take a quick break before doing this.</em></p>
+</section>
+</section>
+</section>
+<section id="variable-types-and-transformations" class="level1">
+<h1>Variable types and transformations</h1>
+<p>You remember from the previous tutorials that there different ways in which variables can be stored in <code>R</code>:</p>
+<ul>
+<li>“Numeric” or <code>num</code> variables: For “pure” numbers such as age;</li>
+<li>“Character” or <code>chr</code> variables: For variables that contain text (e.g., the <code>cntry</code> variable);</li>
+<li>“Factor” variables: How <code>R</code> likes to store categorical or ordinal variables with distinct categories;</li>
+</ul>
+<p>(There are also others, but this is a topic for another time.)</p>
+<section id="identifying-variable-types" class="level2">
+<h2 class="anchored" data-anchor-id="identifying-variable-types">Identifying variable types</h2>
+<p>You also know already how to recognize different types, for example by looking at the description in the <em>Environment</em> tab.</p>
+<p>In addition to the information in the <em>Environment</em> tab, you can also use specific functions to identify the type of a variable in a dataset (or, really, any other object in your workspace) with the <code>class()</code> function — you may remember this from the previous tutorial.</p>
+<p>For example, running <code>class(ess$cntry)</code> will tell you that the <code>cntry</code> variable is of type ‘character’ (<code>chr</code>).</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="changing-storage-types" class="level2">
+<h2 class="anchored" data-anchor-id="changing-storage-types">Changing storage types</h2>
+<p>As mentioned earlier, it can happen that one or more of the variables in your dataset are not stored correctly. For example, a variable that really consists of pure numbers was somehow converted to a text variable during the data import process. In that case, you need to be able to transform your variable into its proper storage type.</p>
+<p>What this means in practice is again easiest to see by looking at an example. Let’s say that, because you are feeling silly today, you want the age variable (<code>agea</code>) not stored as numbers but as text. In other words, you want to convert this variable from type ‘numeric’ to type ‘character’.</p>
+<p>To do this, you would use the <code>as.character()</code> transformation function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.character</span>(ess<span class="sc">$</span>agea)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>] <span class="st">"22"</span> <span class="st">"43"</span> <span class="st">"58"</span> <span class="st">"22"</span> <span class="st">"84"</span> <span class="st">"62"</span> <span class="st">"68"</span> <span class="st">"81"</span> <span class="st">"59"</span> <span class="st">"57"</span> <span class="st">"85"</span> <span class="st">"24"</span> <span class="st">"43"</span> <span class="st">"35"</span> <span class="st">"59"</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a> [<span class="dv">16</span>] <span class="st">"52"</span> <span class="st">"56"</span> <span class="st">"69"</span> <span class="st">"32"</span> <span class="st">"63"</span> <span class="st">"18"</span> <span class="st">"56"</span> <span class="st">"53"</span> <span class="st">"53"</span> <span class="st">"57"</span> <span class="st">"40"</span> <span class="st">"40"</span> <span class="st">"81"</span> <span class="st">"19"</span> <span class="st">"21"</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a> [<span class="dv">31</span>] <span class="st">"43"</span> <span class="st">"67"</span> <span class="st">"66"</span> <span class="st">"43"</span> <span class="st">"26"</span> <span class="st">"56"</span> <span class="st">"82"</span> <span class="st">"18"</span> <span class="st">"35"</span> <span class="st">"73"</span> <span class="st">"29"</span> <span class="st">"56"</span> <span class="st">"65"</span> <span class="st">"56"</span> <span class="st">"17"</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a> [<span class="dv">46</span>] <span class="st">"67"</span> <span class="st">"23"</span> <span class="st">"50"</span> <span class="st">"62"</span> <span class="st">"41"</span> <span class="st">"46"</span> <span class="st">"62"</span> <span class="st">"27"</span> <span class="st">"62"</span> <span class="st">"32"</span> <span class="st">"69"</span> <span class="st">"64"</span> <span class="st">"31"</span> <span class="st">"68"</span> <span class="st">"58"</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a> [<span class="dv">61</span>] <span class="st">"31"</span> <span class="st">"71"</span> <span class="st">"79"</span> <span class="st">"55"</span> <span class="st">"35"</span> <span class="st">"34"</span> <span class="st">"62"</span> <span class="st">"53"</span> <span class="st">"51"</span> <span class="st">"62"</span> <span class="st">"42"</span> <span class="st">"44"</span> <span class="st">"58"</span> <span class="st">"46"</span> <span class="st">"38"</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a> [<span class="dv">76</span>] <span class="st">"35"</span> <span class="st">"53"</span> <span class="st">"56"</span> <span class="st">"66"</span> <span class="st">"40"</span> <span class="st">"44"</span> <span class="st">"60"</span> <span class="st">"60"</span> <span class="st">"20"</span> <span class="st">"71"</span> <span class="st">"17"</span> <span class="st">"21"</span> <span class="st">"58"</span> <span class="st">"90"</span> <span class="st">"32"</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a> [<span class="dv">91</span>] <span class="st">"41"</span> <span class="st">"54"</span> <span class="st">"38"</span> <span class="st">"56"</span> <span class="st">"39"</span> <span class="st">"61"</span> <span class="st">"32"</span> <span class="st">"32"</span> <span class="st">"39"</span> <span class="st">"33"</span> <span class="st">"47"</span> <span class="st">"41"</span> <span class="st">"17"</span> <span class="st">"42"</span> <span class="st">"23"</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>[<span class="dv">106</span>] <span class="st">"76"</span> <span class="st">"36"</span> <span class="st">"74"</span> <span class="st">"23"</span> <span class="st">"55"</span> <span class="st">"18"</span> <span class="st">"43"</span> <span class="st">"28"</span> <span class="st">"44"</span> <span class="st">"44"</span> <span class="st">"38"</span> <span class="st">"48"</span> <span class="st">"38"</span> <span class="st">"48"</span> <span class="st">"41"</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>[<span class="dv">121</span>] <span class="st">"75"</span> <span class="st">"78"</span> <span class="st">"19"</span> <span class="st">"24"</span> <span class="st">"24"</span> <span class="st">"40"</span> <span class="st">"75"</span> <span class="st">"50"</span> <span class="st">"72"</span> <span class="st">"40"</span> <span class="st">"70"</span> <span class="st">"34"</span> <span class="st">"59"</span> <span class="st">"67"</span> <span class="st">"17"</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">136</span>] <span class="st">"87"</span> <span class="st">"65"</span> <span class="st">"71"</span> <span class="st">"39"</span> <span class="st">"33"</span> <span class="st">"32"</span> <span class="st">"16"</span> <span class="st">"25"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You could of course also directly add this new variable to the <code>ess</code> dataset with the assignment operator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>age_chr <span class="ot">&lt;-</span> <span class="fu">as.character</span>(ess<span class="sc">$</span>agea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Take a look at the result above: Do you notice the quotation marks around all of the numbers that <code>R</code> printed out? This indicate that you transformed <code>agea</code> into a character variable: The numbers are still there — but they are now stored as text. <code>R</code> will now refuse to do any calculations with this variable.</p>
+<p>For example, if you try to calculate the mean of this new variable, you will get an error message:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>age_chr, <span class="at">na.rm =</span> T)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>Warning <span class="cf">in</span> <span class="fu">mean.default</span>(ess<span class="sc">$</span>age_chr, <span class="at">na.rm =</span> T)<span class="sc">:</span> argument is not numeric or</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>logical<span class="sc">:</span> returning <span class="cn">NA</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+<p>Now you know what the problem often looks like — there is a variable that you know is supposed to be a numeric variable, but it somehow got stored as text. In that case, you have to tell <code>R</code> that it should treat this variable as a proper numeric variable. This works equivalently to the previous operation, but with a different function — <code>as.numeric()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the age_chr variable we just created into a new one and store in ess</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>age_num <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(ess<span class="sc">$</span>age_chr) </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This should work now</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>age_num, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">47.90909</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This might seem like much ado about nothing, but knowing this can really save you a lot of time and headaches. <strong>The important point:</strong> Be conscious of how your data are stored in <code>R</code>, and if how it is stored really makes sense. If it does not, convert your variables into an appropriate format.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="data-cleaning-and-transformations-with-factors" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning-and-transformations-with-factors">Data cleaning and transformations with <em>factors</em></h2>
+<p>Categorical or ordinal variables that are stored as factors can cause headaches during the data cleaning and management phase, often simply because they are more complex than pure numeric or character variables. In this last part of the tutorial, you will learn a few tricks that can help you deal with factor variables.</p>
+<section id="factor-to-numeric" class="level3">
+<h3 class="anchored" data-anchor-id="factor-to-numeric"><em>Factor</em> to numeric</h3>
+<p>Assume you were interested in people’s level of satisfaction with life and you therefore wanted to do a statistical analysis with the <code>stflife</code> variable from the <code>ess</code> dataset, which measures exactly this. You also see that this variable has 11 categories — from 0 (“<em>Extremely dissatisfied</em>”) to 10 (“<em>Extremely satisified</em>”) — which are enough to be used as a numeric or “metric” variable:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"stflife"</span>, <span class="at">dataset =</span> ess)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a> values                 labels</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> Extremely dissatisfied</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span>                      <span class="dv">1</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>      <span class="dv">3</span>                      <span class="dv">2</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">4</span>                      <span class="dv">3</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">5</span>                      <span class="dv">4</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>      <span class="dv">6</span>                      <span class="dv">5</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>      <span class="dv">7</span>                      <span class="dv">6</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>      <span class="dv">8</span>                      <span class="dv">7</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>                      <span class="dv">8</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>     <span class="dv">10</span>                      <span class="dv">9</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>     <span class="dv">11</span>    Extremely satisfied</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But: <code>R</code> will not do any math with the variable in this form. If you would try to calculate the average level of life satisfaction you get an error message:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>stflife, <span class="at">na.rm =</span> T)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>Warning <span class="cf">in</span> <span class="fu">mean.default</span>(ess<span class="sc">$</span>stflife, <span class="at">na.rm =</span> T)<span class="sc">:</span> argument is not numeric or</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>logical<span class="sc">:</span> returning <span class="cn">NA</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The problem: <code>stflife</code> is stored as a factor, which you can see when you you check how <code>R</code> stored it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>stflife)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"factor"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+<p>Fortunately, you can – in principle – directly extract the numerical scores from a factor-type variable like <code>sftlife</code> into a new numeric variable with <code>as.numeric()</code>.</p>
+<p><strong>But there is one thing you need to be careful about:</strong> Take another look at how the labels and underlying numbers of <code>stflife</code> correspond:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"stflife"</span>, <span class="at">dataset =</span> ess)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a> values                 labels</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> Extremely dissatisfied</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span>                      <span class="dv">1</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>      <span class="dv">3</span>                      <span class="dv">2</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>      <span class="dv">4</span>                      <span class="dv">3</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>      <span class="dv">5</span>                      <span class="dv">4</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>      <span class="dv">6</span>                      <span class="dv">5</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>      <span class="dv">7</span>                      <span class="dv">6</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>      <span class="dv">8</span>                      <span class="dv">7</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>                      <span class="dv">8</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>     <span class="dv">10</span>                      <span class="dv">9</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>     <span class="dv">11</span>    Extremely satisfied</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you take a careful look at the result here you should notice that the <strong>values and labels are off by 1</strong>: “<em>Extremely dissatisfied</em>” – which corresponds to <code>0</code> – has the underlying value of 1, the label “<em>1</em>” has the underlying value of <code>2</code>, and so on. In other words, the <code>values</code> are wrong.</p>
+<p>This is a problem because when you use <code>as.numeric()</code>, <code>R</code> will extract the <code>values</code> from <code>stflife</code> – and because the <code>values</code> are wrong, <strong>all results based on them will also be wrong.</strong></p>
+<p><strong>But: there is an easy way to fix this:</strong> You just subtract <code>1</code> from the result of <code>as.numeric()</code> and then save the result of this as a new variable:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>stflife_num <span class="ot">&lt;-</span> (<span class="fu">as.numeric</span>(ess<span class="sc">$</span>stflife) <span class="sc">-</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If this worked, then the new numeric version of <code>stflife</code> should have a maximum value of 10 – corresponding to the 0-10 scale that the respondents saw when they participated in the survey. And that is now indeed the case:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(ess<span class="sc">$</span>stflife_num)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This also means that this numeric version of <code>stflife</code> will give you correct results, for example the average value:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>stflife_num, <span class="at">na.rm =</span> T)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">7.86014</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+<p><strong>The lesson to be learned:</strong> You need to really pay attention when you convert factor-type variables to numeric ones! In general: <strong>Never run on autopilot, always remain aware of what you are doing to your data!</strong></p>
+<p>Here is a simple and quick <strong>checklist</strong> you can use to make sure that you are converting factor-type variables correctly to numeric:</p>
+<ol type="1">
+<li>Use <code>bst290::visfactor()</code> to let <code>R</code> show you how the labels and underlying values correspond.</li>
+<li>If the labels and values directly correspond – a label of 0 has the value of 0, and so on – then you can just directly use <code>as.numeric()</code></li>
+<li>If the labels and values <em>do not</em> correspond – a label of 0 has the value of 1, and so on – then you need to adjust the values by hand, e.g., by subtracting or adding the necessary number so that the values are correct.</li>
+</ol>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="factor-to-character" class="level3">
+<h3 class="anchored" data-anchor-id="factor-to-character"><em>Factor</em> to character</h3>
+<p>A related problem you might have is that you want not the numerical scores but the text labels of a factor variable. For example, say you wanted to extract the labels for the different educational degrees in Norway from the <code>edlvdno</code> variable into a new pure character variable.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
+<p>To create a new variable that contains only the text labels from <code>edlvdno</code>, you use the <code>as.character()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>edlv_chr <span class="ot">&lt;-</span> <span class="fu">as.character</span>(ess<span class="sc">$</span>edlvdno)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can verify that the new variable really is a character variable with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>edlv_chr)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"character"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And you can see the different levels with <code>unique()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(ess<span class="sc">$</span>edlv_chr)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] <span class="st">"Fullført 3-4 årig utdanning fra høgskole (Bachelor-, cand.mag., lærerhøgsko"</span>    </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a> [<span class="dv">2</span>] <span class="st">"Fullført 5-6 årig utdanning fra høgskole (master, hovedfag)"</span>                    </span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a> [<span class="dv">3</span>] <span class="st">"Universitet/høgskole, mindre enn 3 år, men minst 2 år (høgskolekandidat, 2-"</span>    </span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a> [<span class="dv">4</span>] <span class="st">"Fullført 5-6 årig utdanning fra universitet (master, hovedfag), lengre profesj"</span> </span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a> [<span class="dv">5</span>] <span class="st">"Vitnemål fra påbygging til videregående utdanning (fagskoleutdanning, teknisk"</span>  </span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a> [<span class="dv">6</span>] <span class="st">"Videregående avsluttende utdanning, yrkesfaglige studieretninger/utdanningsprog"</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a> [<span class="dv">7</span>] <span class="st">"Ungdomsskole (grunnskole, 7-årig folkeskole, framhaldsskole, realskole)"</span>        </span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a> [<span class="dv">8</span>] <span class="st">"Fullført 3-4 årig utdanning fra universitet (Bachelor, cand.mag.)"</span>              </span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a> [<span class="dv">9</span>] <span class="st">"Forkurs til universitet/høgskole som ikke gir studiepoeng"</span>                      </span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">10</span>] <span class="st">"Videregående avsluttende utdanning, allmennfaglige studieretninger/studieforber"</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>[<span class="dv">11</span>] <span class="st">"Barneskole (første del av obligatorisk utdanning)"</span>                              </span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>[<span class="dv">12</span>] <span class="st">"Vitnemål fra folkehøgskole"</span>                                                     </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="more-tools-for-working-with-factors" class="level3">
+<h3 class="anchored" data-anchor-id="more-tools-for-working-with-factors">More tools for working with <em>factors</em></h3>
+<p>You probably see now that working with factors can be a bit tedious, simply because they are a bit more complex than other types of variables. But you hopefully also see their structure — numbers with text labels — more clearly now that you have seen how you can extract the different elements with <code>as.numeric()</code> and <code>as.character()</code>.</p>
+<p>If you find yourself working with factors a lot, you will probably want to use the <a href="https://forcats.tidyverse.org/"><code>forcats</code> package</a>. This package is specifically designed for data cleaning and management with factors and is also included in the <code>tidyverse</code> collection. See then also Hadley Wickham’s <a href="https://r4ds.had.co.nz/factors.html"><em>R for Data Science</em></a>.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+</section>
+<section id="summing-up-next-steps" class="level1">
+<h1>Summing up &amp; next steps</h1>
+<p>Now you should know the basics of data management and data cleaning. This may have been a tough one — but understanding variable types and data transformations is absolutely critical if you want to do your own data analyses. Of course, the emphasis here was on <em>“basics”</em> — there is much left to learn and, if you do your first own data analysis project, you will most likely run into situations in which what you learn here is not sufficient to solve a data cleaning problem.</p>
+<p>If you would like to learn more tricks and techniques for data cleaning, here are some resources you can use:</p>
+<ul>
+<li>For a more extensive introduction to the <code>tidyverse</code> approach, see Hadley Wickham’s <em><code>R</code> for Data Science</em>: https://r4ds.had.co.nz/).</li>
+<li>For an introduction (in Norwegian) to data cleaning and management using <code>base R</code>, see <em>Lær dig R</em></li>
+<li>As always: Someone else has probably had your problem or a similar one before, and it was solved on <a href="https://stackoverflow.com">stackoverflow.com</a>.</li>
+<li>Finally, <em>ChatGPT</em> and some other “AI” chatbots can do coding, including in <code>R</code>, and they may be able to give you solutions to some problems — but be careful, chatbots do “hallucinate” and you may still need to adapt the provided solution before it really works.</li>
+</ul>
+<p>Next, some (brief, promise!) de-bugging exercises (as last time: <em>Tutorials</em>, and there choose “Data cleaning &amp; management”).</p>
+<!-- What this tutorial covers is of course not everything there is to learn (for a more thorough and extensive coverage of data cleaning with `R` see , and there will be situations in   -->
+<!-- but it is what you need to get started as a beginner data analyst.  -->
+<!-- \newpage -->
+<!-- # Exercises -->
+<!-- As before, you apply the skills you just learned to a real-life dataset --- again, the *European Social Survey*. Always use the codebook to check what the different variables you use in these exercises really measure. Make sure the `tidyverse` package is loaded, and load all other packages as relevant. -->
+<!-- ## Exercise 1 -->
+<!-- In this exercise, you first import data from the ESS, and then you select and filter the dataset: -->
+<!-- 1. Use `haven::read_sav()` to import the datafile containing the data from the ESS (round 7, 2014), like you did in the previous tutorial; make sure you transform the data after importing with `labelled::unlabelled()`; -->
+<!-- 2. Trim the dataset by selecting the following variables: `name`, `essround`, `idno`, `cntry`, `gincdif`, `ppltrst`, `agea`, and `gndr`; -->
+<!-- 3. Trim the data further by filtering the dataset to only those observations that are from Norway (`cntry=="NO"`); -->
+<!-- 4. Link both operations with the pipe (`%>%`) and store the trimmed dataset as `ess_no`; -->
+<!-- 5. If you like, create a data dictionary of the `ess_no` dataset; -->
+<!-- ## Exercise 2 -->
+<!-- Now you transform some variables: -->
+<!-- 1. Transform the `gndr` variable into a "character"-type variable, save the result as `gndr_chr` into the `ess_no` dataset, and let `R` print out the unique observations of this new variable. -->
+<!-- 2. Dummy-code the `agea` variable into a 0/1 variable that has the value `1` if a respondent is younger than 30 (`<30`) and 0 otherwise; store the new variable into the `ess_no` dataset as `young`; -->
+<!-- 3. Browse to https://europeansocialsurvey.org and look up what the `ppltrst` variable exactly measures (see "Media and social trust"). Transform the `ppltrst` variable from factor to numeric --- and make sure that the numbers are correct! Save this new variable as `ppltrst_num` into the `ess_no` dataset. -->
+<!-- ## Exercise 3 -->
+<!-- In this exercise, you use your newly created variables to calculate some summary statistics. Make sure to use the pipe operator (`%>%`) to efficiently connect everything. -->
+<!-- 1. Use the new numerical version of `ppltrst` and the new `young` variable to see if people who are younger than 30 have, on average, a lower level of trust in others than those who are older. -->
+<!-- 2. Calculate the median, average, and standard deviation of trust in others (`ppltrst_num`) over the categories of the `young` variable --- all in one go! -->
+
+
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Think back to last week: Maybe you remember that the full ESS dataset included more than 600 variables?<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The <code>idno</code> variable does not really contain substantive information about respondents, but it is good practice to keep this variable because it can come in handy later on — for example, in case you want to add other variables.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>“Why?”, you may ask? This is how the function was designed by its author, Hadley Wickham, and the detailed answer for why he did this is quite technical, see: https://design.tidyverse.org/dots-prefix.html. Not to worry, you will get around this just a few pages from here!<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>This is a bit more advanced, but very useful in practice!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Dropping <code>NA</code>s during data cleaning also helps you avoid having to use the <code>na.rm</code> option when you calculate summary statistics.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>See also <a href="https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/" class="uri">https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/</a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Alternatively, see this RStudio Community board discussion for a solution: https://community.rstudio.com/t/pipe-operator-does-not-work/66377<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p><code>if_else()</code> is a newer version of the similar <code>ifelse()</code> function that is built into <code>R</code> from the start. Both work essentially in the same way, but <code>if_else()</code> is specifically designed for <code>mutate()</code> and also a bit stricter — which helps you avoid errors.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>You already know from the previous tutorial that <code>edvldno</code> is a factor, but feel free to check again with <code>class(ess$edlvdno)</code>.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./tutorial_2.html" class="pagination-link" aria-label="Tutorial 2: Importing &amp; exploring your data">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Tutorial 2: Importing &amp; exploring your data</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./tutorial_4.html" class="pagination-link" aria-label="Tutorial 4: Data visualization with `ggplot2`">
+        <span class="nav-page-text">Tutorial 4: Data visualization with <code>ggplot2</code></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

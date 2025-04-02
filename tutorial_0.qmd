@@ -56,20 +56,16 @@ Working with `R` has become quite a bit easier with the arrival of `RStudio` a w
 
 You will of course first need to install both `R` and `RStudio` before you can use them. You can download `R` and `RStudio` from <https://posit.co/download/rstudio-desktop/> (no need to go for the pro-versions; the free *Desktop* version is more than sufficient!).
 
-If you like, you can also watch the following two videos that will guide you through the installation process:
+If you like, you can also watch a video that will guide you through the installation process: [https://vimeo.com/415501284](https://vimeo.com/415501284){target="_blank"}. The video is a *bit* outdated (the website for *RStudio* is different now), but the most important information is still correct.
 
--   Install `R`: <https://vimeo.com/203516510>
--   Install `RStudio`: <https://vimeo.com/203516968>
 
-------------------------------------------------------------------------
-
-**IMPORTANT: You absolutely need to install the latest versions of R and RStudio!**
+::: {.callout-important title="You absolutely need to install the latest versions of R and RStudio!"}
 
 If your operating system (Windows, MacOS, Linux) is too old to support the latest versions of R and RStudio, then you have to update your operating system first.
 
 **No, there really is no other way. If you do not have the latest versions of R and RStudio installed because you refuse to update your computer, then you will run into problems.**
 
-------------------------------------------------------------------------
+:::
 
 <!-- \newpage -->
 
@@ -152,11 +148,11 @@ Once you really start working with `R`, you will use a lot of different files: D
 
 `RStudio` offers you a great way to keep all these files organized: *Projects*. A project automatically organizes all the files you need to work with in a given context (e.g., this course) and makes sure that any outputs you create (e.g., graphs) are stored somewhere where you can find them.
 
-------
+::: {.callout-important}
 
 You should have *one* (and only one) project for this course in `RStudio`. This project includes all the files (dataset files, code files, output) that you work with during this course. All these files should be stored in *one* (and only one) folder on your computer. Your project will be associated with that folder.
 
-------
+::: 
 
 Follow these steps to create the project:
 
@@ -205,16 +201,16 @@ If you are connected to the internet, `R` will now download and install the pack
 
 \newpage
 
-------------------------------------------------------------------------
+::: {.callout-warning}
 
-**Important:** In some cases, `R` might ask you questions during the installation process (this applies to all package installations, now and in the future):
+In some cases, `R` might ask you questions during the installation process (this applies to all package installations, now and in the future):
 
 1.  If it asks you to *update* packages, choose "CRAN packages only" (press `2`)
 2.  If it asks you whether you want to "*install from sources that need compilation*", **choose "No"** (press `N`)
 
 (Did you by accident choose a wrong answer to one of the questions above? No worries, just re-run the `install.packages("tidyverse")` command above to start the installation process again.)
 
-------------------------------------------------------------------------
+:::
 
 \newpage
 
@@ -246,11 +242,11 @@ install.packages("remotes")
 
 You will now see a lot more computer code gibberish running over your screen --- again, nothing to worry about as long as you get the same result as earlier.
 
-------------------------------------------------------------------------
+::: {.callout-warning title="For Windows users"}
 
-**For Windows users:** *R* might give you a warning that you should have something called *RTools* installed --- this is not necessary for now! Just move on. If you want to install *RTools* anyways, you can do this in a few more steps. You can find an instruction here: <https://cran.r-project.org/bin/windows/Rtools/rtools40.html>.
+`R` might give you a warning that you should have something called *RTools* installed --- this is not necessary for now! Just move on. If you want to install *RTools* anyways, you can do this in a few more steps. You can find an instruction here: <https://cran.r-project.org/bin/windows/Rtools/rtools40.html>.
 
-------------------------------------------------------------------------
+:::
 
 \newpage
 
@@ -317,14 +313,13 @@ library(bst290)
 
 There should now not be any warnings, etc.
 
-\newpage
-### Good to know: Loading only a specific tool from a package with the "double-colon" method
+::: {.callout-tip title="Good to know: Loading only a specific part of a package with the 'double-colon' method"}
 
-You can also directly "call" specific functions from a package using the "double-colon" method: ``package::function()`. You can use this directly, without loading the entire package first.
+You can also directly "call" specific functions from a package using the "double-colon" method: `package::function()`. You can use this directly, without loading the entire package first.
 
 Maybe you notice that you already used that method earlier, when you installed the `bst290` package: `remotes::install_github()`. In this case, you used just this *one specific* function from the `remotes` package.
 
-\newpage
+:::
 
 # Summary
 

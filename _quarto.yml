@@ -16,6 +16,16 @@ website:
       - href: tutorial_0.qmd
       - href: tutorial_1.qmd
       - href: tutorial_2.qmd
+      - href: tutorial_3.qmd
+      - href: tutorial_4.qmd
+      - href: tutorial_5.qmd
+      - href: tutorial_6.qmd
+      - href: tutorial_7a.qmd
+      - href: tutorial_7b.qmd
+      - href: tutorial_8.qmd
+      - href: tutorial_9.qmd
+      - href: tutorial_10.qmd
+      - href: tutorial_11.qmd
 
 format:
   html:

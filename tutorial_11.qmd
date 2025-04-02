@@ -1,0 +1,362 @@
+---
+title: "Tutorial 11: Logistic regression for binomial dependent variables"
+author: "Carlo Knotz"
+format:
+  html:
+    toc: true
+lightbox: true
+lang: en
+editor_options: 
+  chunk_output_type: console
+---
+
+[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial11_logit.pdf){.btn .btn-outline-primary .btn role="button"} 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "")
+library(tidyverse)
+library(prediction)
+library(margins)
+library(texreg)
+
+```
+
+# Introduction
+
+When working as a (social) data analyst, you will often be interested in outcomes that have two distinct values: Did someone vote in the last election or not? Is someone a union member or not? Does a country go to war or experience a coup d'état in a given year or not? You will, in other words, work with dependent variables that are *binary* or *dichotomous*. 
+
+In addition, your theory for your outcome or dependent variable will often specify several different potential causes. For example, a person's decision to vote in an election might depend their age (older people tend to be more likely to vote) but also their education or income. This means that you need to use multivariate regression to really test your theory. 
+
+You already know what you would use in this case if you had a *linear* dependent variable: Ordinary least squares (OLS) regression. But one of the central assumptions underlying the OLS model is that the dependent variable must be linear --- and this assumption does not hold if you are interested in electoral participation, union membership, or coups.
+
+Instead, you need to use the **logistic regression** (a.k.a., "logit") model. The logistic regression model is specifically designed to analyze the effects of multiple independent variables on a binary outcome or dependent variable. An alternative is the **probit regression model**, which works slightly differently but will usually give you almost identical results.^[If you want a thorough introduction to the logit and probit models as well as a number of other regression models for non-linear dependent variables, you can read Long, J. S. (1997). *Regression Models for Categorical and Limited Dependent Variables*. Sage, London. To learn about the even more advanced conditional logit model and its extensions, which are often used in research on voter behavior, you can read Train, K. E. (1993). *Qualitative Choice Analysis. Theory, Econometrics, and an Application to Automobile Demand*. MIT Press, Cambridge, 3rd edition, and Train, K. E. (2009). *Discrete Choice Methods with Simulation.* Cambridge University Press, Cambridge, 2nd edition.]
+
+In this tutorial, you will learn how you estimate and interpret a logistic regression model. Topic-wise, we continue with the example from tutorial 6 on tabular analysis: Political participation in the form of voting in a national election.
+
+Before you continue here, make sure that you have read and understood the introduction to the logistic regression model in Kellstedt & Whitten (2018, Chapter 12). Otherwise, you may be able to run the code shown here but you will not understand what any of this really means.
+
+\newpage
+
+# Hypotheses
+
+As in Tutorial 6, we will look at how political participation differs by gender, and now also if the relationship is robust to controlling for some other variables (age, education, trade union membership). Just to remind you, the theory and hypotheses from Tutorial 6 were as follows:
+
+The guiding hypothesis for this analysis is: *Women have higher rates of political participation than men.* 
+
+The corresponding *null hypothesis* is that there is *no difference* between men and women when it comes to political participation.
+
+
+Similar to *Tutorial 6*, we study voting as our form of political participation.
+
+\newpage
+
+## Setup and data management
+
+As always, the start is to load the necessary packages, which are:
+```{r lib, eval=F, echo=T}
+library(tidyverse) # for data management & visualization
+library(prediction) # to calculate predicted probabilities
+library(margins) # to calculate marginal effects
+library(texreg) # to present regression results
+```
+
+The `prediction` and `margins` packages may be new to you (if you did not work through the extra part of Tutorial 9 on multivariate linear regression). These two packages are used to convert the results of regression analyses into more intuitive and useful "quantities of interest", which is especially important when it comes to logistic regression, as you will see further below.
+
+\newpage
+
+## Data import and initial data cleaning
+
+This part is exactly as before and you should now already know what to do here (see Tutorials 8 and 9 for details):
+
+1.  Use `haven::read_dta()` to import the ESS round 7 (2014) dataset; save it as
+    `ess7`;
+2.  Transform the dataset into the familiar format using
+    `labelled:: unlabelled()`;
+3.  Trim the dataset:
+    + Keep only observations from Norway;
+    + Select the following variables: `essround`, `idno`, `cntry`,
+    `vote`, `eduyrs`, `agea`, `mbtru`, and `gndr`;
+    + Use the pipe to link everything;
+    + Save the trimmed dataset as `ess7`;
+4.  If you like, create a data dictionary using `labelled::generate_dictionary()`;
+
+```{r datatrim, echo=F, eval=T}
+ess7 <- labelled::unlabelled(haven::read_dta("ess7.dta")) %>% 
+  filter(cntry=="NO") %>% 
+  select(essround,idno,cntry,vote,eduyrs,gndr,agea,mbtru) %>% 
+  mutate(gndr = droplevels(gndr),
+         mbtru = droplevels(mbtru))
+
+```
+
+\newpage
+
+## Preparing the dependent variable 
+
+### Getting rid of extra categories
+
+The previous part took care of most of the data cleaning and preparation, but the dependent variable (`vote`) needs a bit more work. We go over this in detail because the situation here is one that you may often encounter in practice, so it is good to know how to deal with it.
+
+You will see more clearly what the problem is when you let `R` print out a frequency table of the variable with `table()`:
+```{r freqtab, collapse=T}
+table(ess7$vote)
+```
+
+It turns out that the `vote` variable has *three* categories: "Yes", "No", and "Not eligible to vote". This is a problem because the type of logistic regression model we use here works only for dependent variables that have exactly two categories.^[There are of course other models for more complex variables, see e.g., Long, J. S. (1997). *Regression Models for Categorical and Limited Dependent Variables*. Sage, London; or Train, K. E. (1993). *Qualitative Choice Analysis. Theory, Econometrics, and an Application to Automobile Demand*. MIT Press, Cambridge, 3rd edition.]
+
+This means that if we want to use the `vote` variable, we first have to get rid of one category. In this case, it makes sense to get rid of the "Not eligible" category because the people who are not eligible to vote (e.g., immigrants) have by definition a probability of 0 to vote, which means they are not that interesting to us here.
+
+Therefore, we recode the `vote` variable by setting all cases that fall into the "Not eligible" category to missing (`NA`). To do that, we use the `na_if()` function. This function simply takes a variable (specified under `x` in the function) and replaces all observations that have a particular value (specified under `y`) with `NA`. In this case, we create a new version of `vote` which is `NA` if the original version of `vote` is equal to "Not eligible" and then replace the old with the new version in the dataset:
+```{r dumvote, collapse=TRUE}
+ess7 %>% 
+  mutate(vote = na_if(x = vote,
+                      y = "Not eligible to vote")) -> ess7
+```
+
+**Important:** You obviously need to save the result with the assignment operator. In this case, we use the "reversed" assignment operator and save the dataset with the new version of the `vote` variable under the old name (`ess7`).
+
+\newpage
+If we now again tabulate the vote variable, the "Not eligible" category is empty:
+```{r votetab2, collapse=T}
+table(ess7$vote)
+```
+
+But you will also notice another thing: The "Not eligible" category is now empty, and therefore no longer useful. This means we can get rid of it by using `droplevels()`:
+```{r droplevs, collapse=T}
+ess7$vote <- droplevels(ess7$vote)
+```
+
+Another check reveals that the variable is now probably coded and has exactly two categories:
+```{r votetab3, collapse=T}
+table(ess7$vote)
+```
+
+### Setting the reference category
+
+A last thing: When you run a logistic regression model, `R` will take one category of the dependent variable as the 'baseline' or 'reference' category and then estimate the probability of an observation falling into the *other* category. For example, if the baseline category of `vote` is "No", then `R` will estimate the probability of falling into the "Yes" category. *Importantly*, `R` might also go the other direction and take "Yes" as the reference category. In this case, the model will still be correct --- but the interpretation might be weird.
+
+To be sure that `R` picks the correct reference category, it makes sense to set it explicitly. To do this, you use the `relevel()` function:
+```{r relev, collapse=T}
+ess7$vote <- relevel(ess7$vote,
+                     ref = "No")
+```
+
+With this function, we tell `R` that it should replace the `vote` variable with a new version of itself, in which "No" is the reference or baseline category.
+
+\newpage
+
+# Descriptive statistics
+
+It is always good practice to present your dependent variable to your readers in your report or thesis so that they understand what you are working with. In this case, a bar graph would make sense:
+```{r votegraph, echo=T, eval=T , collapse=T, warning=F, message=F}
+ess7 %>%
+  drop_na(vote) %>% # we remove the NAs for the graph
+  ggplot(aes(x = vote)) +
+    geom_bar() +
+    labs(x = "Participated in last national election?",
+         y = "Number of observations") +
+    theme_classic()
+```
+
+*Normally*, you would now also do more uni- and bivariate analyses using graphs and tables and present these (see e.g., Tutorial 9). For the sake of brevity, however, we will now move straight to the multivariate regression analysis.
+
+\newpage
+# Multivariate logistic regression
+
+You probably remember that you can run a *linear* regression in `R` with the `lm()` function. Inside this function, you specify the model formula (e.g., `income ~ education + age + gender`) and the dataset (`data = mystudy`). Estimating a logistic regression model works almost the same way, with two small but important exceptions.
+
+First, we would not use the `lm()` function, which is for **l**inear **m**odels only. Instead, we use the `glm()` function, which stands for **g**eneralized **l**inear **m**odels. The `glm()` function allows you to estimate regression models where your dependent variable is not linear --- for example, logistic regression with a binary variable, but also other types of models for different types of categorical and "non-linear" variables.
+
+And this is also the second difference: We have to tell `R` what type of dependent variable we have, and what type of model we want to use. We do this by specifying the *link* function between the dependent variable and the independent variables (see Kellstedt & Whitten 2018, Chapter 12 for a detailed explanation of what a "link function" is) with the `family` option ("*argument*"). In our case, because our dependent variable `vote` is a *binomial* variable (a categorical variable with two categories) we specify `family="binomial"`.
+
+As in the case of `lm()`, you first run the model and store the results as a model object. Then you can let `R` show you a summary of the results with `summary()`.
+
+\newpage
+
+## Bivariate model
+
+As before, we start with a bivariate model that includes only the main independent variable, `gndr`:
+
+```{r mod1, eval=T, echo=T, collapse=T}
+mod1 <- glm(vote ~ gndr ,
+            data = ess7, family = "binomial")
+
+summary(mod1)
+```
+
+At first sight, the model results look similar to what you got from `lm()`: You get coefficient estimates under `Estimate`, standard errors, *p*-values, and significance starts in addition to some summary statistics. 
+
+**But be careful:** The coefficient estimates you get from a logistic regression model are logarithmic odds-ratios (or "log-odds") and these very difficult to interpret by themselves. All you can really directly interpret are the *p*-values and the signs of the coefficients (are they positive or negative?). In other words, all you can see is if a variable has a positive or negative effect and if that effect is statistically different from 0 --- but **the coefficient estimates from a logit model cannot really be interpreted as measures of how strong or weak a given effect is exactly**.
+
+In this case, you can see that the dummy for females (which `R` automatically created) is positively associated with voting (i.e., women have a higher probability of voting than men), but also that the relationship is not statistically significant (and we conclude therefore that there is most likely no difference between men and women).
+
+\newpage
+
+## Multivariate model
+
+Next, we see what happens when we include the other independent variables and make the model multivariate:
+```{r mod2, eval=T, echo=T, collapse=T}
+mod2 <- glm(vote ~ gndr + eduyrs + agea + mbtru,
+            data = ess7, family = "binomial")
+
+summary(mod2)
+```
+
+The effect of being a woman is still the same as before: The coefficient is positive, but not significant. Thus, there is probably no difference between men and women when it comes to voting in elections.
+
+But you also see that the other variables have significant effects: Every additional year of education completed significantly raises one's probability to participate in an election, all else held constant, and so does every additional year of age. 
+
+The trade union membership variable is a categorical variable, and thus has a different interpretation: Here the (omitted) baseline or reference category is "Being a union member", and the displayed coefficients for "Not a member" and "Previously been a member" indicate the differences to that reference category. In this case, having previously been a union member and not being a union member corresponds to a lower chance of participating in an election, and the difference is significant at conventional levels in the case of the "No" category.
+
+\newpage
+
+## Presenting the results as a table
+
+As in the case of a linear regression analysis before, it is important to present these results in a proper table. And here you can again use the `texreg()` package:
+```{r screenreg, collapse=T}
+screenreg(list(mod1,mod2),
+          stars = 0.05,
+          custom.coef.names = c("Intercept",
+                                "Female","Years of educ. completed","Age",
+                                "Previous union member","Not a union member"))
+```
+
+This is also helpful to you because you get a few more helpful summary statistics like the BIC and AIC information criteria (lower values mean a better-fitting model) and the deviance (a measure that gives you an indication of how far off your model is, comparable to the RMSE in a linear regression model). The log-likelihood is a quite cryptic statistic and primarily used to evaluate the overall significance of your model.^[You can see if your model as a whole is significantly better at predicting your outcome by using a likelihood-ratio test (see Long 1997, Chapter 4). In `R`, you get this by running an "empty" model (e.g., `mod0 <- glm(vote ~ 1 , data = ess7)`) and then comparing the empty model with your main specification with the `anova()` function (e.g., `anova(mod0,mod2)`).]
+
+Still: All you can say is whether a variable has a significant effect, and in which direction that effect goes --- but the main problem remains: **You cannot say by how large the effect of a variable really is!** To do so, you need to calculate predicted probabilities or changes in predicted probabilities --- and this comes next.
+
+\newpage
+
+# Calculating meaningful quantities of interest
+
+You may remember from the previous tutorials that you can use the `prediction` and `margins` packages to calculate predicted values and marginal effects based on a linear regression model result. And you can do the same with a logistic regression model, the only difference is that everything is expressed in *predicted probabilities* or changes in these probabilities.
+
+## Predicted probabilities
+
+The best place to start is with overall predicted probabilities because these are the most intuitive to interpret. To get these, we use the `prediction()` function from the `prediction` package.
+
+When we use this function, we need to specify which model we want to base the prediction on and over which values of which variable. Since our main interest is in the effect of gender, we start by getting the predicted probabilities of voting for men and women based on the multivariate model:
+```{r pred1, collapse=F}
+prediction(mod2,
+           at = list(gndr = c("Male","Female")))
+```
+
+The numbers you get here are the predicted probabilities of voting in the usual 0-1 notation, where 1 corresponds to 100%. You can see that men have almost exactly the same probability of voting as women: 87% compared to 88%. 
+
+To also get measures of uncertainty and statistical significance (*p*-values & confidence intervals), we can use the `prediction_summary()` function:
+```{r pred1sum, collapse=F}
+prediction_summary(mod2,
+           at = list(gndr = c("Male","Female")))
+```
+
+Here, the *p*-values tell us that both predicted probabilities are significantly different from 0: We can say that both men and women in the overall Norwegian population have a probability of voting that is higher than 0 (which is arguably not very surprising).
+
+The more interesting (but harder to see) thing is that the confidence interval for one gender include the predicted value of the other gender. For example, the confidence interval for the predicted probability of voting for men includes the predicted value for women. This reflects again the lack of a statistically significant effect of gender. 
+
+And this lack of a statistically significant difference between men and women is probably easier to see when you visualize the result (as before, by "piping" the result into a ``ggplot()` graph):
+```{r pred1graph, collapse=T}
+prediction_summary(mod2,
+           at = list(gndr = c("Male","Female"))) %>% 
+  ggplot(aes(x = `at(gndr)`, y = Prediction, ymin = lower, ymax = upper)) +
+    geom_point() +
+    geom_linerange() +
+    scale_y_continuous(breaks = seq(.85,.95,.01),
+                       labels = scales::percent) + # to get real percentages
+    labs(x = "Gender", y = "Predicted probability of voting",
+         caption = "95% confidence intervals.") +
+    theme_classic()
+```
+
+The conclusion to be drawn here is then obviously that our theory is wrong and we need to stick with the null hypothesis: Gender does not matter for electoral participation.
+
+\newpage
+
+You can of course use the `prediction()` function also to get predicted probabilities for numeric independent variables. And, in this case, this also gets us a more interesting result. 
+
+For example, let's look at how the effect of education (`eduyrs`) on voting when expressed in predicted probabilities. To get these (plus measures of uncertainty), we use the `prediction_summary()` function and specify a sequence of values of `eduyrs` over which these should be calculated:
+```{r pred2, collapse=F}
+prediction_summary(mod2,
+           at = list(eduyrs = seq(from = 0, to = 25, by = 1)))
+```
+
+If you now look at the numbers under `Prediction`, you can see how the probability of voting increases from around 62% for someone with no education to around 96% for someone with 25 years of education. That is an increase of more than 30 percentage points, which is not exactly small.
+
+\newpage
+
+A visualization should again make this even easier to see:
+```{r pred2vis, collapse=TRUE}
+prediction_summary(mod2,
+           at = list(eduyrs = seq(from = 0, to = 25, by = 1))) %>% 
+  ggplot(aes(x = `at(eduyrs)`, y = Prediction, ymin = lower, ymax = upper)) +
+    geom_point() +
+    geom_line(linetype = "dashed") +
+    geom_ribbon(alpha = .3) +
+    scale_y_continuous(labels = scales::percent) + # to get real percentages
+    labs(x = "Years of education completed",
+         y = "Predicted probability of voting") +
+    theme_classic()
+
+```
+
+The graph clearly shows the strong increase in the probability to vote as education increases. Also visible is that the estimates are more uncertain (wider confidence intervals) at low values of the `eduyrs` variable and get narrower for higher values. This most likely reflects that fact that there are only very few observations with less than 10 years of education in the dataset.
+
+\newpage
+
+## Marginal effects
+
+In addition to the overall predicted probabilities, we would usually also like to know by *how much exactly* a change in an independent variable changes these probabilities. These *marginal effects* (i.e., changes in predicted probabilities associated with a change in a given independent variable) are easier to interpret and more similar in nature to the regression coefficients you get from linear regression model.
+
+Getting these marginal effects (plus measures of uncertainty) is possible with the `margins_summary()` function from the `margins` package. 
+
+You might appreciate the fact that using this function is fairly simple (at least in its basic form):
+```{r margs1, collapse=T}
+margins_summary(model = mod2)
+```
+
+All we have to specify here is the model we want to base the calculations on, and the function automatically gives us the changes in the predicted probabilities associated with a given variable.
+
+And the result is also fairly easy to interpret: Every additional year of age increases the probability of voting by 0.34 percentage points (0.0034 $\times$ 100), while every additional year of education increases it by 1.16 percentage points. As the *p*-values indicate, these effects are significant.
+
+You can also see that the predicted probability of voting for women is about 1.24 percentage points higher than that for men, but again that this is not statistically different from 0. And finally, those who are not a union member or who have previously been members have predicted probabilities of voting that are about 4 and 5.6 percentage points lower compared to current union members.
+
+\newpage
+These results can of course also be visualized:
+```{r margs1plot, collapse=T}
+margins_summary(model = mod2) %>% 
+  ggplot(aes(y = factor, x = AME, xmin = lower, xmax = upper)) +
+    geom_point(shape = 1) + # shape = 1 gives hollow dots
+    geom_linerange() +
+    geom_vline(xintercept = 0, linetype = "dashed", color = "gray") +
+    scale_y_discrete(labels = c("Age","Years of educ. compl.",
+                                "Female","Not a union member",
+                                "Previous union member")) + 
+    scale_x_continuous(labels = scales::percent) + # to get real percentages
+    labs(x = "Effect of variables on pred. probability of voting",
+         y = "", caption = "95% confidence intervals.") +
+    theme_classic()
+```
+
+Again, you see that:
+
+  * Gender makes no difference (the effect of being a woman is not significantly different from 0).
+  * Age and education have positive effects, and these are significantly different from 0.
+  * Compared to currently being a union member (the omitted baseline category of the union membership variable), having previously been part of a union does not *significantly* change one's probability of voting.
+  * However, not being a union member does significantly reduce the probability of voting compared to the omitted baseline category, being a union member.
+
+
+<!-- \newpage -->
+
+<!-- # Exercises -->
+
+<!-- Now that you know how to run and interpret the results of a logistic regression model, you can directly apply these skills and see if there is a significant effect of gender when it comes to the other form of political participation we are interested in here, signing a petition. -->
+
+<!-- 1. Inspect the `sngptit` variable and apply any necessary cleaning operations to turn it into a proper binomial variable; -->
+<!-- 2. Visualize the distribution of this variable in a suitable graph; -->
+<!-- 3. Run a bivariate and then a multivariate logistic regression model in which you estimate the effects of gender, age, education, and trade union membership on the probability of signing a petition; -->
+<!-- 4. Interpret the results using predicted probabilities and marginal effects. Do this once for gender and then for one other numeric variable; -->
+<!-- 5. Present all results as graphs or properly formatted tables; -->
+
+
+
+
+

@@ -1,11 +1,15 @@
 ---
-title: "Welcome!"
+title: "Hei!"
 ---
 
-**[This site is currently work in progress!!!]**
+This website features all `R` tutorials for the BST290 *Kvantitativ forskningsmetode* course. Simply use the menu on the side to navigate to and between the different tutorials and use the search field (top right) to find tutorials with specific contents.
 
-This website features all `R` tutorials for the BST290 *Kvantitativ forskningsmetode* course. Simply use the menu on the side to navigate to and between the different tutorials and use the search field to find tutorials with specific contents.
+::: {.callout-important}
+
+To make reading the tutorials easier and quicker, **download them as PDFs and print them out**. There are download buttons at the beginning of each tutorial. You *can* read all the material "on screen" if you really want to, but that is not recommended. Ideally, you read each of the tutorials first on paper and you use this website mainly to quickly look things up later.
+
+:::
 
 If you have questions, notice something that is wrong or is not shown properly, please send an email to [carlo.knotz@uis.no](mailto:carlo.knotz@uis.no).
 
-That's it :-) Lykke til!
+That's it. Lykke til!

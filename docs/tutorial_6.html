@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carlo Knotz">
+
+<title>Tutorial 6: Tabular Analysis &amp; the \chi^2 test – R Tutorials for BST290</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./tutorial_7a.html" rel="next">
+<link href="./tutorial_5.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R Tutorials for BST290</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorial_6.html">Tutorial 6: Tabular Analysis &amp; the $\chi^2$ test</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hei!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 0: Installation &amp; Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 1: Your first steps in <code>R</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 2: Importing &amp; exploring your data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 3: Data cleaning &amp; management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 4: Data visualization with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 5: Confidence intervals</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_6.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Tutorial 6: Tabular Analysis &amp; the $\chi^2$ test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7a: <em>t</em>-test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7b: Correlation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 8: Bivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 9: Multivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 10: <em>It depends!</em> Interactive regression models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 11: Logistic regression for binomial dependent variables</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses">Hypotheses</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
+  <ul class="collapse">
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages">Loading packages</a></li>
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning">Data cleaning</a></li>
+  <li><a href="#initial-exploratory-data-analysis-eda" id="toc-initial-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#initial-exploratory-data-analysis-eda">Initial exploratory data analysis (EDA)</a></li>
+  </ul></li>
+  <li><a href="#bivariate-analysis" id="toc-bivariate-analysis" class="nav-link" data-scroll-target="#bivariate-analysis">Bivariate analysis</a>
+  <ul class="collapse">
+  <li><a href="#descriptive-analysis" id="toc-descriptive-analysis" class="nav-link" data-scroll-target="#descriptive-analysis">Descriptive analysis</a>
+  <ul class="collapse">
+  <li><a href="#a-cross-table-showing-frequencies" id="toc-a-cross-table-showing-frequencies" class="nav-link" data-scroll-target="#a-cross-table-showing-frequencies">A cross-table showing frequencies</a></li>
+  <li><a href="#a-cross-table-showing-percentages" id="toc-a-cross-table-showing-percentages" class="nav-link" data-scroll-target="#a-cross-table-showing-percentages">A cross-table showing percentages</a></li>
+  </ul></li>
+  <li><a href="#running-a-chi2-test" id="toc-running-a-chi2-test" class="nav-link" data-scroll-target="#running-a-chi2-test">Running a <span class="math inline">\(\chi^2\)</span> test</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#voluntary-creating-mosaic-plots" id="toc-voluntary-creating-mosaic-plots" class="nav-link" data-scroll-target="#voluntary-creating-mosaic-plots">(Voluntary) Creating mosaic plots</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tutorial 6: Tabular Analysis &amp; the <span class="math inline">\(\chi^2\)</span> test</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carlo Knotz </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a href="https://raw.github.com/cknotz/bst290_tutorials/main/tutorial6_tabanalysis.pdf" class="btn btn-outline-primary" role="button">Download as PDF</a></p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>As (social) data analysts, we are very often interested in <em>relationships between variables</em> or <em>causal effects</em>: Does one variable (e.g., gender) have an impact on another variable (e.g., political attitudes)?</p>
+<p>We can look for evidence of relationships in two ways:</p>
+<ol type="1">
+<li>A <em>descriptive</em> analysis will show first evidence of whether there are any interesting patterns or differences in our dataset;</li>
+<li>A <em>formal statistical test</em> will then tell us if whatever patterns we found earlier are <em>statistically significant</em>: If we can generalize the finding from our sample dataset to the general population.</li>
+</ol>
+<p>In this tutorial, you learn how you can study relationships between <em>two categorical</em> variables with a descriptive tabular analysis and a formal statistical test, the <span class="math inline">\(\chi^2\)</span> (“chi-squared”) test. More specifically, we will study if men and women in Norway differ in their patterns of political participation when it comes to being a member of a trade union.</p>
+<p>Unlike in the previous tutorials, we will start right away with a real research dataset (data from the 2014 round of the <em>European Social Survey</em>).</p>
+<hr>
+<p><em>Hvis du ønsker å lese en norsk tekst <strong>i tillegg</strong>: “Lær deg R”, Kapittel 5.3.</em></p>
+<hr>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="hypotheses" class="level1">
+<h1>Hypotheses</h1>
+<p>Some previous studies have shown that there are some (small) differences in the rates at which men and women participate politically: Specifically, that women are a bit <em>less</em> likely to vote or to be active in political movements.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> But other studies have found that the role of gender has been drastically changing over the last decades, so it is an open question if the relationship between gender and political participation is still true when we look at more recent data.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>But, because we are cautious researchers, our guiding hypothesis for this analysis is: <em>Women participate less politically than men.</em> As mentioned above, we will look at one specific form of political participation: Trade union membership.</p>
+<p>The corresponding <em>null hypothesis</em> is that there is <em>no difference</em> between men and women when it comes to trade union membership.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<p>As always, you need to load all the packages you need and then import and clean your dataset. First, make sure that you are working in your project for this course (upper-right corner of the <em>RStudio</em> screen; make sure the correct project is active).</p>
+<section id="loading-packages" class="level2">
+<h2 class="anchored" data-anchor-id="loading-packages">Loading packages</h2>
+<p>In this tutorial, you will need two packages: <code>tidyverse</code> for the data management and <code>bst290</code> for a special function to make cross tables. As you know, you load these with the <code>library()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bst290)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then you use the <code>read_dta()</code> function from the <code>haven</code> package to import the dataset — make sure that you store (“assign”) the dataset with the assignment operator (<code>&lt;-</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">"ess7.dta"</span>) <span class="co"># change the file name if necessary</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data cleaning</h2>
+<p>Now that the dataset is loaded, you can clean and trim it.</p>
+<p>First, you need to convert how the dataset is stored within <code>R</code> back to the familiar format with <code>labelled::unlabelled()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="ot">&lt;-</span> labelled<span class="sc">::</span><span class="fu">unlabelled</span>(ess7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then you trim the data down to the variables and observations you really need. We will only work with the data for Norway, and only the following variables:</p>
+<ul>
+<li><code>essround</code>, <code>idno</code>, and <code>cntry</code>;</li>
+<li><code>gndr</code>: The respondent’s gender;</li>
+<li><code>mbtru</code>: Whether the respondent is (or was) a member of a trade union;</li>
+</ul>
+<p>You can do both “trimming” steps in one go with the pipe operator (<code>%&gt;%</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(cntry<span class="sc">==</span><span class="st">"NO"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(essround,cntry,idno,gndr,mbtru) <span class="ot">-&gt;</span> ess7</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Always make sure that you store the result, the new “trimmed” dataset. At the very end of the code chunk, we use the “reversed” assignment operator to store the trimmed dataset under the same name (<code>-&gt; ess7</code>) in the <em>Environment</em>!</p>
+<p>If you like, you can also create a “dictionary” of your dataset with <code>labelled::generate_dictionary()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dict <span class="ot">&lt;-</span> labelled<span class="sc">::</span><span class="fu">generate_dictionary</span>(ess7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="initial-exploratory-data-analysis-eda" class="level2">
+<h2 class="anchored" data-anchor-id="initial-exploratory-data-analysis-eda">Initial exploratory data analysis (EDA)</h2>
+<p>Now that you have your dataset in order, you can take a closer look at your main variables. As mentioned in the Introduction, we will look at the relationship between gender and trade union membership in the main part of this tutorial. This means the two variables we need to work with are gender (<code>gndr</code>) and trade union membership (<code>mbtru</code>).</p>
+<p>You can use <code>attributes()</code> to get a first overview over the two variables and how they are stored.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(ess7<span class="sc">$</span>gndr)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="do">## $levels</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "Male"   "Female"</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="do">## $label</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "Gender"</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="do">## $class</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "factor"</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(ess7<span class="sc">$</span>mbtru)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="do">## $levels</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "Yes, currently"  "Yes, previously" "No"             </span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="do">## $label</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "Member of trade union or similar organisation"</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="do">## $class</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "factor"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Both variables are <em>categorical</em> variables and should therefore be stored as <em>factors</em> — and that is indeed the case.</p>
+<div style="page-break-after: always;"></div>
+<p>In a next step, you should check how many observations you have per category of each variable, and if there are some empty categories. You do this with the <code>table()</code> function.</p>
+<p>In the case of the <code>gndr</code>-variable, this looks as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess7<span class="sc">$</span>gndr)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   Male Female </span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">##    764    672</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It turns out that there a few more men than women in the dataset, and there are no “empty” categories.</p>
+<p>The situation is similar in the case of the <code>mbtru</code> variable:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess7<span class="sc">$</span>mbtru)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  Yes, currently Yes, previously              No </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="do">##             663             277             493</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<!-- \newpage -->
+<!-- ## Dropping "empty" category levels -->
+<!-- The fact that the "missing" categories are empty is fortunate.^[Otherwise you would have to recode them to `NA` with the `na_if()` function. See https://dplyr.tidyverse.org/reference/na_if.html] Still, it makes sense to completely remove the empty categories so the tables below look cleaner. You can drop "empty" categories ("levels") from *factor* variables with the `droplevels()` function. -->
+<!-- For example, to drop the empty "No answer" category from the `gndr` variable, you run: -->
+<!-- ```{r dl1, eval=T, echo=T, collapse=T} -->
+<!-- ess7$gndr <- droplevels(ess7$gndr) -->
+<!-- ``` -->
+<!-- This code, translated into proper English, means: "Generate a new version of the `gndr` variable that is the same as the original one, but without any unused categories/levels". -->
+<!-- When you now tabulate the `gndr` variable, you see that the "No answer" category is gone: -->
+<!-- ```{r gentab2, echo=T, eval=T, collapse=T} -->
+<!-- table(ess7$gndr) -->
+<!-- ``` -->
+<!-- This works the same for the `mbtru` variable: -->
+<!-- ```{r dl2, eval=T, echo=T, collapse=T} -->
+<!-- ess7$mbtru <- droplevels(ess7$mbtru) -->
+<!-- ``` -->
+<!-- ```{r trutab2, echo=T, eval=T, collapse=T} -->
+<!-- table(ess7$mbtru) -->
+<!-- ``` -->
+<!-- See also `?droplevels()` for details. -->
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="bivariate-analysis" class="level1">
+<h1>Bivariate analysis</h1>
+<section id="descriptive-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="descriptive-analysis">Descriptive analysis</h2>
+<p>As explained in Kellstedt &amp; Whitten (2018, Chapter 8), the standard way to starting looking for relationships between categorical variables is to cross-tabulate them. This table would be organized like this:</p>
+<ul>
+<li>The <em>independent</em> variable would appear in the <em>columns</em>;</li>
+<li>The <em>dependent</em> variable would appear in the <em>rows</em>;</li>
+</ul>
+<p>In this analysis, we expect that gender (<code>gndr</code>) has an effect on trade union membership (<code>mbtru</code>). This means,</p>
+<ul>
+<li><code>gndr</code> is the <em>independent</em> variable;</li>
+<li><code>mbtru</code> is the <em>dependent</em> variable;</li>
+</ul>
+<div style="page-break-after: always;"></div>
+<section id="a-cross-table-showing-frequencies" class="level3">
+<h3 class="anchored" data-anchor-id="a-cross-table-showing-frequencies">A cross-table showing frequencies</h3>
+<p>To cross-tabulate the two variables, you can use the <code>table()</code> function, which you already know from before. The variable that should be shown in the rows is named first, then the variable that should be shown in the columns:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess7<span class="sc">$</span>mbtru,ess7<span class="sc">$</span>gndr)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="do">##                  </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="do">##                   Male Female</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="do">##   Yes, currently   328    335</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="do">##   Yes, previously  164    113</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="do">##   No               271    222</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This table shows you the “raw” numbers of respondents that fall into each category — the <em>frequencies</em>. As it is now, this table is a bit difficult to read because it is not easy to see if there is an over- or underrepresentation of women or men among trade union members.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="a-cross-table-showing-percentages" class="level3">
+<h3 class="anchored" data-anchor-id="a-cross-table-showing-percentages">A cross-table showing percentages</h3>
+<p>A better way to present the data is in the form of a cross-table that shows <em>column percentages</em> (see again Kellstedt and Whitten 2018, Chapter 8). Creating such a table is possible in <code>R</code> (see Hermansen 2019, <em>Lær deg R</em> Chapter 5.3.1), but that is a multi-step process with lots of potential for error messages and frustration.</p>
+<p>To make this easier and quicker, you can use a special function from the <code>bst290</code> package called <code>krysstabell()</code>. When using this function, you just need to specify a) the dataset; b) the variable that should be shown in the rows; and c) the variable to be shown in the columns:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">krysstabell</span>(<span class="at">dataset =</span> ess7,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">rowvar =</span> <span class="st">"mbtru"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">colvar =</span> <span class="st">"gndr"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="do">##                  gndr</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="do">## mbtru               Male Female    Sum</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="do">##   Yes, currently   42.99  50.00  46.27</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="do">##   Yes, previously  21.49  16.87  19.33</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="do">##   No               35.52  33.13  34.40</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="do">##   Sum             100.00 100.00 100.00</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This table is a bit easier to read: You see that around 43% of men in the sample are members in a trade union, while the share of trade union members among women is 50%. Conversely, fewer women than men used to be members previously or are not members. This indicates that there might be a relationship between gender and trade union membership in Norway — but here, women are <em>more, not less</em> likely to be members than men.</p>
+<p>The <code>krysstabell()</code> function has an export-option (<code>export=TRUE</code>) that you can use to get output that you can copy/paste into your Word document and style there (see also Tutorial 2).</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="running-a-chi2-test" class="level2">
+<h2 class="anchored" data-anchor-id="running-a-chi2-test">Running a <span class="math inline">\(\chi^2\)</span> test</h2>
+<p>The previous descriptive analysis suggests that there <em>might</em> be a relationship between gender and trade union membership. <em>But:</em> It is possible that this reflects only <em>sampling variation</em>: After all, we are working with a <em>sample</em> of the entire Norwegian population. Maybe we were really unlucky and ended up by mere chance with a survey sample in which women are more likely to be trade union members, even though this is not true for the wider Norwegian population?</p>
+<p>To find out if our relationship is <em>systematic</em> or <em>statistically significant</em>, we can use the <span class="math inline">\(\chi^2\)</span> test. As you know, this is a formal statistical test for relationships between two categorical variables.</p>
+<p>Running this test in <code>R</code> is easy because there is a built-in function for it: <code>chisq.test()</code>. Usually, you run this function directly on the cross table.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>This means: You first cross-tabulate your two variables and save the result:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>crosstab <span class="ot">&lt;-</span> <span class="fu">table</span>(ess7<span class="sc">$</span>mbtru,ess7<span class="sc">$</span>gndr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then you use the table that you just saved in the <code>chisq.test()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(crosstab)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  Pearson's Chi-squared test</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="do">## data:  crosstab</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="do">## X-squared = 8.3335, df = 2, p-value = 0.0155</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(crosstab)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  Pearson's Chi-squared test</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="do">## data:  crosstab</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="do">## X-squared = 8.3335, df = 2, p-value = 0.0155</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The output should be possible to understand if you read Kellstedt and Whitten (2018, see Chapter 8):</p>
+<ul>
+<li><code>df</code> refers to the degrees of freedom. You calculate these as <span class="math inline">\(df = (r - 1)(c - 1)\)</span> where <span class="math inline">\(r\)</span> is the number of rows of the cross table, and <span class="math inline">\(c\)</span> is the number of columns. In this case, this is <span class="math inline">\((3 - 1)(2 - 1) = 2\times1 = 2\)</span>.</li>
+<li><code>X-squared</code> is the <span class="math inline">\(\chi^2\)</span> statistic. This is the result of a longer calculation that is explained in Kellstedt and Whitten (and also the interactive dashboard included in the <code>bst290</code> package; see <code>bst290::practiceStatistics()</code>);</li>
+<li><code>p-value</code> is, obviously, the associated <em>p</em>-value.</li>
+</ul>
+<p><em>Can you make sense of the result?</em></p>
+<!-- It turns out that there really is a *statistically significant* relationship! At two degrees of freedom and a significance level of 0.05, the critical $\chi^2$ value would be 5.991 (see also Kellstedt and Whitten 2018, p. 299). And the test statistic we get here (8.333) is clearly higher than that. -->
+<!-- The *p*-value, which is lower than 0.05, reflects this as well: It indicates that *if the null hypothesis were true* --- if there was in reality no relationship between gender and trade union membership in the wider population --- then it would be very unlikely to get the result we got: The probability is only 1.55 percent.^[You can translate the *p*-value to a percentage by multiplying it by 100. For example, 0.0155 $\times$ 100 = 1.55.] -->
+<!-- In a research report or paper, you could summarize the finding like this: -->
+<!-- > "The $\chi^2$ test indicates that the relationship between gender and trade union membership shown in the cross table is statistically significant ($\chi^2$ = 8.33; df = 2; *p* = 0.016). We can therefore reject the null hypothesis at the 0.05 level of significance." -->
+<!-- Still, the relationship that we found is the opposite of what we initially expected to find: Women are *more* likely to be politically involved in the form of being trade union members than men.  -->
+<div style="page-break-after: always;"></div>
+<!-- # Exercises -->
+<!-- ## Exercise: Gender and petitions -->
+<!-- You have now seen how you conduct a tabular analysis of two categorical variables and run a $\chi^2$ test. In the exercise, you will test yourself if the relationship between gender and political participation we found above is also true when looking at a second form of political participation: signing a petition. -->
+<!-- **Assumption: You have gone through the entire tutorial, step by step and without errors, until here.** -->
+<!-- 1. The `sgnptit` variable in the ESS dataset measures whether a respondent has signed a petition in the last 12 months. Inspect the variable: How is it stored, and are there empty categories? Do any necessary data cleaning to prepare the variable for an analysis; -->
+<!-- 2. Create a cross table that shows the relationship between gender and signing a petition; -->
+<!-- 3. Conduct a $\chi^2$ test to see if any patterns in the table are statistically significant; -->
+<!-- 4. Interpret the results; -->
+<!-- ## De-bugging exercises -->
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>You now know how to use <code>R</code> to test for relationships between two categorical variables and to see if you can generalize any patterns you find in your sample data to the underlying general population.</p>
+<p>There are again some de-bugging exercises (plus quizzes) that you can use to practice tabular analysis and interpreting <span class="math inline">\(\chi^2\)</span> tests (“De-bugging exercises: Tabular analysis”). There, you will study the relationship between gender and voting in elections (using the small practice dataset).</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="voluntary-creating-mosaic-plots" class="level1">
+<h1>(Voluntary) Creating mosaic plots</h1>
+<p>A cross table showing column percentages is a good way to show relationships between categorical variables — but there is another option that can be even better in some cases: a <em>mosaic plot</em> (see also Hermansen 2019, <em>Lær deg R</em>, pp.&nbsp;91-2). Such a plot is, simply put, a graphical representation of a cross table and it is often the case that relationships are easier to see in the form of a graph than when they are presented in table-form.</p>
+<p>Creating a mosaic plot is not difficult because there is a dedicated function for it in <code>R</code>: <code>mosaicplot()</code>. This function works basically the same way as the <code>chisq.test()</code> function: You first create a simple cross table of two categorical variables with <code>table()</code> and then feed the result of that operation into the <code>mosaicplot()</code> function. The only thing to be aware of is that the variables go into the <code>table()</code> function in the opposite order than they would otherwise.</p>
+<p>For example, to get a mosaic plot that shows the relationship between gender and trade union membership, you would first create a cross table:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>crosstab <span class="ot">&lt;-</span> <span class="fu">table</span>(ess7<span class="sc">$</span>gndr,ess7<span class="sc">$</span>mbtru)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><em>Notice</em> that the variables are in the <em>opposite order</em> compared to when we created the frequency table above (compare to section 4.1.1): The independent variable (<code>gndr</code>) comes first, and second is the dependent variable (<code>mbtru</code>).</p>
+<p>Then you use the saved table in the <code>mosaicplot()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(crosstab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_6_files/figure-html/mospl-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="tutorial_6_files/figure-html/mospl-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The graph shows quite nicely the higher share of women who are currently members of a trade union and, conversely, the higher share of men who are not or who used to be.</p>
+<div style="page-break-after: always;"></div>
+<p>You can also give the plot a nicer title by setting the <code>main</code>-option:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(crosstab,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">main =</span> <span class="st">"The relationship between gender and trade union membership"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_6_files/figure-html/mospl2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="tutorial_6_files/figure-html/mospl2-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When you are happy with the result, you can export the graph with the <code>pdf()</code> function (<code>ggsave()</code> does not work here, because we are using <code>base R</code> graphics, not <code>ggplot2</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pdf</span>(<span class="st">"mosplot.pdf"</span>) <span class="co"># this opens a "graphics device"</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mosaicplot</span>(crosstab, <span class="co"># this creates the graph</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">main =</span> <span class="st">"The relationship between gender and trade union membership"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>() <span class="co"># you always need to "turn off" the "graphics device" when you have saved your graph</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>See Gallego (2007), “Unequal Participation in Europe”, <em>International Journal of Sociology</em> 37(4):10-25.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>See e.g., Iversen and Rosenbluth (2010), <em>Women, Work, and Politics</em>, Yale University Press.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>You can technically also enter two factor-variables like this: <code>chisq.test(ess7$mbtru,ess7$gndr)</code>. However, creating the table first helps to remind you that you always run the actual test on the table, not on the underlying data.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./tutorial_5.html" class="pagination-link" aria-label="Tutorial 5: Confidence intervals">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Tutorial 5: Confidence intervals</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./tutorial_7a.html" class="pagination-link" aria-label="Tutorial 7a: *t*-test">
+        <span class="nav-page-text">Tutorial 7a: <em>t</em>-test</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"loop":false,"descPosition":"bottom","openEffect":"zoom","selector":".lightbox","closeEffect":"zoom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

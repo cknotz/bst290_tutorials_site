@@ -1,0 +1,399 @@
+---
+title: "Tutorial 9: Multivariate linear regression"
+author: "Carlo Knotz"
+format:
+  html:
+    toc: true
+lightbox: true
+lang: en
+editor_options: 
+  chunk_output_type: console
+---
+
+[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial9_multOLS.pdf){.btn .btn-outline-primary .btn role="button"} 
+
+```{r setup, include=FALSE,message=F, warning=F, collapse=T}
+knitr::opts_chunk$set(echo = TRUE, comment = "", collapse = T, warning = F, message = F)
+library(tidyverse)
+library(prediction)
+library(texreg)
+```
+
+# Introduction
+
+In the previous tutorial, you learned how to estimate a *bivariate* linear regression model in `R`. You used a linear regression model to see if people's level of education influences their level of trust in politicians. The expectation was that higher education would lead to greater trust in politicians, and that is also what we found.
+
+In this tutorial, we go one step further and test if this bivariate relationship stays the same ("is robust") when we control for additional factors. We do so by estimating a *multivariate* regression model. In this type of model, we estimate the effects of several independent variables (*predictors*) on a dependent variable simultaneously.
+
+---
+
+*Hvis du ønsker å lese en norsk tekst __i tillegg__: "Lær deg R", Kapittel 8.*
+
+---
+
+\newpage
+# Setup
+
+## Packages, data import, and first data cleaning
+
+As before, we use the `tidyverse` to help with data management and visualization and `texreg` to make neat-looking regression tables.
+```{r lib1, eval=F}
+library(tidyverse)
+library(texreg)
+```
+
+You should now already know what to do next, and how to do it:
+
+1.  Use `haven::read_dta()` to import the ESS round 7 (2014) dataset; save it as
+    `ess7`;
+2.  Transform the dataset into the familiar format using
+    `labelled::unlabelled()`;
+3.  Trim the dataset:
+    + Keep only observations from Norway;
+    + Select the following variables: `essround`, `idno`, `cntry`,
+    `trstplt`, `eduyrs` --- and also `agea`, and `gndr`;
+    + Use the pipe to link everything;
+    + Save the trimmed dataset as `ess7`;
+4.  If you like, create a data dictionary using `labelled::generate_dictionary()`;
+5.  Transform the `trstplt` variable from factor to numeric using `as.numeric()`; do not forget to adjust the scores; store the new variable as `trstplt_num`;
+
+```{r datatrim, echo=F, eval=T}
+ess7 <- labelled::unlabelled(haven::read_dta("ess7.dta")) %>% 
+  filter(cntry=="NO") %>% 
+  select(essround,idno,cntry,trstplt,eduyrs,gndr,agea) %>% 
+  mutate(trstplt_num = as.numeric(trstplt) - 1)
+
+dict <- labelled::generate_dictionary(ess7)
+
+```
+
+\newpage
+## New data management: additional independent variables
+
+In addition to the main predictor from the previous tutorial (`eduyrs`, the respondent's level of education), we want to add controls for two additional variables:
+
+* The respondent's age in years, using `agea`
+* The respondent's gender, using `gndr`
+
+We take a quick look at how these variables are stored:
+```{r consclass, collapse=T}
+class(ess7$agea)
+class(ess7$gndr)
+```
+
+Luckily, these variables are stored correctly: `agea` is numeric, and `gndr` is a factor --- as they should be.
+
+<!-- In the case of the `gndr` variable, we only have to get rid of the empty "No answer" category with `droplevels()`: -->
+<!-- ```{r droplv, eval=T, echo=T, collapse=T} -->
+<!-- ess7$gndr <- droplevels(ess7$gndr) -->
+<!-- ``` -->
+
+\newpage
+# (New) descriptive statistics
+
+As before, we print out some descriptive statistics for our variables. It is important to report these so that readers get an idea of how our data look like and can interpret the results correctly. 
+
+To report statistics for our numeric variables, we simply expand the descriptive table we created in the previous tutorial:
+```{r oppsum, collapse=T}
+bst290::oppsumtabell(dataset = ess7,
+                     variables = c("trstplt_num","agea","eduyrs"))
+```
+
+\newpage
+The gender-variable is not numeric, so including it in the summary table is not recommended. But you can report its distribution using a simple bar graph:
+```{r gndrbar}
+ess7 %>% 
+  ggplot(aes(x = gndr)) +
+    geom_bar() +
+    labs(x = "Respondent's gender",
+         y = "Number of observations") +
+    theme_bw()
+```
+
+Alternatively, you could also create a simple table with `table()`:
+```{r gndrtab}
+table(ess7$gndr)
+```
+
+\newpage
+
+# Regression analysis
+
+
+### Models & formulas (again)
+
+Recall the formula for the *bivariate* regression model we estimated in the last tutorial. This model included only a single independent variable (`eduyrs`) but no control variables:
+
+\begin{align*}
+  \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \epsilon
+\end{align*}
+
+Now we expand this model by adding more independent variables --- the model becomes *multivariate*:
+\begin{align*}
+  \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \beta_2 \texttt{gndr} + \beta_3 \texttt{agea} + \epsilon
+\end{align*}
+
+As before:
+
+* $\alpha$ is still the intercept (*konstantledd*). 
+* The $\beta$s are the regression coefficients (or *"weights"*, *stigningstall*). 
+* $\epsilon$ is still the error term.
+
+In `R`, the formula for the multivariate model (with all control variables) would be written like this:
+```{r form, eval=F, collapse=T}
+trstplt_num ~ eduyrs + gndr + agea
+```
+
+As before, `R` takes care of the intercept and the error term --- all we have to do to get a multivariate regression model is to list more than one independent variable. Easy.
+
+\newpage
+
+## The `lm()` function
+
+Just to refresh your memory, we first estimate the bivariate regression model from the previous tutorial and store the result as `model1`:
+```{r lm1, collapse=T}
+model1 <- lm(trstplt_num ~ eduyrs, 
+             data = ess7)
+```
+
+If you like, you can also print out the result with `summary()`:
+```{r lm1sum, collapse=T}
+summary(model1)
+```
+
+\newpage
+In the next step, we test if the effect of `eduyrs` is robust to including the additional control variables: gender and age.
+
+This means that we estimate our multivariate model, store the result as `model2`, and print out the results:
+```{r fullmod, collapse=T}
+model2 <- lm(trstplt_num ~ eduyrs + gndr + agea, data = ess7)
+summary(model2)
+```
+
+You see that the output looks the same as before, just with more coefficients listed. Notice also that `R` has automatically figured out that `gndr` is a factor variable and included a *dummy* only for women (`gndrFemale`) into the model (as also explained in Kellstedt & Whitten, Chapter 11.2). 
+
+Now it gets tricky: How do you make sense of these results? Kellstedt & Whitten (2018, Chapters 10 & 11) or Solbakken (*Statistikk for Nybeginnere*, Chapters 6 & 8) explain this.
+
+<!-- With the additional control variables, the *interpretation of the results is a bit different from before*: -->
+
+<!-- * The intercept is still the predicted value of `trstplt_num` when *all other* variables are exactly `0`. But now the model includes several variables! This means, the intercept is now the predicted value for a person who has no education (`eduyrs` = 0), is a man (`gndrFemale` = 0), and was just born (`agea` = 0). This fictional person would then have a score of around 4.62. This is of course a silly prediction --- unless you think that uneducated male newborns can already have opinions about politicians. But this illustrates an important point: *The intercept of a regression model does not always have a good interpretation!* -->
+<!-- * The coefficient for `eduyrs` is still the effect of education --- but now when all other variables are held constant at their means (*"controlling for"* the other variables). You see that the effect is a bit lower than before: 0.069. This means that controlling for the other variables does indeed reduce the effect of education, but only by a very small amount (from 0.074 to 0.069). And the effect is still statistically significant. -->
+<!-- * The coefficient for `gndr` has a special interpretation: It shows you the *difference* in the predicted scores of women compared to those of men. In other words, women have a score on the `trstplt_num` variable that is, on average, 0.071 points higher than the average score of men --- holding all other variables constant. **But:** The coefficient has a high *p*-value (around 0.5), which indicates that it is *not statistically significant* (note also the lack of stars that indicate significance). This means that we -->
+<!-- cannot say with sufficient confidence that there really is a difference between men and women in the general population. And we therefore stay on the cautious side and conclude that the true difference is 0, or that gender has no effect on trust in politicians. -->
+<!-- * According to the coefficient estimate for the `agea` variable, age has a negative effect: As someone's age increases by one year, their score on the `trstplt_num` variable decreases by 0.0075 points. Simply put: Older people have less trust in politicians, all other factors held equal. This effect is statistically significant. -->
+
+
+\newpage
+## Presenting the regression results in a publication-quality table
+
+To present the results and export them as a nice-looking table, we use again the `texreg` package.
+
+First, we print out a preview of our table using the `screenreg()` function. Now we have two regression models to print, so we have to list both in the function:
+```{r screenreg1, collapse=T}
+screenreg(list(model1, model2))
+```
+
+When you look at the table, you can directly see the differences between the two models. Model 1 included only the intercept and education (`eduyrs`), while model 2 also included age and gender as control variables. The table includes all the variables' coefficients: You see, for instance, the coefficients for education and how they differ (or not) between the two models. 
+
+\newpage
+Next, we add proper labels for the coefficients and trim the significance stars:
+```{r screenreg2, collapse=T}
+screenreg(list(model1,model2),
+          custom.coef.names = c("Intercept",
+                                "Years of educ. completed",
+                                "Female",
+                                "Age"),
+          stars = 0.05)
+```
+
+Finally, we use the `wordreg()` function to export the table to a Microsoft Word document:
+```{r screenreg3, collapse=T, eval=F}
+wordreg(list(model1,model2),
+          custom.coef.names = c("Intercept",
+                                "Years of educ. completed",
+                                "Female",
+                                "Age"),
+          stars = 0.05,
+        file = "ols_models.doc")
+```
+
+
+\newpage
+# Conclusion
+
+Now you know how to estimate, interpret, and present a multivariate linear regression model in `R`. This opens a lot of doors, because you can now use data such as those from the ESS to really disentangle the drivers and determinants of complex social and political phenomena. Also, if you read political science and sociological research, you will find many, many publications that use this type of method, so you now have first-hand knowledge of what is behind the results that are presented there.
+
+
+
+<!-- **Assumption: You have gone through the entire tutorial, step by step and without errors, until here.** -->
+
+<!-- ## Trust in the United Nations: A multivariate model -->
+
+<!-- As you probably remember from the previous tutorial, people's trust in the United Nations, as measured by the `trstun` variable. This is obviously also the variable you will be working with here. -->
+
+<!-- 1. Redo the data management, exploratory analysis, and bivariate regression analysis from last week's tutorial exercise on how education is related to trust in the UN (you can just re-use your code!) -->
+<!-- 2. Now estimate a multivariate regression model that includes `eduyrs` plus `gndr` and `agea`. -->
+<!-- 4. Interpret the results -->
+<!-- 5. Present the results in a nice-looking table using `texreg` -->
+
+<!-- ### De-bugging exercises -->
+
+You can again find an interactive tutorial to practice working with linear regression models a bit more --- by continuing the earlier analysis on why some people are happier than others.
+
+<!-- But if you first want to learn more about how to present the results of a linear regression model, keep on reading! -->
+
+
+<!-- \newpage -->
+<!-- # (Voluntary) Making better sense of regression results -->
+
+<!-- In the previous tutorial on bivariate regression models, you saw a graph that showed the main results of the first regression model we estimated --- and which hopefully helped you to understand better how to interpret a linear regression model. This extra part of the tutorial shows you how to make graphs like the one shown in the previous tutorial. -->
+
+<!-- If you can, you should always aim to present your results in the most intuitive and clear way possible --- such as with predicted values shown in a graph --- even once you have become an expert social data analyst! This is because, at the end of the day, our job as (social) data analysts is to communicate insights to others who may not be trained in statistics, and they need intuitive results, not statistical gibberish.^[See also King, G., Tomz, M., and Wittenberg, J. (2000). Making the most of statistical analyses: Improving interpretation and presentation. *American Journal of Political Science*, 44(2):341–335.] -->
+
+<!-- Learning how to get predicted values and visualize them is not only useful when you are interpreting simple linear regression models, but it is even essential if you want to interpret more advanced models with interactions or non-linear dependent variables. -->
+
+<!-- ### The `prediction` package -->
+
+<!-- There are different ways to get `R` to compute predicted values from a regression model, but the probably easiest way to do so is with the `prediction` package. This can be easily installed with `install.packages()`: -->
+<!-- ```{r instpred, eval=F, collapse=T} -->
+<!-- install.packages("prediction") -->
+<!-- library(prediction) -->
+<!-- ``` -->
+
+<!-- \newpage -->
+<!-- ## The `prediction()` function -->
+
+<!-- The `prediction` package has one main function: `prediction()`. This function, quite simply, calculates predicted values based on a regression model. -->
+
+<!-- The best way to use this function is to let it give you predicted values of the dependent variable over values of an independent variable. This is also what the graph in the previous tutorial showed: The predicted values of `trstplt_num` over values of `eduyrs`. -->
+
+<!-- To see better how this function works, let's first replicate the earlier graph. This includes two steps: First, we calculate the predicted values with `prediction()` based on the results of the first (bivariate) regression model. Then we use `ggplot()` to visualize them in a graph. -->
+
+<!-- Step 1 looks as follows: -->
+<!-- ```{r pred1, eval=F} -->
+<!-- prediction(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1))) -->
+<!-- ``` -->
+
+<!-- In human language: we state that `prediction()` should calculate the predicted score on the `trstplt_num` variable... -->
+
+<!--  * based on our first regression model (`model = model1`)... -->
+<!--  * and over the entire range of the education variable, i.e., from `0` to `30` in steps of `1` -->
+
+<!-- The result looks then like this: -->
+<!-- ```{r pred2, eval=T, echo=F} -->
+<!-- prediction(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1))) -->
+<!-- ``` -->
+
+<!-- You see that the predicted score for someone with no education (`eduyrs` = `0`) corresponds directly to the intercept from `model1`: 4.23. From there it increases to around 6.5 for someone with 30 years of education (`eduyrs` = `30`). This increase reflects the *positive* effect of education on trust: as `eduyrs` *increases*, `trstplt_num` *increases* as well. -->
+
+<!-- These are of course only the predicted values --- but the graph also showed confidence intervals. And it is indeed good practice to always present confidence intervals when dealing with estimated values.^[See also King, G., Tomz, M., and Wittenberg, J. (2000). Making the most of statistical analyses: Improving interpretation and presentation. *American Journal of Political Science*, 44(2):341–335.] Getting these from `prediction()` is not hard. -->
+
+<!-- You can either wrap `prediction()` into `summary()` like so: -->
+<!-- ```{r predsum1, eval=F} -->
+<!-- summary(prediction(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1)))) -->
+<!-- ``` -->
+
+<!-- Or, to make it easier, use `prediction_summary()`: -->
+<!-- ```{r predsum2, collapse=T} -->
+<!-- prediction_summary(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1))) -->
+<!-- ``` -->
+
+<!-- `prediction_summary()` gives you the predicted values (now under `Prediction`), but now also their standard errors (`SE`), *z*-scores (which are equivalent to *t*-scores), *p*-values, and finally the upper and lower limits of the confidence interval for each predicted value. This is all you need for the graph! -->
+
+<!-- \newpage -->
+<!-- ## Visualizing results from `prediction_summary()` -->
+
+<!-- We can directly 'feed' the result from `prediction_summary()` into a `ggplot()` graph using the pipe operator (`%>%`): -->
+<!-- ```{r predgraph1, collapse=T} -->
+<!-- prediction_summary(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1))) %>% -->
+<!--   ggplot(aes(x = `at(eduyrs)`, y = Prediction, -->
+<!--              ymin = lower, ymax = upper)) + -->
+<!--     geom_point() + # for the dots -->
+<!--     geom_line() + # to connect the dots with a line -->
+<!--     geom_ribbon(alpha = .2) # this draws the confidence intervals -->
+<!-- ``` -->
+
+<!-- Some things to pay attention to: -->
+
+<!-- 1. `geom_ribbon()` creates the gray confidence band. However, without any adjustment it will simply draw a thick black line across the graph and obscure the line and dots representing the predicted values. This means that we need to use the `alpha` parameter to make the confidence band transparent. `alpha` can range from 0 (completely transparent/invisible) to 1 (completely nontransparent). We choose a value of 0.2, which produces a highly transparent confidence band. -->
+<!-- 2. `geom_ribbon()` represents a *range* of values, which need to be defined by `ymin` and `ymax`. In the case of this graph, `ymin` and `ymax` are the lower and upper limits of our confidence interval, respectively. -->
+<!-- 3. Notice the single apostrophes around `at(eduyrs)`! It is important to add these to make sure that `R` understands that `at(eduyrs)` refers to the column in the output from `prediction_summary()` and not to the `at()` function! -->
+
+<!-- With some more polishing, we end up with the graph shown in the previous tutorial: -->
+<!-- ```{r predgraph_pol} -->
+<!-- prediction_summary(model1, -->
+<!--                    at = list(eduyrs = seq(from = 0, to = 30, by = 1))) %>% -->
+<!--   ggplot(aes(x = `at(eduyrs)`, y = Prediction, -->
+<!--              ymin = lower, ymax = upper)) + -->
+<!--     geom_point() + -->
+<!--     geom_line() + -->
+<!--     geom_ribbon(alpha = .2) + -->
+<!--     scale_x_continuous(breaks = seq(0,30,5)) + -->
+<!--     labs(x = "Years of education (eduyrs)", -->
+<!--          y = "Predicted trust in politicians (trstplt)", -->
+<!--          caption = "95% confidence intervals.", -->
+<!--          title = "Main prediction of Model 1") + -->
+<!--     theme_bw() -->
+<!-- ``` -->
+
+<!-- \newpage -->
+<!-- ## Predictions for more than one independent variable -->
+
+<!-- So far, we have only calculated and visualized predicted values over the range of a single independent variable, `eduyrs`. But if we have a regression model that includes more than one independent variable, then it is often useful to show how predictions vary over multiple variables. Our second regression model above, for example, included not only education but also gender. So it would be nice to show how trust in politicians varies by both education *and* gender. -->
+
+<!-- This, too, is easy to do with `prediction()`: All you need to do is to add to the list within the `at()`-function. In this case, you would add `gndr = c("Male","Female")` to get predictions for men and women. Also, you need to make sure you refer to the correct model: In this case, this is `model2` --- the "full" model with all control variables: -->
+<!-- ```{r pred3, collapse = T} -->
+<!-- prediction(model = model2, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1), -->
+<!--                      gndr = c("Male","Female"))) -->
+<!-- ``` -->
+
+<!-- Now you get two sets of predictions for how the dependent variable --- `trstplt_num` --- changes as one's education increases: One set of predictions is about men, the other is about women. And you can see the model's results reflected here as well: Remember that the coefficient for women (`gndrFemale`) above was positive --- meaning that, all else equal, women have higher scores than men. This is clearly visible in the predicted values here: At every level of education, women have higher scores than men. But you also see that the differences are not very big. -->
+
+<!-- \newpage -->
+<!-- This is of course all a bit much information to take in --- but, luckily, we can also directly visualize it. All we need to do is to get the complete results including confidence intervals with `prediction_summary()` and then feed the output into a `ggplot()` graph: -->
+<!-- ```{r predgraph_gen, collapse=T} -->
+<!-- prediction_summary(model = model2, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1), -->
+<!--                      gndr = c("Male","Female"))) %>% -->
+<!--   ggplot(aes(x = `at(eduyrs)`, y = Prediction, -->
+<!--              linetype = `at(gndr)`, # to let the linetype vary by gender! -->
+<!--              ymin = lower, ymax = upper)) + -->
+<!--     geom_line() + -->
+<!--     geom_ribbon(alpha = .2) -->
+<!-- ``` -->
+
+<!-- * `geom_line()` shows us the predicted values themselves. We also let the linetype vary by `gndr` -->
+<!-- * As before: We need to wrap `at(eduyrs)` and `at(gndr)` in single quotes so that `R` understands that we are not trying to use the `at()` function here. -->
+
+<!-- You can directly see the positive effect of education in the graph: As education increases by one year, the predicted level of trust in politicians increases by around 0.07 points --- and you also see that, at every stage, women have slightly higher predicted values than men. -->
+
+<!-- **But:** You can see clearly that the difference between the lines for men and women is small. In addition, the confidence intervals for each line include the predicted values of the other line. This reflects the lack of statistical significance: We cannot tell if the two lines are really different or not, and we stay on the safe side and assume that they are not different. -->
+
+<!-- To be able to include it in a thesis or report, you would now only polish the graph a bit more: -->
+<!-- ```{r predgraphpol, collapse=T} -->
+<!-- prediction_summary(model = model2, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1), -->
+<!--                      gndr = c("Male","Female"))) %>% -->
+<!--     ggplot(aes(x = `at(eduyrs)`, -->
+<!--              y = Prediction, linetype = `at(gndr)`, -->
+<!--              ymin = lower, ymax = upper)) + -->
+<!--     geom_line() + -->
+<!--     geom_ribbon(alpha = .2) + -->
+<!--     scale_x_continuous(breaks = seq(0,30,5)) + -->
+<!--     labs(x = "Years of education completed", -->
+<!--          y = "Predicted value: Trust in politicians", -->
+<!--          caption = "95% confidence intervals", -->
+<!--          linetype = "Gender") + -->
+<!--     theme_bw() + -->
+<!--     theme(legend.position = "bottom") -->
+<!-- ``` -->
+
+
+
+

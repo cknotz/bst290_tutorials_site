@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carlo Knotz">
+
+<title>Tutorial 10: It depends! Interactive regression models – R Tutorials for BST290</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./tutorial_11.html" rel="next">
+<link href="./tutorial_9.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R Tutorials for BST290</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorial_10.html">Tutorial 10: <em>It depends!</em> Interactive regression models</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hei!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 0: Installation &amp; Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 1: Your first steps in <code>R</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 2: Importing &amp; exploring your data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 3: Data cleaning &amp; management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 4: Data visualization with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 5: Confidence intervals</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 6: Tabular Analysis &amp; the $\chi^2$ test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7a: <em>t</em>-test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7b: Correlation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 8: Bivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 9: Multivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_10.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Tutorial 10: <em>It depends!</em> Interactive regression models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 11: Logistic regression for binomial dependent variables</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses">Hypotheses</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
+  <ul class="collapse">
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#data-import-and-data-cleaning" id="toc-data-import-and-data-cleaning" class="nav-link" data-scroll-target="#data-import-and-data-cleaning">Data import and data cleaning</a></li>
+  </ul></li>
+  <li><a href="#interactive-regression-models" id="toc-interactive-regression-models" class="nav-link" data-scroll-target="#interactive-regression-models">Interactive regression models</a>
+  <ul class="collapse">
+  <li><a href="#models-formulas" id="toc-models-formulas" class="nav-link" data-scroll-target="#models-formulas">Models &amp; formulas</a></li>
+  <li><a href="#model-specification-in-r" id="toc-model-specification-in-r" class="nav-link" data-scroll-target="#model-specification-in-r">Model specification in <code>R</code></a></li>
+  <li><a href="#estimating-interactive-models-with-lm" id="toc-estimating-interactive-models-with-lm" class="nav-link" data-scroll-target="#estimating-interactive-models-with-lm">Estimating interactive models with <code>lm()</code></a></li>
+  </ul></li>
+  <li><a href="#calculating-presenting-and-interpreting-marginal-effects" id="toc-calculating-presenting-and-interpreting-marginal-effects" class="nav-link" data-scroll-target="#calculating-presenting-and-interpreting-marginal-effects">Calculating, presenting, and interpreting marginal effects</a>
+  <ul class="collapse">
+  <li><a href="#basic-use" id="toc-basic-use" class="nav-link" data-scroll-target="#basic-use">Basic use</a></li>
+  <li><a href="#getting-p-values-and-confidence-intervals" id="toc-getting-p-values-and-confidence-intervals" class="nav-link" data-scroll-target="#getting-p-values-and-confidence-intervals">Getting <em>p</em>-values and confidence intervals</a></li>
+  <li><a href="#visualizing-marginal-effect-estimates" id="toc-visualizing-marginal-effect-estimates" class="nav-link" data-scroll-target="#visualizing-marginal-effect-estimates">Visualizing marginal effect estimates</a></li>
+  </ul></li>
+  <li><a href="#predictions" id="toc-predictions" class="nav-link" data-scroll-target="#predictions">Predictions</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tutorial 10: <em>It depends!</em> Interactive regression models</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carlo Knotz </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a href="https://raw.github.com/cknotz/bst290_tutorials/main/tutorial10_interact.pdf" class="btn btn-outline-primary" role="button">Download as PDF</a></p>
+<div style="page-break-after: always;"></div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Tutorials 8 and 9 showed you how you can estimate and interpret bi- and multivariate linear regression (OLS) models in <code>R</code>. The goal there was to figure out the <em>effects</em> of your independent (“explanatory”) variables on your dependent variable. A linear regression model shows you these effects in the form of coefficients: How does the dependent variable change when a given independent variable changes?</p>
+<p>The previous analyses also treated each independent variable’s effect as separate: Education had its effect on political trust, which was separate from the effect of gender, and both of these effects were separate from the effect of age.</p>
+<p>Treating effects as separate can make sense in many cases, but there are also situations when you may have reasons to expect that the strength or direction of the effect of one independent variable <em>depends</em> on another independent variable. For example, we often expect that gender can moderate the effect of an independent variable, meaning that the variable has an effect only for men but not for women (or vice versa). This type of effect or relationship where the effect of one variable depends on another is called <em>interactive</em>: Two variables interact with each other in producing a change in the dependent variable.</p>
+<p>Accordingly, a regression model that includes an interaction between two independent variables is called an <em>interactive regression model</em>. This type of model is widely used in political and social research.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Specifying and estimating interactive models in <code>R</code> is not particularly difficult — but what is more difficult is the interpretation and presentation of the results. In the past, researchers often did not do this correctly, which led them to draw incorrect conclusions. But nowadays there is an established way of interpreting interaction effects by looking at <em>marginal effects</em> (or <em>conditional effects</em>), and there are packages for <code>R</code> that make calculating these marginal effects and presenting them fairly easy.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> One of these is the <code>margins</code> package.</p>
+<p>This tutorial will show you how you specify, interpret, and present interactive regression analyses. We continue with the case from earlier tutorials where we looked at trust in politicians using data from round 7 of the <em>ESS</em>.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="hypotheses" class="level1">
+<h1>Hypotheses</h1>
+<p>One of the results of the previous analyses was that people’s trust in politicians decreases as they get older. In other words, we found that age has a negative effect on trust in politicians. The effect was small, but statistically significant.</p>
+<p>But remember also that we studied how men and women differ when it comes to political involvement. Specifically, one of the hypotheses we tested in a previous tutorial was that women are less politically active than men — or at least used to be in past decades.</p>
+<p>If that last hypothesis is true, then we would expect that older generations today still carry the patterns from past times with them: Among older people, women tend to be less politically engaged. And this could mean that the negative effect of age on political trust exists only for men. Simply put, women in older generations have maybe always cared less about politics in general, and their getting older has therefore less of an effect on their trust in politicians than it has in the case of men.</p>
+<p>The guiding hypothesis for this tutorial is therefore:</p>
+<blockquote class="blockquote">
+<p><em>Gender conditions the negative effect of age on trust in politicians: The effect exists only for men, but not for women.</em></p>
+</blockquote>
+<p>The corresponding null hypothesis is:</p>
+<blockquote class="blockquote">
+<p><em>Gender has no conditioning effect: The negative effect of age on trust in politicians is the same for men and women.</em></p>
+</blockquote>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<p>The setup and data management part are almost exactly the same as in the previous tutorial, so this part will be very brief.</p>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">Packages</h2>
+<p>As before, we use the <code>tidyverse</code> to help with data management and visualization and <code>texreg</code> to make neat-looking regression tables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But we now also need to load the <code>margins</code> package, which allows you to calculate marginal effect estimates. If you have not yet installed this package, you need to do so with <code>install.packages("margins")</code>. Once this is done, you load the package with <code>library()</code>. In addition, we will use the <code>prediction</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(margins)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="data-import-and-data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-import-and-data-cleaning">Data import and data cleaning</h2>
+<p>This part is exactly as before and you should now already know what to do here (see Tutorials 8 and 9 for details):</p>
+<ol type="1">
+<li>Use <code>haven::read_dta()</code> to import the ESS round 7 (2014) dataset; save it as <code>ess7</code></li>
+<li>Transform the dataset into the familiar format using <code>labelled:: unlabelled()</code>;</li>
+<li>Trim the dataset:
+<ul>
+<li>Keep only observations from Norway;</li>
+<li>Select the following variables: <code>essround</code>, <code>idno</code>, <code>cntry</code>, <code>trstplt</code>, <code>eduyrs</code> — and also <code>agea</code>, and <code>gndr</code>;</li>
+<li>Use the pipe to link everything;</li>
+<li>Save the trimmed dataset as <code>ess7</code>;</li>
+</ul></li>
+<li>If you like, create a data dictionary using <code>labelled::generate_dictionary()</code>;</li>
+<li>Transform the <code>trstplt</code> variable from factor to numeric using <code>as.numeric()</code>; do not forget to adjust the scores; store the new variable as <code>trstplt_num</code>;</li>
+<li>Drop the empty levels of the <code>gndr</code> variable with <code>droplevels()</code>;</li>
+</ol>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="interactive-regression-models" class="level1">
+<h1>Interactive regression models</h1>
+<section id="models-formulas" class="level2">
+<h2 class="anchored" data-anchor-id="models-formulas">Models &amp; formulas</h2>
+<p>In the previous two tutorials, we first estimated a <em>bivariate</em> regression model (which included only one independent variable) and then a <em>multivariate</em> regression model (which included three independent variables). Just to refresh your memory, the model equations looked like this:</p>
+<p>The bivariate model included only a single independent variable (<code>eduyrs</code>) but no control variables:</p>
+<p><span class="math display">\[\begin{align*}
+  \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \epsilon
+\end{align*}\]</span></p>
+<p>The multivariate model then included also age (<code>agea</code>) and gender (<code>gndr</code>) as additional independent variables: <span class="math display">\[\begin{align*}
+  \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \beta_2 \texttt{gndr} + \beta_3 \texttt{agea} + \epsilon
+\end{align*}\]</span></p>
+<p>This last model assumes that all the independent variables work separately, that each has its own unique effect and this effect does not depend on the other variables. But the guiding hypothesis for this tutorial is of course that things <em>depend</em>: Specifically, that the effect of age depends on gender. This means we need to extend the multivariate model to let the effect of age <em>vary</em> by gender, which we do by including an <em>interaction term</em>.</p>
+<p>To interact two variables, you multiply them. Specifically, you keep the two main variables in the model (plus any other additional controls) but then you also add a new term that is the product of the two constituent variables. In this case here, this would be the product of product of age and gender. If we add that interactive term, the model becomes an <strong>interactive regression model</strong>:</p>
+<p><span class="math display">\[\begin{align*}
+  \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \beta_2 \texttt{gndr} + \beta_3 \texttt{agea} + \textcolor{blue}{\beta_4 (\texttt{gndr} \times \texttt{agea}}) + \epsilon
+\end{align*}\]</span></p>
+<p>The results of this model now become much more difficult to interpret:</p>
+<ul>
+<li>The coefficient for <code>gndr</code>, <span class="math inline">\(\beta_2\)</span> is now not the unique effect of gender but the effect of gender <em>when <code>agea</code> is exactly 0</em> (and, by implication, the interaction term is also 0).</li>
+<li>Similarly, the coefficient for <code>agea</code>, <span class="math inline">\(\beta_3\)</span> is no longer the unique effect of age but instead the effect of age when the gender-dummy is 0 (and, again, the interaction term is 0). Depending on how the gender-dummy is specified, this can be the case for men or women.</li>
+<li>The coefficient for the interaction term, <span class="math inline">\(\beta_4\)</span> shows you how much the effects of age and gender vary: How much the effect of age differs between genders, but also how much the effect of gender differs by age.</li>
+<li>The coefficient for education, <span class="math inline">\(\beta_1\)</span> is not part of the interaction. Therefore, you interpret it as before: The unique effect of an additional year of education on trust in politicians.</li>
+</ul>
+<p>You probably notice that this is quite hard to wrap your head around — but this gets easier when we instead look at marginal effects, which comes below. First, however, we look at how you specify an interactive model in <code>R</code>.</p>
+</section>
+<section id="model-specification-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="model-specification-in-r">Model specification in <code>R</code></h2>
+<p>As you know, the formula for the multivariate model (with all control variables) would be written like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are now two ways to make the model interactive. The first option is to extend the previous equation with the interactive term that multiplies <code>agea</code> with <code>gndr</code> (for which you use the colon-symbol):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea <span class="sc">+</span> gndr<span class="sc">:</span>agea</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A simpler (but more indirect) way is to directly interact <code>gndr</code> with <code>agea</code> with the multiplication symbol. <code>R</code> will then automatically add individual terms for <code>agea</code> and <code>gndr</code> plus the interactive term when it runs the calculation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr<span class="sc">*</span>agea</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="estimating-interactive-models-with-lm" class="level2">
+<h2 class="anchored" data-anchor-id="estimating-interactive-models-with-lm">Estimating interactive models with <code>lm()</code></h2>
+<p>To start, we quickly re-estimate the bi- and multivariate models from the previous tutorials so that we can compare these results to the interactive model’s results (and because you should anyways proceed in this stepwise fashion):<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bivariate model</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(trstplt_num <span class="sc">~</span> eduyrs, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> ess7)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># multivariate model</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea, </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> ess7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we have these models as a baseline comparison, we estimate the interactive model and print a quick summary of the results to the <em>Console</em>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># interactive model</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr<span class="sc">*</span>agea, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> ess7)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model3)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>Call<span class="sc">:</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(<span class="at">formula =</span> trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">*</span> agea, <span class="at">data =</span> ess7)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>Residuals<span class="sc">:</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>   Min     <span class="dv">1</span>Q Median     <span class="dv">3</span>Q    Max </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">5.867</span> <span class="sc">-</span><span class="fl">1.192</span>  <span class="fl">0.206</span>  <span class="fl">1.435</span>  <span class="fl">5.064</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>Coefficients<span class="sc">:</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>                 Estimate Std. Error t value <span class="fu">Pr</span>(<span class="sc">&gt;</span><span class="er">|</span>t<span class="sc">|</span>)    </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>(Intercept)      <span class="fl">4.813994</span>   <span class="fl">0.271636</span>  <span class="fl">17.722</span>  <span class="sc">&lt;</span> <span class="fl">2e-16</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>eduyrs           <span class="fl">0.070857</span>   <span class="fl">0.013885</span>   <span class="fl">5.103</span> <span class="fl">3.79e-07</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>gndrFemale      <span class="sc">-</span><span class="fl">0.389786</span>   <span class="fl">0.277113</span>  <span class="sc">-</span><span class="fl">1.407</span>  <span class="fl">0.15977</span>    </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>agea            <span class="sc">-</span><span class="fl">0.012221</span>   <span class="fl">0.003797</span>  <span class="sc">-</span><span class="fl">3.219</span>  <span class="fl">0.00132</span> <span class="sc">**</span> </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>gndrFemale<span class="sc">:</span>agea  <span class="fl">0.009818</span>   <span class="fl">0.005488</span>   <span class="fl">1.789</span>  <span class="fl">0.07382</span> .  </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>Signif. codes<span class="sc">:</span>  <span class="dv">0</span> <span class="st">'***'</span> <span class="fl">0.001</span> <span class="st">'**'</span> <span class="fl">0.01</span> <span class="st">'*'</span> <span class="fl">0.05</span> <span class="st">'.'</span> <span class="fl">0.1</span> <span class="st">' '</span> <span class="dv">1</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>Residual standard error<span class="sc">:</span> <span class="fl">1.927</span> on <span class="dv">1422</span> degrees of freedom</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  (<span class="dv">9</span> observations deleted due to missingness)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>Multiple R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.02745</span>,   Adjusted R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.02471</span> </span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>F<span class="sc">-</span>statistic<span class="sc">:</span> <span class="fl">10.03</span> on <span class="dv">4</span> and <span class="dv">1422</span> DF,  p<span class="sc">-</span>value<span class="sc">:</span> <span class="fl">5.234e-08</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When you look at the summary, you can directly see that <code>R</code> has automatically “populated” the model with the correct terms: An individual term for <code>eduyrs</code>, then a dummy for women using <code>gndr</code>, another term for <code>agea</code>, and finally the interaction term between <code>agea</code> and <code>gndrFemale</code> (<code>gndrFemale:agea</code>).</p>
+<p>You can see already here that the interaction term is at least significant at the 10% level (indicated by the single dot in the last line). So there might be something there. But to really know, we need to look at marginal effects.</p>
+<p>Before that, we first print all the results in a proper table:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screenreg</span>(<span class="fu">list</span>(model1,model2,model3),</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">custom.coef.names =</span> <span class="fu">c</span>(<span class="st">"Intercept"</span>,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Years of educ. completed"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Female"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Age"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Female x Age"</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">custom.model.names =</span> <span class="fu">c</span>(<span class="st">"Bivariate"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Multivariate"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Interactive"</span>),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">stars =</span> <span class="fl">0.05</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">============================================================</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                          Bivariate  Multivariate  Interactive</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="sc">--------------------------------------------------------------</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Intercept                    <span class="fl">4.23</span> <span class="sc">*</span>     <span class="fl">4.62</span> <span class="sc">*</span>        <span class="fl">4.81</span> <span class="sc">*</span>  </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>                            (<span class="fl">0.20</span>)     (<span class="fl">0.25</span>)        (<span class="fl">0.27</span>)   </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>Years of educ. completed     <span class="fl">0.07</span> <span class="sc">*</span>     <span class="fl">0.07</span> <span class="sc">*</span>        <span class="fl">0.07</span> <span class="sc">*</span>  </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                            (<span class="fl">0.01</span>)     (<span class="fl">0.01</span>)        (<span class="fl">0.01</span>)   </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>Female                                  <span class="fl">0.07</span>         <span class="sc">-</span><span class="fl">0.39</span>    </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>                                       (<span class="fl">0.10</span>)        (<span class="fl">0.28</span>)   </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>Age                                    <span class="sc">-</span><span class="fl">0.01</span> <span class="sc">*</span>       <span class="sc">-</span><span class="fl">0.01</span> <span class="sc">*</span>  </span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>                                       (<span class="fl">0.00</span>)        (<span class="fl">0.00</span>)   </span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>Female x Age                                          <span class="fl">0.01</span>    </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                                                     (<span class="fl">0.01</span>)   </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="sc">--------------------------------------------------------------</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>R<span class="sc">^</span><span class="dv">2</span>                          <span class="fl">0.02</span>       <span class="fl">0.03</span>          <span class="fl">0.03</span>    </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>Adj. R<span class="sc">^</span><span class="dv">2</span>                     <span class="fl">0.02</span>       <span class="fl">0.02</span>          <span class="fl">0.02</span>    </span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>Num. obs.                 <span class="dv">1427</span>       <span class="dv">1427</span>          <span class="dv">1427</span>       </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">============================================================</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="er">*</span> p <span class="sc">&lt;</span> <span class="fl">0.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="calculating-presenting-and-interpreting-marginal-effects" class="level1">
+<h1>Calculating, presenting, and interpreting marginal effects</h1>
+<section id="basic-use" class="level2">
+<h2 class="anchored" data-anchor-id="basic-use">Basic use</h2>
+<p>Now to the interesting part where we really make sense of the model results by looking at marginal effects. Marginal effects are more meaningful and easy to understand because they tell us the overall effect of one variable at different levels of another one: E.g., what is the effect of age for women and then for men?</p>
+<p><code>R</code>, or more specifically the <code>margins</code>-package can calculate marginal effects from the ‘raw’ model results via the <code>margins()</code> function. This function works like this:</p>
+<ol type="1">
+<li>You need to specify the model that you want the calculation to be based on. In this case, this would be <code>model3</code>.</li>
+<li>You need to specify for which variable you want marginal effects calculated. In this case, this would be <code>agea</code>.</li>
+<li>You need to specify over which other variable these marginal effects should vary. Here, this would be <code>gndr</code>.</li>
+</ol>
+<p>Putting it all together, the complete <code>margins()</code> call would look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins</span>(<span class="at">model =</span> model3,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">variables =</span> <span class="st">"agea"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Female"</span>,<span class="st">"Male"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> at(gndr)      agea
+     Male -0.012221
+   Female -0.002403</code></pre>
+</div>
+</div>
+<p>These numbers may seem cryptic at first sight, but they are actually relatively easy to read. The first line gives you the effect of age for women. You read this as: <em>If someone is a woman, every additional year of age decreases trust in politicians by a very tiny -0.002 points.</em></p>
+<p>The second line gives you the corresponding result for men: <em>If someone is a man, every additional year of age decreases trust in politicians by -0.012 points.</em></p>
+<p>In both cases, the effects are surely not very large — but you also see that the effect of age for men, however small it may be, is still about five times as large as the tiny effect for women (-0.012221/-0.002403 = 5.085726). So, it does look like the effect of age differs by gender!</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="getting-p-values-and-confidence-intervals" class="level2">
+<h2 class="anchored" data-anchor-id="getting-p-values-and-confidence-intervals">Getting <em>p</em>-values and confidence intervals</h2>
+<p>The results we have so far are interesting, but they are only half of the story — we also need to account for the fact that these numbers are <em>estimates</em> based on <em>sample data</em> and that we cannot just take them at face value. We also need to look if they really are <em>statistically significant</em>, meaning if we can say with sufficient confidence that these effects also exist in the general population for which we want to make inferences. As you know, we look at <em>p</em>-values and confidence intervals to figure this out.</p>
+<p>To get these additional statistics, we use <code>margins()</code>’s sister-function, <code>margins_nummary()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">variables =</span> <span class="st">"agea"</span>, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>)))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a> factor   gndr     AME     SE       z      p   lower   upper</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>   agea <span class="fl">1.0000</span> <span class="sc">-</span><span class="fl">0.0122</span> <span class="fl">0.0038</span> <span class="sc">-</span><span class="fl">3.2186</span> <span class="fl">0.0013</span> <span class="sc">-</span><span class="fl">0.0197</span> <span class="sc">-</span><span class="fl">0.0048</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>   agea <span class="fl">2.0000</span> <span class="sc">-</span><span class="fl">0.0024</span> <span class="fl">0.0040</span> <span class="sc">-</span><span class="fl">0.6039</span> <span class="fl">0.5459</span> <span class="sc">-</span><span class="fl">0.0102</span>  <span class="fl">0.0054</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This result now tells us the complete story, only the values of the <code>gndr</code> variable are presented in a less informative way. But we can simply use <code>bst::visfactor()</code> to figure out what 1 and 2 correspond to:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bst290<span class="sc">::</span><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"gndr"</span>, <span class="at">dataset =</span> ess7)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a> values labels</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span>   Male</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span> Female</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If we now look at the <code>margins_summary()</code> result and specifically at the <em>p</em>-values (under <code>p</code>), we see that only the marginal effect of age for men (see <code>AME</code>) is really statistically significant (<em>p</em> = 0.0013 &lt; 0.05). The marginal effect of age for women, on the other hand, is not (<em>p</em> = 0.5459).</p>
+<p>This means: <em>There (probably) is a small negative effect of age on trust in politicians in the general Norwegian population — but this effect exists only among Norwegian men. In the case of women, we cannot say with sufficient confidence if the true effect is really different from 0 or not, and so we assume that age has no effect on political trust in the case of Norwegian women.</em></p>
+<p>You can also see this if you look at the last two columns of the result, which give you the upper and lower limits of the confidence intervals of the marginal effect estimates. The confidence interval for men does not include 0, while the one for women does overlap with 0.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="visualizing-marginal-effect-estimates" class="level2">
+<h2 class="anchored" data-anchor-id="visualizing-marginal-effect-estimates">Visualizing marginal effect estimates</h2>
+<p>To make the interpretation of the results still more intuitive for yourself (and especially for your readers!), you can and should visualize the result. Luckily, the output you get from <code>margins_summary()</code> is a <code>data.frame</code>, which means you can directly “pipe” it into a <code>ggplot()</code> graph.</p>
+<p>A raw, unpolished graph (here a bar graph; <code>geom_point()</code> is an alternative) would look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">variables =</span> <span class="st">"agea"</span>, </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gndr, <span class="at">y =</span> AME, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper)) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> <span class="co"># draws marginal effect estimates as bars</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_linerange</span>() <span class="co"># draws confidence intervals as lines</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_10_files/figure-html/rawplot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="tutorial_10_files/figure-html/rawplot-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note that <code>geom_linerange()</code>, which draws the confidence intervals, needs to know the upper and lower values of the lines it is supposed to draw. You need to specify these with <code>ymin</code> and <code>ymax</code> within <code>aes()</code>.</p>
+<p>What you see here are the marginal effect estimates of age separately for men and women. You can directly see that the effect of age is more strongly negative for men than for women. If you look carefully, you can also see that the confidence interval overlaps with 0 in the case of women — indicating again the lack of statistical significance.</p>
+<div style="page-break-after: always;"></div>
+<p>To make the interpretation even easier, we would polish the graph a bit more by adding proper labels to the axes, using a better-looking scheme, and also by adding a horizontal reference line at the 0-point on the y-axis with <code>geom_hline()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">variables =</span> <span class="st">"agea"</span>, </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gndr, <span class="at">y =</span> AME, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper)) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_linerange</span>() <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"gray"</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Gender"</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Effect of age on trust in politicians"</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"95% confidence intervals."</span>) <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_10_files/figure-html/finalplot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="tutorial_10_files/figure-html/finalplot-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This graph should make the overall result fairly apparent: Among men, every additional year of age decreases trust in politicians by around -0.012 points. Among women, on the other hand, the effect of age is not significantly different from 0. In other words, <em>we have shown that the effect of age on trust in politicians depends on gender!</em> Only men trust politicians less as they get older, while age makes no difference for women.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="predictions" class="level1">
+<h1>Predictions</h1>
+<p>A second way to interpret the results of an interactive regression model is to calculate and visualize <em>predicted</em> outcomes. In this case, it would be interesting to look at how trust in politicians changes as people get older, and how that differs between men and women.</p>
+<p>You may already have guessed that we will now use the <code>prediction</code> package. Specifically, we will use its <code>prediction_summary()</code> function to calculate predicted trust scores over values of <code>agea</code> and <code>gndr</code>. The logic of the code to do this is very similar to that used with <code>margins()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(<span class="at">model =</span> model3,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">agea =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">75</span>, <span class="at">by =</span> <span class="dv">5</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> at(gndr) at(agea) Prediction      SE     z          p lower upper
+     Male       20      5.551 0.12148 45.69  0.000e+00 5.313 5.789
+   Female       20      5.357 0.13260 40.40  0.000e+00 5.097 5.617
+     Male       25      5.490 0.10654 51.53  0.000e+00 5.281 5.698
+   Female       25      5.345 0.11669 45.81  0.000e+00 5.117 5.574
+     Male       30      5.429 0.09307 58.33  0.000e+00 5.246 5.611
+   Female       30      5.333 0.10218 52.20  0.000e+00 5.133 5.534
+     Male       35      5.367 0.08183 65.59  0.000e+00 5.207 5.528
+   Female       35      5.321 0.08976 59.29  0.000e+00 5.145 5.497
+     Male       40      5.306 0.07383 71.87  0.000e+00 5.162 5.451
+   Female       40      5.309 0.08040 66.03  0.000e+00 5.152 5.467
+     Male       45      5.245 0.07019 74.73  0.000e+00 5.108 5.383
+   Female       45      5.297 0.07526 70.38  0.000e+00 5.150 5.445
+     Male       50      5.184 0.07157 72.43  0.000e+00 5.044 5.324
+   Female       50      5.285 0.07521 70.27  0.000e+00 5.138 5.433
+     Male       55      5.123 0.07771 65.92  0.000e+00 4.971 5.275
+   Female       55      5.273 0.08025 65.71  0.000e+00 5.116 5.431
+     Male       60      5.062 0.08762 57.77  0.000e+00 4.890 5.234
+   Female       60      5.261 0.08954 58.76  0.000e+00 5.086 5.437
+     Male       65      5.001 0.10018 49.92  0.000e+00 4.804 5.197
+   Female       65      5.249 0.10191 51.51  0.000e+00 5.049 5.449
+     Male       70      4.940 0.11452 43.13  0.000e+00 4.715 5.164
+   Female       70      5.237 0.11638 45.00  0.000e+00 5.009 5.465
+     Male       75      4.879 0.13006 37.51 6.187e-308 4.624 5.134
+   Female       75      5.225 0.13227 39.50  0.000e+00 4.966 5.484</code></pre>
+</div>
+</div>
+<p>In this case, we ask for predicted scores for ages from 20 to 75 in steps of 5 years, and this separately for men and for women.</p>
+<div style="page-break-after: always;"></div>
+<p>The result contains lots and lots of numbers, and any patterns in it will be more easily visible when visualized:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(<span class="at">model =</span> model3,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">agea =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">at(agea)</span><span class="st">`</span>, <span class="at">y =</span> Prediction,<span class="at">fill =</span> <span class="st">`</span><span class="at">at(gndr)</span><span class="st">`</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="st">`</span><span class="at">at(gndr)</span><span class="st">`</span>, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper)) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(<span class="at">alpha =</span> .<span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">4.5</span>, <span class="at">to =</span> <span class="dv">6</span>, <span class="at">by =</span> .<span class="dv">5</span>),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">4.5</span>,<span class="dv">6</span>)) <span class="co"># this adjust the range and labels of the y-axis</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_10_files/figure-html/preds2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="tutorial_10_files/figure-html/preds2-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You can see that as women get older, their level of trust barely changes. For men, on the other hand, there is a more pronounced decrease over time. Of course, the change is <em>substantively</em> small – as you can also see when you look at the range of the y-axis.</p>
+<div style="page-break-after: always;"></div>
+<p>With some more polishing, we end up with a nice and informative graph about the conditional effect of age on political trust:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(<span class="at">model =</span> model3,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">agea =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">at(agea)</span><span class="st">`</span>, <span class="at">y =</span> Prediction,<span class="at">fill =</span> <span class="st">`</span><span class="at">at(gndr)</span><span class="st">`</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="st">`</span><span class="at">at(gndr)</span><span class="st">`</span>, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper)) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(<span class="at">alpha =</span> .<span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">4.5</span>, <span class="at">to =</span> <span class="dv">6</span>, <span class="at">by =</span> .<span class="dv">5</span>),</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">4.5</span>,<span class="dv">6</span>)) <span class="sc">+</span> </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>),</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>                       <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">20</span>,<span class="dv">80</span>)) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Orange"</span>,<span class="st">"Cornflowerblue"</span>)) <span class="sc">+</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age"</span>, <span class="at">y =</span> <span class="st">"Predicted level of trust in politicians"</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"95% confidence intervals"</span>) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>, <span class="co"># move legend to bottom</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="co"># remove legend title</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_10_files/figure-html/preds3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="tutorial_10_files/figure-html/preds3-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<!-- \newpage -->
+<!-- # Exercises  -->
+<!-- Now you know how to estimate and interpret an interactive linear regression model in `R`. As in the prevoius tutorial, you know apply this to the second dependent variable we work with here: Trust in the UN. -->
+<!-- **Assumption: You have gone through the entire tutorial, step by step and without errors, until here.** -->
+<!-- ## Trust in the United Nations: An interactive model -->
+<!-- As you probably remember from the previous tutorial, people's trust in the United Nations, as measured by the `trstun` variable. This is obviously also the variable you will be working with here. -->
+<!-- 1. Redo the necessary data management (as last week). -->
+<!-- 2. Now estimate regression models that include `eduyrs` plus `gndr` and `agea` and an interaction between `gndr` and `agea`, but in a stepwise fashion (bivariate, then multivariate, then interactive). -->
+<!-- 5. Present the results in a nice-looking table using `texreg` -->
+<!-- 6. Calculate the marginal effects of `agea` over `gndr` using `margins_summary()` -->
+<!-- 7. Visualize the marginal effects. -->
+<!-- 8. Interpret the results. -->
+
+
+</section>
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>For example, Liechti <em>et al.</em> (Liechti, F., Fossati, F., Bonoli, G., and Auer, D. (2017). The signalling value of labour market programmes. <em>European Sociological Review</em>, 33(2):257–274.) show that labor market re-integration programs for unemployed workers have different effects depending on whether the unemployed worker is an immigrant or not.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>A widely-cited studied that established this (and which you should cite if you estimate interactive models) is Brambor, T., Clark, W. R., and Golder, M. (2006). Understanding interaction models: Improving empirical analyses. <em>Political Analysis</em>, 14(1):63–82.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>See Lenz, G. S. and Sahn, A. (2021). Achieving statistical significance with control variables and without transparency. <em>Political Analysis</em>, 29(3):356–369.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./tutorial_9.html" class="pagination-link" aria-label="Tutorial 9: Multivariate linear regression">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Tutorial 9: Multivariate linear regression</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./tutorial_11.html" class="pagination-link" aria-label="Tutorial 11: Logistic regression for binomial dependent variables">
+        <span class="nav-page-text">Tutorial 11: Logistic regression for binomial dependent variables</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"loop":false,"descPosition":"bottom","closeEffect":"zoom","openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>

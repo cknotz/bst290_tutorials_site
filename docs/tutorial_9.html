@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carlo Knotz">
+
+<title>Tutorial 9: Multivariate linear regression – R Tutorials for BST290</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./tutorial_10.html" rel="next">
+<link href="./tutorial_8.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">R Tutorials for BST290</span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools tools-end">
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorial_9.html">Tutorial 9: Multivariate linear regression</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Hei!</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_0.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 0: Installation &amp; Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 1: Your first steps in <code>R</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 2: Importing &amp; exploring your data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_3.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 3: Data cleaning &amp; management</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 4: Data visualization with <code>ggplot2</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 5: Confidence intervals</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 6: Tabular Analysis &amp; the $\chi^2$ test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7a: <em>t</em>-test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_7b.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 7b: Correlation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 8: Bivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_9.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Tutorial 9: Multivariate linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 10: <em>It depends!</em> Interactive regression models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tutorial_11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tutorial 11: Logistic regression for binomial dependent variables</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
+  <ul class="collapse">
+  <li><a href="#packages-data-import-and-first-data-cleaning" id="toc-packages-data-import-and-first-data-cleaning" class="nav-link" data-scroll-target="#packages-data-import-and-first-data-cleaning">Packages, data import, and first data cleaning</a></li>
+  <li><a href="#new-data-management-additional-independent-variables" id="toc-new-data-management-additional-independent-variables" class="nav-link" data-scroll-target="#new-data-management-additional-independent-variables">New data management: additional independent variables</a></li>
+  </ul></li>
+  <li><a href="#new-descriptive-statistics" id="toc-new-descriptive-statistics" class="nav-link" data-scroll-target="#new-descriptive-statistics">(New) descriptive statistics</a></li>
+  <li><a href="#regression-analysis" id="toc-regression-analysis" class="nav-link" data-scroll-target="#regression-analysis">Regression analysis</a>
+  <ul class="collapse">
+  <li><a href="#models-formulas-again" id="toc-models-formulas-again" class="nav-link" data-scroll-target="#models-formulas-again">Models &amp; formulas (again)</a></li>
+  <li><a href="#the-lm-function" id="toc-the-lm-function" class="nav-link" data-scroll-target="#the-lm-function">The <code>lm()</code> function</a></li>
+  <li><a href="#presenting-the-regression-results-in-a-publication-quality-table" id="toc-presenting-the-regression-results-in-a-publication-quality-table" class="nav-link" data-scroll-target="#presenting-the-regression-results-in-a-publication-quality-table">Presenting the regression results in a publication-quality table</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Tutorial 9: Multivariate linear regression</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carlo Knotz </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a href="https://raw.github.com/cknotz/bst290_tutorials/main/tutorial9_multOLS.pdf" class="btn btn-outline-primary" role="button">Download as PDF</a></p>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>In the previous tutorial, you learned how to estimate a <em>bivariate</em> linear regression model in <code>R</code>. You used a linear regression model to see if people’s level of education influences their level of trust in politicians. The expectation was that higher education would lead to greater trust in politicians, and that is also what we found.</p>
+<p>In this tutorial, we go one step further and test if this bivariate relationship stays the same (“is robust”) when we control for additional factors. We do so by estimating a <em>multivariate</em> regression model. In this type of model, we estimate the effects of several independent variables (<em>predictors</em>) on a dependent variable simultaneously.</p>
+<hr>
+<p><em>Hvis du ønsker å lese en norsk tekst <strong>i tillegg</strong>: “Lær deg R”, Kapittel 8.</em></p>
+<hr>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<section id="packages-data-import-and-first-data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="packages-data-import-and-first-data-cleaning">Packages, data import, and first data cleaning</h2>
+<p>As before, we use the <code>tidyverse</code> to help with data management and visualization and <code>texreg</code> to make neat-looking regression tables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You should now already know what to do next, and how to do it:</p>
+<ol type="1">
+<li>Use <code>haven::read_dta()</code> to import the ESS round 7 (2014) dataset; save it as <code>ess7</code>;</li>
+<li>Transform the dataset into the familiar format using <code>labelled::unlabelled()</code>;</li>
+<li>Trim the dataset:
+<ul>
+<li>Keep only observations from Norway;</li>
+<li>Select the following variables: <code>essround</code>, <code>idno</code>, <code>cntry</code>, <code>trstplt</code>, <code>eduyrs</code> — and also <code>agea</code>, and <code>gndr</code>;</li>
+<li>Use the pipe to link everything;</li>
+<li>Save the trimmed dataset as <code>ess7</code>;</li>
+</ul></li>
+<li>If you like, create a data dictionary using <code>labelled::generate_dictionary()</code>;</li>
+<li>Transform the <code>trstplt</code> variable from factor to numeric using <code>as.numeric()</code>; do not forget to adjust the scores; store the new variable as <code>trstplt_num</code>;</li>
+</ol>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="new-data-management-additional-independent-variables" class="level2">
+<h2 class="anchored" data-anchor-id="new-data-management-additional-independent-variables">New data management: additional independent variables</h2>
+<p>In addition to the main predictor from the previous tutorial (<code>eduyrs</code>, the respondent’s level of education), we want to add controls for two additional variables:</p>
+<ul>
+<li>The respondent’s age in years, using <code>agea</code></li>
+<li>The respondent’s gender, using <code>gndr</code></li>
+</ul>
+<p>We take a quick look at how these variables are stored:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess7<span class="sc">$</span>agea)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"numeric"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess7<span class="sc">$</span>gndr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"factor"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Luckily, these variables are stored correctly: <code>agea</code> is numeric, and <code>gndr</code> is a factor — as they should be.</p>
+<!-- In the case of the `gndr` variable, we only have to get rid of the empty "No answer" category with `droplevels()`: -->
+<!-- ```{r droplv, eval=T, echo=T, collapse=T} -->
+<!-- ess7$gndr <- droplevels(ess7$gndr) -->
+<!-- ``` -->
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="new-descriptive-statistics" class="level1">
+<h1>(New) descriptive statistics</h1>
+<p>As before, we print out some descriptive statistics for our variables. It is important to report these so that readers get an idea of how our data look like and can interpret the results correctly.</p>
+<p>To report statistics for our numeric variables, we simply expand the descriptive table we created in the previous tutorial:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bst290<span class="sc">::</span><span class="fu">oppsumtabell</span>(<span class="at">dataset =</span> ess7,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"trstplt_num"</span>,<span class="st">"agea"</span>,<span class="st">"eduyrs"</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> Variable        trstplt_num agea    eduyrs </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a> Observations    <span class="fl">1429.00</span>     <span class="fl">1436.00</span> <span class="fl">1434.00</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a> Average            <span class="fl">5.26</span>       <span class="fl">46.77</span>   <span class="fl">13.85</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> <span class="dv">25</span>th percentile    <span class="fl">4.00</span>       <span class="fl">32.00</span>   <span class="fl">11.00</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a> Median             <span class="fl">5.00</span>       <span class="fl">47.00</span>   <span class="fl">14.00</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a> <span class="dv">75</span>th percentile    <span class="fl">7.00</span>       <span class="fl">61.25</span>   <span class="fl">17.00</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a> Stand. Dev.        <span class="fl">1.95</span>       <span class="fl">18.68</span>    <span class="fl">3.72</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a> Minimum            <span class="fl">0.00</span>       <span class="fl">15.00</span>    <span class="fl">0.00</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a> Maximum           <span class="fl">10.00</span>      <span class="fl">104.00</span>   <span class="fl">30.00</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a> Missing            <span class="fl">7.00</span>        <span class="fl">0.00</span>    <span class="fl">2.00</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+<p>The gender-variable is not numeric, so including it in the summary table is not recommended. But you can report its distribution using a simple bar graph:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gndr)) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Respondent's gender"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Number of observations"</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_9_files/figure-html/gndrbar-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="tutorial_9_files/figure-html/gndrbar-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Alternatively, you could also create a simple table with <code>table()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess7<span class="sc">$</span>gndr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  Male Female </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>   <span class="dv">764</span>    <span class="dv">672</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="regression-analysis" class="level1">
+<h1>Regression analysis</h1>
+<section id="models-formulas-again" class="level3">
+<h3 class="anchored" data-anchor-id="models-formulas-again">Models &amp; formulas (again)</h3>
+<p>Recall the formula for the <em>bivariate</em> regression model we estimated in the last tutorial. This model included only a single independent variable (<code>eduyrs</code>) but no control variables:</p>
+<p><span class="math display">\[\begin{align*}
+  \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \epsilon
+\end{align*}\]</span></p>
+<p>Now we expand this model by adding more independent variables — the model becomes <em>multivariate</em>: <span class="math display">\[\begin{align*}
+  \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \beta_2 \texttt{gndr} + \beta_3 \texttt{agea} + \epsilon
+\end{align*}\]</span></p>
+<p>As before:</p>
+<ul>
+<li><span class="math inline">\(\alpha\)</span> is still the intercept (<em>konstantledd</em>).</li>
+<li>The <span class="math inline">\(\beta\)</span>s are the regression coefficients (or <em>“weights”</em>, <em>stigningstall</em>).</li>
+<li><span class="math inline">\(\epsilon\)</span> is still the error term.</li>
+</ul>
+<p>In <code>R</code>, the formula for the multivariate model (with all control variables) would be written like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As before, <code>R</code> takes care of the intercept and the error term — all we have to do to get a multivariate regression model is to list more than one independent variable. Easy.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="the-lm-function" class="level2">
+<h2 class="anchored" data-anchor-id="the-lm-function">The <code>lm()</code> function</h2>
+<p>Just to refresh your memory, we first estimate the bivariate regression model from the previous tutorial and store the result as <code>model1</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(trstplt_num <span class="sc">~</span> eduyrs, </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> ess7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you like, you can also print out the result with <code>summary()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model1)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Call<span class="sc">:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(<span class="at">formula =</span> trstplt_num <span class="sc">~</span> eduyrs, <span class="at">data =</span> ess7)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>Residuals<span class="sc">:</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    Min      <span class="dv">1</span>Q  Median      <span class="dv">3</span>Q     Max </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">5.7148</span> <span class="sc">-</span><span class="fl">1.1966</span>  <span class="fl">0.0996</span>  <span class="fl">1.4332</span>  <span class="fl">5.0256</span> </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>Coefficients<span class="sc">:</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            Estimate Std. Error t value <span class="fu">Pr</span>(<span class="sc">&gt;</span><span class="er">|</span>t<span class="sc">|</span>)    </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>(Intercept)  <span class="fl">4.23401</span>    <span class="fl">0.19737</span>  <span class="fl">21.452</span>  <span class="sc">&lt;</span> <span class="fl">2e-16</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>eduyrs       <span class="fl">0.07404</span>    <span class="fl">0.01377</span>   <span class="fl">5.378</span> <span class="fl">8.78e-08</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>Signif. codes<span class="sc">:</span>  <span class="dv">0</span> <span class="st">'***'</span> <span class="fl">0.001</span> <span class="st">'**'</span> <span class="fl">0.01</span> <span class="st">'*'</span> <span class="fl">0.05</span> <span class="st">'.'</span> <span class="fl">0.1</span> <span class="st">' '</span> <span class="dv">1</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>Residual standard error<span class="sc">:</span> <span class="fl">1.932</span> on <span class="dv">1425</span> degrees of freedom</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  (<span class="dv">9</span> observations deleted due to missingness)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>Multiple R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.0199</span>,    Adjusted R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.01921</span> </span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>F<span class="sc">-</span>statistic<span class="sc">:</span> <span class="fl">28.93</span> on <span class="dv">1</span> and <span class="dv">1425</span> DF,  p<span class="sc">-</span>value<span class="sc">:</span> <span class="fl">8.779e-08</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+<p>In the next step, we test if the effect of <code>eduyrs</code> is robust to including the additional control variables: gender and age.</p>
+<p>This means that we estimate our multivariate model, store the result as <code>model2</code>, and print out the results:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea, <span class="at">data =</span> ess7)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model2)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>Call<span class="sc">:</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(<span class="at">formula =</span> trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea, <span class="at">data =</span> ess7)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>Residuals<span class="sc">:</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    Min      <span class="dv">1</span>Q  Median      <span class="dv">3</span>Q     Max </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="sc">-</span><span class="fl">5.7539</span> <span class="sc">-</span><span class="fl">1.1985</span>  <span class="fl">0.1983</span>  <span class="fl">1.4072</span>  <span class="fl">5.2348</span> </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>Coefficients<span class="sc">:</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>             Estimate Std. Error t value <span class="fu">Pr</span>(<span class="sc">&gt;</span><span class="er">|</span>t<span class="sc">|</span>)    </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>(Intercept)  <span class="fl">4.621764</span>   <span class="fl">0.249674</span>  <span class="fl">18.511</span>  <span class="sc">&lt;</span> <span class="fl">2e-16</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>eduyrs       <span class="fl">0.069118</span>   <span class="fl">0.013861</span>   <span class="fl">4.986</span> <span class="fl">6.91e-07</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>gndrFemale   <span class="fl">0.070814</span>   <span class="fl">0.102590</span>   <span class="fl">0.690</span>  <span class="fl">0.49014</span>    </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>agea        <span class="sc">-</span><span class="fl">0.007544</span>   <span class="fl">0.002756</span>  <span class="sc">-</span><span class="fl">2.737</span>  <span class="fl">0.00627</span> <span class="sc">**</span> </span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="sc">---</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>Signif. codes<span class="sc">:</span>  <span class="dv">0</span> <span class="st">'***'</span> <span class="fl">0.001</span> <span class="st">'**'</span> <span class="fl">0.01</span> <span class="st">'*'</span> <span class="fl">0.05</span> <span class="st">'.'</span> <span class="fl">0.1</span> <span class="st">' '</span> <span class="dv">1</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>Residual standard error<span class="sc">:</span> <span class="fl">1.928</span> on <span class="dv">1423</span> degrees of freedom</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  (<span class="dv">9</span> observations deleted due to missingness)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>Multiple R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.02526</span>,   Adjusted R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.0232</span> </span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>F<span class="sc">-</span>statistic<span class="sc">:</span> <span class="fl">12.29</span> on <span class="dv">3</span> and <span class="dv">1423</span> DF,  p<span class="sc">-</span>value<span class="sc">:</span> <span class="fl">6.121e-08</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You see that the output looks the same as before, just with more coefficients listed. Notice also that <code>R</code> has automatically figured out that <code>gndr</code> is a factor variable and included a <em>dummy</em> only for women (<code>gndrFemale</code>) into the model (as also explained in Kellstedt &amp; Whitten, Chapter 11.2).</p>
+<p>Now it gets tricky: How do you make sense of these results? Kellstedt &amp; Whitten (2018, Chapters 10 &amp; 11) or Solbakken (<em>Statistikk for Nybeginnere</em>, Chapters 6 &amp; 8) explain this.</p>
+<!-- With the additional control variables, the *interpretation of the results is a bit different from before*: -->
+<!-- * The intercept is still the predicted value of `trstplt_num` when *all other* variables are exactly `0`. But now the model includes several variables! This means, the intercept is now the predicted value for a person who has no education (`eduyrs` = 0), is a man (`gndrFemale` = 0), and was just born (`agea` = 0). This fictional person would then have a score of around 4.62. This is of course a silly prediction --- unless you think that uneducated male newborns can already have opinions about politicians. But this illustrates an important point: *The intercept of a regression model does not always have a good interpretation!* -->
+<!-- * The coefficient for `eduyrs` is still the effect of education --- but now when all other variables are held constant at their means (*"controlling for"* the other variables). You see that the effect is a bit lower than before: 0.069. This means that controlling for the other variables does indeed reduce the effect of education, but only by a very small amount (from 0.074 to 0.069). And the effect is still statistically significant. -->
+<!-- * The coefficient for `gndr` has a special interpretation: It shows you the *difference* in the predicted scores of women compared to those of men. In other words, women have a score on the `trstplt_num` variable that is, on average, 0.071 points higher than the average score of men --- holding all other variables constant. **But:** The coefficient has a high *p*-value (around 0.5), which indicates that it is *not statistically significant* (note also the lack of stars that indicate significance). This means that we -->
+<!-- cannot say with sufficient confidence that there really is a difference between men and women in the general population. And we therefore stay on the cautious side and conclude that the true difference is 0, or that gender has no effect on trust in politicians. -->
+<!-- * According to the coefficient estimate for the `agea` variable, age has a negative effect: As someone's age increases by one year, their score on the `trstplt_num` variable decreases by 0.0075 points. Simply put: Older people have less trust in politicians, all other factors held equal. This effect is statistically significant. -->
+<div style="page-break-after: always;"></div>
+</section>
+<section id="presenting-the-regression-results-in-a-publication-quality-table" class="level2">
+<h2 class="anchored" data-anchor-id="presenting-the-regression-results-in-a-publication-quality-table">Presenting the regression results in a publication-quality table</h2>
+<p>To present the results and export them as a nice-looking table, we use again the <code>texreg</code> package.</p>
+<p>First, we print out a preview of our table using the <code>screenreg()</code> function. Now we have two regression models to print, so we have to list both in the function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screenreg</span>(<span class="fu">list</span>(model1, model2))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">===================================</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>             Model <span class="dv">1</span>      Model <span class="dv">2</span>    </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="sc">-------------------------------------</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>(Intercept)     <span class="fl">4.23</span> <span class="sc">**</span><span class="er">*</span>     <span class="fl">4.62</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>               (<span class="fl">0.20</span>)       (<span class="fl">0.25</span>)   </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>eduyrs          <span class="fl">0.07</span> <span class="sc">**</span><span class="er">*</span>     <span class="fl">0.07</span> <span class="sc">**</span><span class="er">*</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>               (<span class="fl">0.01</span>)       (<span class="fl">0.01</span>)   </span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>gndrFemale                   <span class="fl">0.07</span>    </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                            (<span class="fl">0.10</span>)   </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>agea                        <span class="sc">-</span><span class="fl">0.01</span> <span class="sc">**</span> </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                            (<span class="fl">0.00</span>)   </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="sc">-------------------------------------</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>R<span class="sc">^</span><span class="dv">2</span>             <span class="fl">0.02</span>         <span class="fl">0.03</span>    </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>Adj. R<span class="sc">^</span><span class="dv">2</span>        <span class="fl">0.02</span>         <span class="fl">0.02</span>    </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>Num. obs.    <span class="dv">1427</span>         <span class="dv">1427</span>       </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">===================================</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="er">***</span> p <span class="sc">&lt;</span> <span class="fl">0.001</span>; <span class="sc">**</span> p <span class="sc">&lt;</span> <span class="fl">0.01</span>; <span class="sc">*</span> p <span class="sc">&lt;</span> <span class="fl">0.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When you look at the table, you can directly see the differences between the two models. Model 1 included only the intercept and education (<code>eduyrs</code>), while model 2 also included age and gender as control variables. The table includes all the variables’ coefficients: You see, for instance, the coefficients for education and how they differ (or not) between the two models.</p>
+<div style="page-break-after: always;"></div>
+<p>Next, we add proper labels for the coefficients and trim the significance stars:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screenreg</span>(<span class="fu">list</span>(model1,model2),</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">custom.coef.names =</span> <span class="fu">c</span>(<span class="st">"Intercept"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Years of educ. completed"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Female"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Age"</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">stars =</span> <span class="fl">0.05</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">============================================</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                          Model <span class="dv">1</span>    Model <span class="dv">2</span>  </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="sc">----------------------------------------------</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>Intercept                    <span class="fl">4.23</span> <span class="sc">*</span>     <span class="fl">4.62</span> <span class="sc">*</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                            (<span class="fl">0.20</span>)     (<span class="fl">0.25</span>) </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>Years of educ. completed     <span class="fl">0.07</span> <span class="sc">*</span>     <span class="fl">0.07</span> <span class="sc">*</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                            (<span class="fl">0.01</span>)     (<span class="fl">0.01</span>) </span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>Female                                  <span class="fl">0.07</span>  </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>                                       (<span class="fl">0.10</span>) </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>Age                                    <span class="sc">-</span><span class="fl">0.01</span> <span class="sc">*</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>                                       (<span class="fl">0.00</span>) </span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="sc">----------------------------------------------</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>R<span class="sc">^</span><span class="dv">2</span>                          <span class="fl">0.02</span>       <span class="fl">0.03</span>  </span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>Adj. R<span class="sc">^</span><span class="dv">2</span>                     <span class="fl">0.02</span>       <span class="fl">0.02</span>  </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>Num. obs.                 <span class="dv">1427</span>       <span class="dv">1427</span>     </span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">============================================</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="er">*</span> p <span class="sc">&lt;</span> <span class="fl">0.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, we use the <code>wordreg()</code> function to export the table to a Microsoft Word document:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wordreg</span>(<span class="fu">list</span>(model1,model2),</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">custom.coef.names =</span> <span class="fu">c</span>(<span class="st">"Intercept"</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Years of educ. completed"</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Female"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Age"</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">stars =</span> <span class="fl">0.05</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">file =</span> <span class="st">"ols_models.doc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
+<p>Now you know how to estimate, interpret, and present a multivariate linear regression model in <code>R</code>. This opens a lot of doors, because you can now use data such as those from the ESS to really disentangle the drivers and determinants of complex social and political phenomena. Also, if you read political science and sociological research, you will find many, many publications that use this type of method, so you now have first-hand knowledge of what is behind the results that are presented there.</p>
+<!-- **Assumption: You have gone through the entire tutorial, step by step and without errors, until here.** -->
+<!-- ## Trust in the United Nations: A multivariate model -->
+<!-- As you probably remember from the previous tutorial, people's trust in the United Nations, as measured by the `trstun` variable. This is obviously also the variable you will be working with here. -->
+<!-- 1. Redo the data management, exploratory analysis, and bivariate regression analysis from last week's tutorial exercise on how education is related to trust in the UN (you can just re-use your code!) -->
+<!-- 2. Now estimate a multivariate regression model that includes `eduyrs` plus `gndr` and `agea`. -->
+<!-- 4. Interpret the results -->
+<!-- 5. Present the results in a nice-looking table using `texreg` -->
+<!-- ### De-bugging exercises -->
+<p>You can again find an interactive tutorial to practice working with linear regression models a bit more — by continuing the earlier analysis on why some people are happier than others.</p>
+<!-- But if you first want to learn more about how to present the results of a linear regression model, keep on reading! -->
+<!-- \newpage -->
+<!-- # (Voluntary) Making better sense of regression results -->
+<!-- In the previous tutorial on bivariate regression models, you saw a graph that showed the main results of the first regression model we estimated --- and which hopefully helped you to understand better how to interpret a linear regression model. This extra part of the tutorial shows you how to make graphs like the one shown in the previous tutorial. -->
+<!-- If you can, you should always aim to present your results in the most intuitive and clear way possible --- such as with predicted values shown in a graph --- even once you have become an expert social data analyst! This is because, at the end of the day, our job as (social) data analysts is to communicate insights to others who may not be trained in statistics, and they need intuitive results, not statistical gibberish.^[See also King, G., Tomz, M., and Wittenberg, J. (2000). Making the most of statistical analyses: Improving interpretation and presentation. *American Journal of Political Science*, 44(2):341–335.] -->
+<!-- Learning how to get predicted values and visualize them is not only useful when you are interpreting simple linear regression models, but it is even essential if you want to interpret more advanced models with interactions or non-linear dependent variables. -->
+<!-- ### The `prediction` package -->
+<!-- There are different ways to get `R` to compute predicted values from a regression model, but the probably easiest way to do so is with the `prediction` package. This can be easily installed with `install.packages()`: -->
+<!-- ```{r instpred, eval=F, collapse=T} -->
+<!-- install.packages("prediction") -->
+<!-- library(prediction) -->
+<!-- ``` -->
+<!-- \newpage -->
+<!-- ## The `prediction()` function -->
+<!-- The `prediction` package has one main function: `prediction()`. This function, quite simply, calculates predicted values based on a regression model. -->
+<!-- The best way to use this function is to let it give you predicted values of the dependent variable over values of an independent variable. This is also what the graph in the previous tutorial showed: The predicted values of `trstplt_num` over values of `eduyrs`. -->
+<!-- To see better how this function works, let's first replicate the earlier graph. This includes two steps: First, we calculate the predicted values with `prediction()` based on the results of the first (bivariate) regression model. Then we use `ggplot()` to visualize them in a graph. -->
+<!-- Step 1 looks as follows: -->
+<!-- ```{r pred1, eval=F} -->
+<!-- prediction(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1))) -->
+<!-- ``` -->
+<!-- In human language: we state that `prediction()` should calculate the predicted score on the `trstplt_num` variable... -->
+<!--  * based on our first regression model (`model = model1`)... -->
+<!--  * and over the entire range of the education variable, i.e., from `0` to `30` in steps of `1` -->
+<!-- The result looks then like this: -->
+<!-- ```{r pred2, eval=T, echo=F} -->
+<!-- prediction(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1))) -->
+<!-- ``` -->
+<!-- You see that the predicted score for someone with no education (`eduyrs` = `0`) corresponds directly to the intercept from `model1`: 4.23. From there it increases to around 6.5 for someone with 30 years of education (`eduyrs` = `30`). This increase reflects the *positive* effect of education on trust: as `eduyrs` *increases*, `trstplt_num` *increases* as well. -->
+<!-- These are of course only the predicted values --- but the graph also showed confidence intervals. And it is indeed good practice to always present confidence intervals when dealing with estimated values.^[See also King, G., Tomz, M., and Wittenberg, J. (2000). Making the most of statistical analyses: Improving interpretation and presentation. *American Journal of Political Science*, 44(2):341–335.] Getting these from `prediction()` is not hard. -->
+<!-- You can either wrap `prediction()` into `summary()` like so: -->
+<!-- ```{r predsum1, eval=F} -->
+<!-- summary(prediction(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1)))) -->
+<!-- ``` -->
+<!-- Or, to make it easier, use `prediction_summary()`: -->
+<!-- ```{r predsum2, collapse=T} -->
+<!-- prediction_summary(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1))) -->
+<!-- ``` -->
+<!-- `prediction_summary()` gives you the predicted values (now under `Prediction`), but now also their standard errors (`SE`), *z*-scores (which are equivalent to *t*-scores), *p*-values, and finally the upper and lower limits of the confidence interval for each predicted value. This is all you need for the graph! -->
+<!-- \newpage -->
+<!-- ## Visualizing results from `prediction_summary()` -->
+<!-- We can directly 'feed' the result from `prediction_summary()` into a `ggplot()` graph using the pipe operator (`%>%`): -->
+<!-- ```{r predgraph1, collapse=T} -->
+<!-- prediction_summary(model = model1, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1))) %>% -->
+<!--   ggplot(aes(x = `at(eduyrs)`, y = Prediction, -->
+<!--              ymin = lower, ymax = upper)) + -->
+<!--     geom_point() + # for the dots -->
+<!--     geom_line() + # to connect the dots with a line -->
+<!--     geom_ribbon(alpha = .2) # this draws the confidence intervals -->
+<!-- ``` -->
+<!-- Some things to pay attention to: -->
+<!-- 1. `geom_ribbon()` creates the gray confidence band. However, without any adjustment it will simply draw a thick black line across the graph and obscure the line and dots representing the predicted values. This means that we need to use the `alpha` parameter to make the confidence band transparent. `alpha` can range from 0 (completely transparent/invisible) to 1 (completely nontransparent). We choose a value of 0.2, which produces a highly transparent confidence band. -->
+<!-- 2. `geom_ribbon()` represents a *range* of values, which need to be defined by `ymin` and `ymax`. In the case of this graph, `ymin` and `ymax` are the lower and upper limits of our confidence interval, respectively. -->
+<!-- 3. Notice the single apostrophes around `at(eduyrs)`! It is important to add these to make sure that `R` understands that `at(eduyrs)` refers to the column in the output from `prediction_summary()` and not to the `at()` function! -->
+<!-- With some more polishing, we end up with the graph shown in the previous tutorial: -->
+<!-- ```{r predgraph_pol} -->
+<!-- prediction_summary(model1, -->
+<!--                    at = list(eduyrs = seq(from = 0, to = 30, by = 1))) %>% -->
+<!--   ggplot(aes(x = `at(eduyrs)`, y = Prediction, -->
+<!--              ymin = lower, ymax = upper)) + -->
+<!--     geom_point() + -->
+<!--     geom_line() + -->
+<!--     geom_ribbon(alpha = .2) + -->
+<!--     scale_x_continuous(breaks = seq(0,30,5)) + -->
+<!--     labs(x = "Years of education (eduyrs)", -->
+<!--          y = "Predicted trust in politicians (trstplt)", -->
+<!--          caption = "95% confidence intervals.", -->
+<!--          title = "Main prediction of Model 1") + -->
+<!--     theme_bw() -->
+<!-- ``` -->
+<!-- \newpage -->
+<!-- ## Predictions for more than one independent variable -->
+<!-- So far, we have only calculated and visualized predicted values over the range of a single independent variable, `eduyrs`. But if we have a regression model that includes more than one independent variable, then it is often useful to show how predictions vary over multiple variables. Our second regression model above, for example, included not only education but also gender. So it would be nice to show how trust in politicians varies by both education *and* gender. -->
+<!-- This, too, is easy to do with `prediction()`: All you need to do is to add to the list within the `at()`-function. In this case, you would add `gndr = c("Male","Female")` to get predictions for men and women. Also, you need to make sure you refer to the correct model: In this case, this is `model2` --- the "full" model with all control variables: -->
+<!-- ```{r pred3, collapse = T} -->
+<!-- prediction(model = model2, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1), -->
+<!--                      gndr = c("Male","Female"))) -->
+<!-- ``` -->
+<!-- Now you get two sets of predictions for how the dependent variable --- `trstplt_num` --- changes as one's education increases: One set of predictions is about men, the other is about women. And you can see the model's results reflected here as well: Remember that the coefficient for women (`gndrFemale`) above was positive --- meaning that, all else equal, women have higher scores than men. This is clearly visible in the predicted values here: At every level of education, women have higher scores than men. But you also see that the differences are not very big. -->
+<!-- \newpage -->
+<!-- This is of course all a bit much information to take in --- but, luckily, we can also directly visualize it. All we need to do is to get the complete results including confidence intervals with `prediction_summary()` and then feed the output into a `ggplot()` graph: -->
+<!-- ```{r predgraph_gen, collapse=T} -->
+<!-- prediction_summary(model = model2, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1), -->
+<!--                      gndr = c("Male","Female"))) %>% -->
+<!--   ggplot(aes(x = `at(eduyrs)`, y = Prediction, -->
+<!--              linetype = `at(gndr)`, # to let the linetype vary by gender! -->
+<!--              ymin = lower, ymax = upper)) + -->
+<!--     geom_line() + -->
+<!--     geom_ribbon(alpha = .2) -->
+<!-- ``` -->
+<!-- * `geom_line()` shows us the predicted values themselves. We also let the linetype vary by `gndr` -->
+<!-- * As before: We need to wrap `at(eduyrs)` and `at(gndr)` in single quotes so that `R` understands that we are not trying to use the `at()` function here. -->
+<!-- You can directly see the positive effect of education in the graph: As education increases by one year, the predicted level of trust in politicians increases by around 0.07 points --- and you also see that, at every stage, women have slightly higher predicted values than men. -->
+<!-- **But:** You can see clearly that the difference between the lines for men and women is small. In addition, the confidence intervals for each line include the predicted values of the other line. This reflects the lack of statistical significance: We cannot tell if the two lines are really different or not, and we stay on the safe side and assume that they are not different. -->
+<!-- To be able to include it in a thesis or report, you would now only polish the graph a bit more: -->
+<!-- ```{r predgraphpol, collapse=T} -->
+<!-- prediction_summary(model = model2, -->
+<!--            at = list(eduyrs = seq(from = 0, to = 30, by = 1), -->
+<!--                      gndr = c("Male","Female"))) %>% -->
+<!--     ggplot(aes(x = `at(eduyrs)`, -->
+<!--              y = Prediction, linetype = `at(gndr)`, -->
+<!--              ymin = lower, ymax = upper)) + -->
+<!--     geom_line() + -->
+<!--     geom_ribbon(alpha = .2) + -->
+<!--     scale_x_continuous(breaks = seq(0,30,5)) + -->
+<!--     labs(x = "Years of education completed", -->
+<!--          y = "Predicted value: Trust in politicians", -->
+<!--          caption = "95% confidence intervals", -->
+<!--          linetype = "Gender") + -->
+<!--     theme_bw() + -->
+<!--     theme(legend.position = "bottom") -->
+<!-- ``` -->
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./tutorial_8.html" class="pagination-link" aria-label="Tutorial 8: Bivariate linear regression">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Tutorial 8: Bivariate linear regression</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./tutorial_10.html" class="pagination-link" aria-label="Tutorial 10: *It depends!* Interactive regression models">
+        <span class="nav-page-text">Tutorial 10: <em>It depends!</em> Interactive regression models</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":false,"selector":".lightbox","openEffect":"zoom","descPosition":"bottom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
+
+
+
+
+</body></html>
