@@ -2,16 +2,16 @@
 title: "Tutorial 2: Importing & exploring your data"
 author: "Carlo Knotz"
 bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
   chunk_output_type: console
 ---
 
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial2_gettingtoknow.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 # Introduction
 
@@ -24,11 +24,11 @@ But we will take this one step at a time: You will first learn about data explor
 
 **Important:** As before, document your code in a dedicated scriptfile as you work your way through the tutorial -- do not rely on the *Console* (unless you are just installing packages or quickly trying things out).
 
----
+::: {.callout-tip}
 
 *Hvis du ønsker å lese en norsk tekst __i tillegg__: "Lær deg R", Kapittel 4*
 
----
+:::
 
 \newpage
 

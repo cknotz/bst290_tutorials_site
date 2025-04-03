@@ -1,9 +1,10 @@
 ---
 title: 'Tutorial 3: Data cleaning & management'
 author: "Carlo Knotz"
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
@@ -19,7 +20,6 @@ library(tidyverse)
 
 ```
 
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial3_datacleaning.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 # Introduction
 
@@ -39,11 +39,11 @@ In this tutorial, you will first learn how to do basic data cleaning and prepara
 
 As in the previous tutorial, you will first practice all these operations with the small `ess` dataset from the `bst290` package. Later, when doing the exercises, you will apply what you have learned to real-life data from the ESS.
 
----
+::: {.callout-tip}
 
 *Hvis du ønsker å lese en norsk tekst __i tillegg__: "Lær deg R", Kapittel 6. OBS: Boken bruker en annen 'dialekt' (`base R`) enn den vi bruker her (`tidyverse`).*
 
----
+:::
 
 <!-- \newpage -->
 <!-- # Data cleaning and management: Main steps -->

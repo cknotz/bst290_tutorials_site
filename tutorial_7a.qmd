@@ -1,16 +1,16 @@
 ---
 title: "Tutorial 7a: *t*-test"
 author: "Carlo Knotz"
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
   chunk_output_type: console
 ---
 
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial7a_ttest.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -33,11 +33,11 @@ This tutorial will show you how you study such relationships between binomial an
 
 As in the previous tutorial, we will start right away with the real *ESS* dataset, but you will use the small practice dataset in the de-bugging exercises.
 
----
+::: {.callout-tip}
 
 *Hvis du ønsker å lese en norsk tekst __i tillegg__: "Lær deg R", Kapittel 5.3.2*
 
----
+:::
 
 \newpage
 # Hypotheses

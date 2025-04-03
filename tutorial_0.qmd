@@ -2,17 +2,15 @@
 title: "Tutorial 0: Installation & Setup"
 author: "Carlo Knotz"
 bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
   chunk_output_type: console
 ---
-
-
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial0_install-setup.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 \newpage
 # Introduction
@@ -22,11 +20,11 @@ To successfully complete the *Kvantitativ forskningsmetode* course, you need to 
 
 This tutorial introduces you to `R` and `RStudio` and shows you how you install these applications on your computer and set everything up so that you are ready to do analyses.
 
-------------------------------------------------------------------------
+::: {.callout-tip}
 
 *Hvis du ønsker å lese en norsk tekst **i tillegg**: Hermansen, S. S. (2019). Lær deg R: En innføring i statistikkprogrammets muligheter Fagbogforlaget, Bergen, kapittel 1 & 4.1*
 
-------------------------------------------------------------------------
+:::
 
 {{< pagebreak >}}
 

@@ -1,16 +1,15 @@
 ---
 title: "Tutorial 5: Confidence intervals"
 author: "Carlo Knotz"
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
   chunk_output_type: console
 ---
-
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial5_confint.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 # Introduction
 

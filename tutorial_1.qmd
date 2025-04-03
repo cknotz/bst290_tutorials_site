@@ -2,16 +2,15 @@
 title: "Tutorial 1: Your first steps in `R`"
 author: "Carlo Knotz"
 bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
   chunk_output_type: console
 ---
-
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial1_firststeps.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 # Introduction
 
@@ -21,11 +20,11 @@ But even if you managed to get everything to work, it might still have felt stra
 
 The aim of this tutorial is to help you get familiar with `R` and more used to writing code. This means that you will do a few simply warm-up exercises and learn about the main logic of `R` and `R` code.
 
----
+::: {.callout-tip}
 
 *Hvis du ønsker å lese en norsk tekst __i tillegg__: "Lær deg R", Kapittel 2 & 4.1.1*
 
----
+:::
 
 \newpage
 # Writing code: Some warm-up exercises

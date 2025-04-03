@@ -1,16 +1,15 @@
 ---
 title: "Tutorial 10: *It depends!* Interactive regression models"
 author: "Carlo Knotz"
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
   chunk_output_type: console
 ---
-
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial10_interact.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 ```{r setup, include=FALSE,message=F, warning=F, collapse=T}
 knitr::opts_chunk$set(echo = TRUE, comment = "", collapse = T, warning = F, message = F)

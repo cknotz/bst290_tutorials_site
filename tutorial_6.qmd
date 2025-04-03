@@ -1,16 +1,15 @@
 ---
 title: "Tutorial 6: Tabular Analysis & the $\\chi^2$ test"
 author: "Carlo Knotz"
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
   chunk_output_type: console
 ---
-
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial6_tabanalysis.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -36,11 +35,11 @@ In this tutorial, you learn how you can study relationships between *two categor
 
 Unlike in the previous tutorials, we will start right away with a real research dataset (data from the 2014 round of the *European Social Survey*).
 
----
+::: {.callout-tip}
 
 *Hvis du ønsker å lese en norsk tekst __i tillegg__: "Lær deg R", Kapittel 5.3.*
 
----
+:::
 
 \newpage
 # Hypotheses

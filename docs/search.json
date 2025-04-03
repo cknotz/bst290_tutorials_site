@@ -1,15 +1,5 @@
 [
   {
-    "objectID": "tutorial_10.html",
-    "href": "tutorial_10.html",
-    "title": "Tutorial 10: It depends! Interactive regression models",
-    "section": "",
-    "text": "Download as PDF",
-    "crumbs": [
-      "Tutorial 10: *It depends!* Interactive regression models"
-    ]
-  },
-  {
     "objectID": "tutorial_10.html#packages",
     "href": "tutorial_10.html#packages",
     "title": "Tutorial 10: It depends! Interactive regression models",
@@ -104,7 +94,7 @@
     "href": "tutorial_6.html",
     "title": "Tutorial 6: Tabular Analysis & the \\(\\chi^2\\) test",
     "section": "",
-    "text": "Download as PDF",
+    "text": "As (social) data analysts, we are very often interested in relationships between variables or causal effects: Does one variable (e.g., gender) have an impact on another variable (e.g., political attitudes)?\nWe can look for evidence of relationships in two ways:\n\nA descriptive analysis will show first evidence of whether there are any interesting patterns or differences in our dataset;\nA formal statistical test will then tell us if whatever patterns we found earlier are statistically significant: If we can generalize the finding from our sample dataset to the general population.\n\nIn this tutorial, you learn how you can study relationships between two categorical variables with a descriptive tabular analysis and a formal statistical test, the \\(\\chi^2\\) (“chi-squared”) test. More specifically, we will study if men and women in Norway differ in their patterns of political participation when it comes to being a member of a trade union.\nUnlike in the previous tutorials, we will start right away with a real research dataset (data from the 2014 round of the European Social Survey).\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 5.3.",
     "crumbs": [
       "Tutorial 6: Tabular Analysis & the $\\chi^2$ test"
     ]
@@ -184,7 +174,7 @@
     "href": "tutorial_5.html",
     "title": "Tutorial 5: Confidence intervals",
     "section": "",
-    "text": "Download as PDF",
+    "text": "You have now made it through the software- and code-heavy parts of the course and learned the basics of data handling and visualization with R. Now, beginning with this tutorial, the focus will shift away from software and code and instead focus more on statistics. This means that the tutorials will say less about how to write code and more about how you make sense of your results.\nThe reason for this is the following: Running statistical tests and estimations in R is not really difficult as far as coding is concerned. As you will see, most statistical estimations require only a few brief lines of code. The tricky thing is knowing how to write the necessary bits of code correctly. But the most difficult part is how to make sense of the results. Here you need to understand what the different statistical concepts such as p-values or standard errors are and how you identify them in the output that R gives you. And this is why we focus mostly on the latter part, the interpretation.\nThis being said, we will still use these tutorials to repeat and practice the data management and visualization skills that you learned previously.\nWe start in this tutorial with the first building block of inferential statistics: confidence intervals. You will learn how to use R to calculate a confidence interval for a sample mean and how to interpret the result — as was explained in Kellstedt & Whitten (2018, Chapter 7). As before, we start by working with the small ess practice dataset included in the bst290 package. You will then apply what you learned on real ESS data in the in-class exercises.",
     "crumbs": [
       "Tutorial 5: Confidence intervals"
     ]
@@ -244,7 +234,7 @@
     "href": "tutorial_4.html",
     "title": "Tutorial 4: Data visualization with ggplot2",
     "section": "",
-    "text": "Download as PDF",
+    "text": "You made it through the most tedious parts, the descriptive tables and data transformation procedures. Data visualization is where the fun begins.\nIf you are able to visualize your data, you can turn boring and dull rows of numbers and symbols into nice and informative graphs. In other words, you can do or produce something you and other people can see and use directly in reports, on websites, etc. Obviously, that is a skill that you can directly use at many workplaces where (social) data analysts work. And, if you keep working on it, you will eventually be able to produce more and more advanced and beautiful graphs.\nIn this tutorial, you will learn the basics of visualizing data with ggplot2, which is one of several ways to visualize data in R.1\nYou learn ggplot2 here for a few reasons:\n\nIt is arguably the most widely used package for data visualization in R (and generally one of the most frequently downloaded packages overall). The BBC Data Team, for example, uses ggplot2 to make graphics.\nIt is extremely flexible. You can generate a wide range of different types of graphs, and each graph can be customized down to the finest detail (as long as you know what you have to do).\nIt can be extended. One extension called ggiraph allows you to make ggplot2 graphs interactive.\n\nObviously, this tutorial will only cover the basics — but you can take a look at some examples of what you will eventually be able to do with ggplot2 and R:\n\nhttps://bbc.github.io/rcookbook/\nhttps://www.r-graph-gallery.com/\nhttps://davidgohel.github.io/ggiraph/articles/offcran/using_ggiraph.html\n\n(The first two websites are also generally highly recommended if you want to look for example code for a particular type of graph!)\nFor a more thorough introduction to data visualization with R see https://ggplot2-book.org/ or https://r-graphics.org/index.html.\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 3 & 5. OBS: Boken bruker en annen ‘dialekt’ (base R) enn den vi bruker her (tidyverse/ggplot2).",
     "crumbs": [
       "Tutorial 4: Data visualization with `ggplot2`"
     ]
@@ -324,7 +314,7 @@
     "href": "tutorial_1.html",
     "title": "Tutorial 1: Your first steps in R",
     "section": "",
-    "text": "Download as PDF",
+    "text": "In the previous tutorial, you have learned how you can install R and RStudio and how you install add-on packages.\nBut even if you managed to get everything to work, it might still have felt strange to work with computer code.\nThe aim of this tutorial is to help you get familiar with R and more used to writing code. This means that you will do a few simply warm-up exercises and learn about the main logic of R and R code.\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 2 & 4.1.1",
     "crumbs": [
       "Tutorial 1: Your first steps in `R`"
     ]
@@ -494,7 +484,7 @@
     "href": "tutorial_2.html",
     "title": "Tutorial 2: Importing & exploring your data",
     "section": "",
-    "text": "Download as PDF",
+    "text": "You have so far learned how to install and set up R and RStudio, how you can install and load packages, how data look like in R, and how you write and use code. All of this was essentially a warm-up.\nNow things get a bit more real: This week, you will learn how to open a real research dataset and how to explore it in R.\nBut we will take this one step at a time: You will first learn about data exploration with a small dataset that is already installed on your computer. Then you will import a real dataset (from the European Social Survey). This is to prepare you for the in-class exercises, where you will apply the data-exploration techniques you learned in the tutorial to the full-scale ESS dataset.\nImportant: As before, document your code in a dedicated scriptfile as you work your way through the tutorial – do not rely on the Console (unless you are just installing packages or quickly trying things out).\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 4",
     "crumbs": [
       "Tutorial 2: Importing & exploring your data"
     ]
@@ -624,7 +614,7 @@
     "href": "tutorial_9.html",
     "title": "Tutorial 9: Multivariate linear regression",
     "section": "",
-    "text": "Download as PDF",
+    "text": "In the previous tutorial, you learned how to estimate a bivariate linear regression model in R. You used a linear regression model to see if people’s level of education influences their level of trust in politicians. The expectation was that higher education would lead to greater trust in politicians, and that is also what we found.\nIn this tutorial, we go one step further and test if this bivariate relationship stays the same (“is robust”) when we control for additional factors. We do so by estimating a multivariate regression model. In this type of model, we estimate the effects of several independent variables (predictors) on a dependent variable simultaneously.\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 8.",
     "crumbs": [
       "Tutorial 9: Multivariate linear regression"
     ]
@@ -674,7 +664,7 @@
     "href": "tutorial_8.html",
     "title": "Tutorial 8: Bivariate linear regression",
     "section": "",
-    "text": "Download as PDF",
+    "text": "The ordinary least squares (OLS) or “linear” regression model is probably the workhorse statistical model in (social) data analysis. Countless analyses use it, or variations of it, and all other more advanced models such as logistic regression follow in essence the same logic.\nIt is therefore important that you know how to estimate and interpret a linear regression model in R, and how you can present the results in your course paper or also a thesis or report. This is what you learn in this tutorial.\nSpecifically, this tutorial will first walk you through the essential data preparation steps. Then you will see how you estimate a bviariate linear regression model with the lm() function. The last step is to show you how you can present the results in an informative and professional way in your paper.\nTo illustrate all this, we will study the relationship between how educated people are and how much trust they have in politicians and international institutions using data from the European Social Survey.\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 7.",
     "crumbs": [
       "Tutorial 8: Bivariate linear regression"
     ]
@@ -794,7 +784,7 @@
     "href": "tutorial_3.html",
     "title": "Tutorial 3: Data cleaning & management",
     "section": "",
-    "text": "Download as PDF",
+    "text": "In the previous tutorial, you learned how you can import a dataset and do some initial exploratory data analysis (EDA) to get familiar with it.\nIn a real data analysis project, these would of course only be the very first steps. Usually, you will discover some smaller and larger issues with your data during the initial EDA, for example that you have to trim and clean the dataset, and that you may need to recode some variables or create new ones. In more extreme cases, your dataset can be disorganized or contain irrelevant information, or the variables in them can be stored in the wrong way.\nThis process of cleaning and organizing a dataset, and of creating new variables is called data management (or ‘munging’, ‘wrangling’, or ‘data manipulation’). It is the process of turning a raw dataset, which usually contains irrelevant observations or variables and where some variables need to be transformed or newly constructed, into the neat and tidy dataset you use in your statistical analysis.\nLet’s be honest for a moment: Data cleaning is often not very entertaining, and is generally the thing that is most difficult to get through when you are just starting and you do not yet have a good intuition or “muscle memory” for working with data. In that case, data cleaning can be a major hurdle and source of frustration.\nFortunately, things have improved a lot with the arrival of the tidyverse (see https://www.tidyverse.org/). As mentioned in the first tutorial, the tidyverse collection includes several packages that make data cleaning, and even otherwise difficult operations much easier and quicker.\nStill: Expect to be struggling with these things at the beginning, and that this tutorial will likely be the one that feels most dull and confusing. Just hang in there, and ask if you really need help!\nIn this tutorial, you will first learn how to do basic data cleaning and preparation tasks with functions from the tidyverse (sections 4-6). In section 7, you will learn how to change how a particular variable is stored (e.g., from numeric to character). Here, you will use functions from ‘base R’.\nAs in the previous tutorial, you will first practice all these operations with the small ess dataset from the bst290 package. Later, when doing the exercises, you will apply what you have learned to real-life data from the ESS.\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 6. OBS: Boken bruker en annen ‘dialekt’ (base R) enn den vi bruker her (tidyverse).",
     "crumbs": [
       "Tutorial 3: Data cleaning & management"
     ]
@@ -930,16 +920,6 @@
     ]
   },
   {
-    "objectID": "tutorial_0.html",
-    "href": "tutorial_0.html",
-    "title": "Tutorial 0: Installation & Setup",
-    "section": "",
-    "text": "Download as PDF",
-    "crumbs": [
-      "Tutorial 0: Installation & Setup"
-    ]
-  },
-  {
     "objectID": "tutorial_0.html#about-r",
     "href": "tutorial_0.html#about-r",
     "title": "Tutorial 0: Installation & Setup",
@@ -1064,7 +1044,7 @@
     "href": "tutorial_7a.html",
     "title": "Tutorial 7a: t-test",
     "section": "",
-    "text": "Download as PDF",
+    "text": "The previous tutorial showed you how you can analyze relationships between two categorical variables (e.g., gender and joining a trade union). But, obviously, sometimes we are interested in relationships where the independent variable is binomial (has two distinct categories) and the dependent variable is numeric. The gender wage gap (gender and income) is one example, but there are also many others.1\nThis tutorial will show you how you study such relationships between binomial and numerical variables using R. More specifically, we will see if gender is related to religiosity: If women are more religious than men (or vice versa).\nAs in the previous tutorial, we will start right away with the real ESS dataset, but you will use the small practice dataset in the de-bugging exercises.\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 5.3.2",
     "crumbs": [
       "Tutorial 7a: *t*-test"
     ]
@@ -1154,7 +1134,7 @@
     "href": "tutorial_7b.html",
     "title": "Tutorial 7b: Correlation",
     "section": "",
-    "text": "Download as PDF",
+    "text": "The last two tutorials showed you how you can study relationships between two categorical variables (with the \\(\\chi^2\\) test) and between one binomial variable and one metric or linear variable (with the t-test). What is left: How do you analyze relationships between two continuous variables?\nThe correct test is of course Pearson’s correlation coefficient (as you know from Kellstedt and Whitten 2018). In this tutorial, you will learn how you can implement this in R.\nThe research question for this tutorial is again about religiosity, but we will now look at the effect of age. In other words, we will see if there is a correlation between how old a person is and how religious she feels.\nAnd, as before, we will start directly with the full ESS dataset (round 7, 2014).\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 5.3.3",
     "crumbs": [
       "Tutorial 7b: Correlation"
     ]
@@ -1244,7 +1224,7 @@
     "href": "tutorial_11.html",
     "title": "Tutorial 11: Logistic regression for binomial dependent variables",
     "section": "",
-    "text": "Download as PDF",
+    "text": "When working as a (social) data analyst, you will often be interested in outcomes that have two distinct values: Did someone vote in the last election or not? Is someone a union member or not? Does a country go to war or experience a coup d’état in a given year or not? You will, in other words, work with dependent variables that are binary or dichotomous.\nIn addition, your theory for your outcome or dependent variable will often specify several different potential causes. For example, a person’s decision to vote in an election might depend their age (older people tend to be more likely to vote) but also their education or income. This means that you need to use multivariate regression to really test your theory.\nYou already know what you would use in this case if you had a linear dependent variable: Ordinary least squares (OLS) regression. But one of the central assumptions underlying the OLS model is that the dependent variable must be linear — and this assumption does not hold if you are interested in electoral participation, union membership, or coups.\nInstead, you need to use the logistic regression (a.k.a., “logit”) model. The logistic regression model is specifically designed to analyze the effects of multiple independent variables on a binary outcome or dependent variable. An alternative is the probit regression model, which works slightly differently but will usually give you almost identical results.1\nIn this tutorial, you will learn how you estimate and interpret a logistic regression model. Topic-wise, we continue with the example from tutorial 6 on tabular analysis: Political participation in the form of voting in a national election.\nBefore you continue here, make sure that you have read and understood the introduction to the logistic regression model in Kellstedt & Whitten (2018, Chapter 12). Otherwise, you may be able to run the code shown here but you will not understand what any of this really means.",
     "crumbs": [
       "Tutorial 11: Logistic regression for binomial dependent variables"
     ]

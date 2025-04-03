@@ -1,16 +1,16 @@
 ---
 title: "Tutorial 7b: Correlation"
 author: "Carlo Knotz"
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
   chunk_output_type: console
 ---
 
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial7b_correl.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -35,11 +35,11 @@ The research question for this tutorial is again about religiosity, but we will 
 
 And, as before, we will start directly with the full *ESS* dataset (round 7, 2014).
 
----
+::: {.callout-tip}
 
 *Hvis du ønsker å lese en norsk tekst __i tillegg__: "Lær deg R", Kapittel 5.3.3*
 
----
+:::
 
 \newpage
 # Hypotheses

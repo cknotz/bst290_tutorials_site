@@ -296,7 +296,7 @@ window.Quarto = {
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#voluntary-creating-mosaic-plots" id="toc-voluntary-creating-mosaic-plots" class="nav-link" data-scroll-target="#voluntary-creating-mosaic-plots">(Voluntary) Creating mosaic plots</a></li>
   </ul>
-</nav>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="tutorial_6.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -326,7 +326,6 @@ window.Quarto = {
 </header>
 
 
-<p><a href="https://raw.github.com/cknotz/bst290_tutorials/main/tutorial6_tabanalysis.pdf" class="btn btn-outline-primary" role="button">Download as PDF</a></p>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>As (social) data analysts, we are very often interested in <em>relationships between variables</em> or <em>causal effects</em>: Does one variable (e.g., gender) have an impact on another variable (e.g., political attitudes)?</p>
@@ -337,9 +336,19 @@ window.Quarto = {
 </ol>
 <p>In this tutorial, you learn how you can study relationships between <em>two categorical</em> variables with a descriptive tabular analysis and a formal statistical test, the <span class="math inline">\(\chi^2\)</span> (“chi-squared”) test. More specifically, we will study if men and women in Norway differ in their patterns of political participation when it comes to being a member of a trade union.</p>
 <p>Unlike in the previous tutorials, we will start right away with a real research dataset (data from the 2014 round of the <em>European Social Survey</em>).</p>
-<hr>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p><em>Hvis du ønsker å lese en norsk tekst <strong>i tillegg</strong>: “Lær deg R”, Kapittel 5.3.</em></p>
-<hr>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </section>
 <section id="hypotheses" class="level1">
@@ -1054,7 +1063,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"loop":false,"selector":".lightbox","closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","selector":".lightbox","openEffect":"zoom","loop":false,"closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

@@ -1,9 +1,10 @@
 ---
 title: "Tutorial 4: Data visualization with `ggplot2`"
 author: "Carlo Knotz"
+toc: true
 format:
-  html:
-    toc: true
+  html: default
+  pdf: default
 lightbox: true
 lang: en
 editor_options: 
@@ -19,7 +20,6 @@ library(tidyverse)
 
 ```
 
-[Download as PDF](https://raw.github.com/cknotz/bst290_tutorials/main/tutorial4_visualization.pdf){.btn .btn-outline-primary .btn role="button"} 
 
 # Introduction
 
@@ -37,19 +37,19 @@ You learn `ggplot2` here for a few reasons:
 
 Obviously, this tutorial will only cover the basics --- but you can take a look at some examples of what you will eventually be able to do with `ggplot2` and `R`:
 
-* https://bbc.github.io/rcookbook/
-* https://www.r-graph-gallery.com/
-* https://davidgohel.github.io/ggiraph/articles/offcran/using_ggiraph.html
+* <https://bbc.github.io/rcookbook/>
+* <https://www.r-graph-gallery.com/>
+* <https://davidgohel.github.io/ggiraph/articles/offcran/using_ggiraph.html>
 
 (The first two websites are also generally highly recommended if you want to look for example code for a particular type of graph!)
 
-For a more thorough introduction to data visualization with `R` see https://ggplot2-book.org/ or https://r-graphics.org/index.html.
+For a more thorough introduction to data visualization with `R` see <https://ggplot2-book.org/> or <https://r-graphics.org/index.html>.
 
----
+::: {.callout-tip}
 
 *Hvis du ønsker å lese en norsk tekst __i tillegg__: "Lær deg R", Kapittel 3 & 5. OBS: Boken bruker en annen 'dialekt' (`base R`) enn den vi bruker her (`tidyverse`/`ggplot2`).*
 
----
+:::
 
 
 \newpage
