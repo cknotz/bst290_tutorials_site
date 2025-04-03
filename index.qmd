@@ -6,7 +6,7 @@ This website features all `R` tutorials for the BST290 *Kvantitativ forskningsme
 
 ::: {.callout-important}
 
-To make reading the tutorials easier and quicker, **download them as PDFs and print them out**. There are download buttons at the beginning of each tutorial. You *can* read all the material "on screen" if you really want to, but that is not recommended. Ideally, you read each of the tutorials first on paper and you use this website mainly to quickly look things up later.
+To make reading the tutorials easier and quicker, **download them as PDFs and print them out**. There are download buttons at the beginning of each tutorial (under the table of contents on the right side). You *can* of course read all the material "on screen" if you really want to, but that is not recommended. Ideally, you read each of the tutorials first on paper and you use this website mainly to quickly look things up later.
 
 :::
 
