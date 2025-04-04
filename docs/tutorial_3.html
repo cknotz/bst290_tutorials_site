@@ -475,7 +475,7 @@ Tip
 <li>You want only women (<code>gndr=="Female"</code>)</li>
 <li>You make clear that both conditions have to be fulfilled at the same time with the <code>&amp;</code> (“ampersand”) symbol.</li>
 </ol>
-<p>You can <em>save</em> the result with the assignment operator (<code>&lt;-</code>) as shown on the previous page with <code>select()</code>.</p>
+<p>You can <em>save</em> the result with the assignment operator (<code>&lt;-</code>) as shown above with <code>select()</code>.</p>
 <div style="page-break-after: always;"></div>
 </section>
 </section>
@@ -582,7 +582,7 @@ Important
 <li>“…and if that condition is <em>false</em>, <code>older</code> gets the value of <code>0</code>.”</li>
 </ol>
 <div style="page-break-after: always;"></div>
-<p>To show you more clearly what a dummy-coded variable looks like and does, here is a cleaned-up result of the operation shown on the previous page:</p>
+<p>To show you more clearly what a dummy-coded variable looks like and does, here is a cleaned-up result of the operation shown above:</p>
 <div class="cell">
 <pre><code>    idno agea older
 1  12414   22     0
@@ -631,7 +631,7 @@ Important
 </ol>
 <p>And, as before, <strong>if you wanted to use the new variable in your analysis</strong>, you would need to store the new version of the dataset with <code>&lt;-</code> or <code>-&gt;</code>. Otherwise, <code>R</code> will only print out the entire dataset with all the variables, old and new.</p>
 <div style="page-break-after: always;"></div>
-<p>And just to show you again what the new variable does in this case, here is a cleaned-up version of the result of the code shown on the previous page:</p>
+<p>And just to show you again what the new variable does in this case, here is a cleaned-up version of the result of the code shown above:</p>
 <div class="cell">
 <pre><code>    idno    health    health_dummy
 1  12414      Good     Good health
@@ -673,7 +673,7 @@ Important
 </div>
 <p>What you do here is, in essence, the same as the above: You use the <code>mean()</code> function to calculate the average of the <code>height</code> variable. The only differences are that a) you save the result <em>temporarily</em> into a new variable (<code>mean_height</code>), and b) you do not have to use the <code>$</code> sign to tell <code>R</code> where to take the <code>height</code> variable from because you already do that in the very first step (<code>ess %&gt;%</code>).</p>
 <p>If you now think that the second option is really just a more complicated and cumbersome form of the first one: True, in principle.</p>
-<p><strong>But</strong> the second option has the great advantage that it can be extended — for example to calculate summary statistics <em>over the categories of some other variable</em>. How you do this comes on the next page. </p>
+<p><strong>But</strong> the second option has the great advantage that it can be extended — for example to calculate summary statistics <em>over the categories of some other variable</em>. How you do this comes below. </p>
 </section>
 <section id="combining-summarize-group_by" class="level2">
 <h2 class="anchored" data-anchor-id="combining-summarize-group_by">Combining <code>summarize()</code> &amp; <code>group_by()</code></h2>
@@ -963,7 +963,7 @@ Important
 <ol>
 <li id="fn1"><p>Think back to last week: Maybe you remember that the full ESS dataset included more than 600 variables?<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>The <code>idno</code> variable does not really contain substantive information about respondents, but it is good practice to keep this variable because it can come in handy later on — for example, in case you want to add other variables.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>“Why?”, you may ask? This is how the function was designed by its author, Hadley Wickham, and the detailed answer for why he did this is quite technical, see: https://design.tidyverse.org/dots-prefix.html. Not to worry, you will get around this just a few pages from here!<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>“Why?”, you may ask? This is how the function was designed by its author, Hadley Wickham, and the detailed answer for why he did this is quite technical, see: https://design.tidyverse.org/dots-prefix.html. Not to worry, you will get around this in just a bit!<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>This is a bit more advanced, but very useful in practice!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>See also <a href="https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/" class="uri">https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>Alternatively, see this RStudio Community board discussion for a solution: https://community.rstudio.com/t/pipe-operator-does-not-work/66377<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

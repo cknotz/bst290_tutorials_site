@@ -104,7 +104,7 @@ select(.data = ess, idno, agea, gndr)
 Here you tell `R`:
 
 1. That you want to select variables with the `select()` function;
-2. That you want to select from the `ess` dataset (with `.data = ess`). It is important that you do not forget to add a dot before `data`;^["Why?", you may ask? This is how the function was designed by its author, Hadley Wickham, and the detailed answer for why he did this is quite technical, see: https://design.tidyverse.org/dots-prefix.html. Not to worry, you will get around this just a few pages from here!]
+2. That you want to select from the `ess` dataset (with `.data = ess`). It is important that you do not forget to add a dot before `data`;^["Why?", you may ask? This is how the function was designed by its author, Hadley Wickham, and the detailed answer for why he did this is quite technical, see: https://design.tidyverse.org/dots-prefix.html. Not to worry, you will get around this in just a bit!]
 3. Then you simply list the variables you want to select, separated by commas;
 
 ### Saving the result
@@ -162,7 +162,7 @@ In human language:
 2. You want only women (`gndr=="Female"`)
 3. You make clear that both conditions have to be fulfilled at the same time with the `&` ("ampersand") symbol.
 
-You can *save* the result with the assignment operator (`<-`) as shown on the previous page with `select()`.
+You can *save* the result with the assignment operator (`<-`) as shown above with `select()`.
 
 \newpage
 # Connecting operations with the "pipe" (`%>%` or `|>`)
@@ -284,7 +284,7 @@ The `mutate`-call in human language:
 
 \newpage
 
-To show you more clearly what a dummy-coded variable looks like and does, here is a cleaned-up result of the operation shown on the previous page:
+To show you more clearly what a dummy-coded variable looks like and does, here is a cleaned-up result of the operation shown above:
 ```{r ifel_ex, eval = T, echo=F, collapse=T, warning=F, message=F}
 ess %>% 
   select(idno, agea) %>% 
@@ -336,7 +336,7 @@ And, as before, **if you wanted to use the new variable in your analysis**, you 
 
 \newpage
 
-And just to show you again what the new variable does in this case, here is a cleaned-up version of the result of the code shown on the previous page:
+And just to show you again what the new variable does in this case, here is a cleaned-up version of the result of the code shown above:
 ```{r dumhealthvis, eval=T, echo=F, collapse=T}
 ess %>%  
   select(idno, health) %>% 
@@ -379,7 +379,7 @@ What you do here is, in essence, the same as the above: You use the `mean()` fun
 
 If you now think that the second option is really just a more complicated and cumbersome form of the first one: True, in principle.
 
-**But** the second option has the great advantage that it can be extended --- for example to calculate summary statistics *over the categories of some other variable*. How you do this comes on the next page.
+**But** the second option has the great advantage that it can be extended --- for example to calculate summary statistics *over the categories of some other variable*. How you do this comes below.
 \newpage
 
 ## Combining `summarize()` & `group_by()`
