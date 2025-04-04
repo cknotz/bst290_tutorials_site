@@ -481,7 +481,7 @@ Tip
 </section>
 <section id="connecting-operations-with-the-pipe-or" class="level1">
 <h1>Connecting operations with the “pipe” (<code>%&gt;%</code> or <code>|&gt;</code>)</h1>
-<p>So far you were doing one operation at a time: First selecting variables, then filtering observations, then dropping <code>NA</code>s.</p>
+<p>So far you were doing one operation at a time: First selecting variables, then filtering observations.</p>
 <p>There is also a more efficient way of doing data cleaning with the <code>tidyverse</code>: You can <em>connect</em> different operations together using the “pipe” operator: <code>%&gt;%</code>.</p>
 <p>Simply put: <em>The pipe tells <code>R</code> that it should take the result of one operation and then directly “feed” it into a following one — or, in other words, it “docks” two operations together.</em> With this operator, you can build entire “data management pipelines” where you take your starting dataset, put it through a sequence of data cleaning and management operations, and get a properly cleaned and prepped dataset out at the end.</p>
 <p>How this works will become clearer when you see the pipe in action. For example, let’s say you wanted to work with the <code>ess</code> practice dataset, but you first wanted to trim it down to only a few variables you really need <em>and</em> keep only female respondents who are older than 35.</p>

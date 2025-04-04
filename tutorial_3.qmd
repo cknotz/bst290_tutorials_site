@@ -167,7 +167,7 @@ You can *save* the result with the assignment operator (`<-`) as shown above wit
 \newpage
 # Connecting operations with the "pipe" (`%>%` or `|>`)
 
-So far you were doing one operation at a time: First selecting variables, then filtering observations, then dropping `NA`s.
+So far you were doing one operation at a time: First selecting variables, then filtering observations.
 
 There is also a more efficient way of doing data cleaning with the `tidyverse`: You can *connect* different operations together using the "pipe" operator: `%>%`. 
 
