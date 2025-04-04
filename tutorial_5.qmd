@@ -74,7 +74,7 @@ ess %>%
 
 (We could have also created a histogram with `geom_histogram()` and set the number of bins to 10 to get a similar result.) 
 
-Overall, most respondents are fairly satisfied with their lives. This makes sense: The data are from Norway, and Norway is one of the countries in which people are most satisified with their lives (similar to Denmark, Sweden, Iceland, or Finland).^[See e.g., https://worldhappiness.report/ed/2020/the-nordic-exceptionalism-what-explains-why-the-nordic-countries-are-constantly-among-the-happiest-in-the-world/]
+Overall, most respondents are fairly satisfied with their lives. This makes sense: The data are from Norway, and Norway is one of the countries in which people are most satisified with their lives (similar to Denmark, Sweden, Iceland, or Finland).^[See e.g., <https://worldhappiness.report/ed/2020/the-nordic-exceptionalism-what-explains-why-the-nordic-countries-are-constantly-among-the-happiest-in-the-world/>]
 
 \newpage
 # Getting a confidence interval

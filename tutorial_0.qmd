@@ -263,7 +263,7 @@ This might again take a bit and you will probably again see a lot more computer 
 
 ## Installing the `tinytex` package
 
-The third add-on package you need to install is called `tinytex`. `tinytex` is really nothing more than a tool to install the `TinyTex` software automatically through *RStudio*. You need to have `TinyTex` to be able to create PDF code reports for your assignments.^[`TinyTex` is a small version of the `LaTeX` typesetting software on your computer, which `RStudio` then uses to create the code reports (see also https://yihui.org/tinytex/).]
+The third add-on package you need to install is called `tinytex`. `tinytex` is really nothing more than a tool to install the `TinyTex` software automatically through *RStudio*. You need to have `TinyTex` to be able to create PDF code reports for your assignments.^[`TinyTex` is a small version of the `LaTeX` typesetting software on your computer, which `RStudio` then uses to create the code reports (see also <https://yihui.org/tinytex/>).]
 
 You install `tinytex` just like the other packages:
 ```{r tinytex1, eval=F, echo=T}

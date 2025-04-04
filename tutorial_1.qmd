@@ -399,7 +399,7 @@ Note that:
 * Each row is a state (e.g., Alabama, Alaska, etc.); 
 * Each column is a variable that records the arrest rate for a given crime and the share of the population living in big cities (`UrbanPop`). 
 
-**Importantly**, each of the variables by itself is just a sequence of numbers --- or a vector --- but, together, they form a dataset. And this is also how a dataset should ideally be organized: Each row is an observation, each column is a variable. A dataset that is organized like this is called a *tidy* dataset.^[See also Wickham, H. (2014). Tidy data. *Journal of Statistical Software*, 59(10):1–23.] In `R`, datasets are stored as so-called `data.frames`.^[There are also other types of dataset-objects such as the `tibble` (https://tibble.tidyverse.org/), but they all look and work more or less the same way.] 
+**Importantly**, each of the variables by itself is just a sequence of numbers --- or a vector --- but, together, they form a dataset. And this is also how a dataset should ideally be organized: Each row is an observation, each column is a variable. A dataset that is organized like this is called a *tidy* dataset.^[See also Wickham, H. (2014). Tidy data. *Journal of Statistical Software*, 59(10):1–23.] In `R`, datasets are stored as so-called `data.frames`.^[There are also other types of dataset-objects such as the `tibble` (<https://tibble.tidyverse.org/>), but they all look and work more or less the same way.] 
 
 
 The datasets you will work with during this course will be organized like this --- but, in real life, datasets are often messy and need to be reorganized before you can really work with them. This is why this course includes a part on Data Management.

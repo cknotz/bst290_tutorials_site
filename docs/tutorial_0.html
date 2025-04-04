@@ -662,7 +662,7 @@ Good to know: Loading only a specific part of a package with the ‘double-colon
 
 <ol>
 <li id="fn1"><p>You can also always check where exactly your working directory currently is by using the <code>getwd()</code> (“get working directory”) command. So, if you enter <code>getwd()</code> into the <em>Console</em> and press the Enter-key, you will be shown the file path to the folder that you are currently working in — where all your graphs, tables, etc. get put in when you export them from <code>R</code>. You can also manually change your working directory with <code>setwd()</code>. You just need to add a valid file path within the parentheses. For example, this would be file path that I could use on my own computer: <code>setwd(""/Users/carloknotz/Documents/Work/Teaching/BST290/R_Tutorials")</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p><code>TinyTex</code> is a small version of the <code>LaTeX</code> typesetting software on your computer, which <code>RStudio</code> then uses to create the code reports (see also https://yihui.org/tinytex/).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><code>TinyTex</code> is a small version of the <code>LaTeX</code> typesetting software on your computer, which <code>RStudio</code> then uses to create the code reports (see also <a href="https://yihui.org/tinytex/" class="uri">https://yihui.org/tinytex/</a>).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>What this tells you is that there are certain commands (“functions”) in the packages you just loaded that have the same name as some other functions that are in use. For example, <code>dplyr::filter() masks stats::filter()</code> means: “There is a function called <code>filter()</code> in the <code>dplyr</code> package that was just loaded. That function has the same name as another <code>filter()</code> function, which is included in the <code>stats</code> package that comes with <code>R</code> right out of the box. <code>dplyr</code> was loaded last, so if you now use the <code>filter()</code> function, the one from the <code>dplyr</code> package will be used.”<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
@@ -1099,7 +1099,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"closeEffect":"zoom","openEffect":"zoom","descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","openEffect":"zoom","closeEffect":"zoom","loop":false,"descPosition":"bottom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

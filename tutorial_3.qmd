@@ -31,7 +31,7 @@ This process of cleaning and organizing a dataset, and of creating new variables
 
 Let's be honest for a moment: Data cleaning is often not very entertaining, and is generally the thing that is most difficult to get through when you are just starting and you do not yet have a good intuition or "muscle memory" for working with data. In that case, data cleaning can be a major hurdle and source of frustration.
 
-Fortunately, things have improved a lot with the arrival of the `tidyverse` (see https://www.tidyverse.org/). As mentioned in the first tutorial, the `tidyverse` collection includes several packages that make data cleaning, and even otherwise difficult operations much easier and quicker.
+Fortunately, things have improved a lot with the arrival of the `tidyverse` (see <https://www.tidyverse.org/>). As mentioned in the first tutorial, the `tidyverse` collection includes several packages that make data cleaning, and even otherwise difficult operations much easier and quicker.
 
 Still: Expect to be struggling with these things at the beginning, and that this tutorial will likely be the one that feels most dull and confusing. Just hang in there, and ask if you really need help!
 
@@ -104,7 +104,7 @@ select(.data = ess, idno, agea, gndr)
 Here you tell `R`:
 
 1. That you want to select variables with the `select()` function;
-2. That you want to select from the `ess` dataset (with `.data = ess`). It is important that you do not forget to add a dot before `data`;^["Why?", you may ask? This is how the function was designed by its author, Hadley Wickham, and the detailed answer for why he did this is quite technical, see: https://design.tidyverse.org/dots-prefix.html. Not to worry, you will get around this in just a bit!]
+2. That you want to select from the `ess` dataset (with `.data = ess`). It is important that you do not forget to add a dot before `data`;^["Why?", you may ask? This is how the function was designed by its author, Hadley Wickham, and the detailed answer for why he did this is quite technical, see: <https://design.tidyverse.org/dots-prefix.html>. Not to worry, you will get around this in just a bit!]
 3. Then you simply list the variables you want to select, separated by commas;
 
 ### Saving the result
@@ -251,7 +251,7 @@ Once more in human language:
 1. "Take the `ess` dataset..."
 2. "...and mutate `height` into a new variable, `height_meters`, by dividing `height` by 100."
 
-Obviously, this is just a very simple example and you can certainly take this further --- for example by adding, subtracting, or multiplying two or more variables or doing more complex mathematical transformations. To get an overview over what you can do with `mutate()`, see the official help page: https://dplyr.tidyverse.org/reference/mutate.html#useful-mutate-functions
+Obviously, this is just a very simple example and you can certainly take this further --- for example by adding, subtracting, or multiplying two or more variables or doing more complex mathematical transformations. To get an overview over what you can do with `mutate()`, see the official help page: <https://dplyr.tidyverse.org/reference/mutate.html#useful-mutate-functions>
 
 \newpage
 
@@ -590,7 +590,7 @@ Now you should know the basics of data management and data cleaning. This may ha
 
 If you would like to learn more tricks and techniques for data cleaning, here are some resources you can use:
 
-* For a more extensive introduction to the `tidyverse` approach, see Hadley Wickham's *`R` for Data Science*: https://r4ds.had.co.nz/).
+* For a more extensive introduction to the `tidyverse` approach, see Hadley Wickham's *`R` for Data Science*: <https://r4ds.had.co.nz/>).
 * For an introduction (in Norwegian) to data cleaning and management using `base R`, see *Lær dig R*
 * As always: Someone else has probably had your problem or a similar one before, and it was solved on [stackoverflow.com](https://stackoverflow.com). 
 * Finally, *ChatGPT* and some other "AI" chatbots can do coding, including in `R`, and they may be able to give you solutions to some problems --- but be careful, chatbots do "hallucinate" and you may still need to adapt the provided solution before it really works.

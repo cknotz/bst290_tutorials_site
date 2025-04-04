@@ -36,7 +36,7 @@ But we will take this one step at a time: You will first learn about data explor
 
 ## Your project folder
 
-The first thing you need to do is to make sure that you are working in the *Project* (and the associated folder) that you created in the first seminar/lab in Week 1 of the course.^[Did you miss that session? You can read about *Projects* and how you create them here: https://support.posit.co/hc/en-us/articles/200526207-Using-RStudio-Projects or in *Lær deg R*, 4.1.1.3.]
+The first thing you need to do is to make sure that you are working in the *Project* (and the associated folder) that you created in the first seminar/lab in Week 1 of the course.^[Did you miss that session? You can read about *Projects* and how you create them here: <https://support.posit.co/hc/en-us/articles/200526207-Using-RStudio-Projects> or in *Lær deg R*, 4.1.1.3.]
 
 Look at the upper-right corner of the *RStudio* window and check that your project is active. It should __not__ say: "Project: (None)". Instead, you should see the name of the project you created. (If you do see "Project: (None)" written there, you can click on it to open a drop-down menu in which your project should be listed. You can open it there.)
 
@@ -140,7 +140,7 @@ head(ess$agea, n = 10)
 
 You can do the same with the `tail()` function.
 
-(A final note: As is often the case with `R`, there is more than one way to subset a dataset, and these allow you to select more than one variables at a time, or a specific set of observations. We will cover some of them in the next tutorial; for others see e.g.: https://www.statmethods.net/management/subset.html.)
+(A final note: As is often the case with `R`, there is more than one way to subset a dataset, and these allow you to select more than one variables at a time, or a specific set of observations. We will cover some of them in the next tutorial; for others see e.g.: <https://www.statmethods.net/management/subset.html>.)
 
 
 \newpage
@@ -367,8 +367,8 @@ You see that only five (plus the `NA`s) of the nine categories are listed --- an
 
 Since it is a statistical programming language, `R` can be used to generate pretty much any type of summary table for any kind of situation you could think of. In addition, there are special packages for more advanced tables, for instance:
 
-* `gtsummary` (https://www.danieldsjoberg.com/gtsummary/index.html)
-* `xtable` (https://cran.r-project.org/web/packages/xtable/vignettes/xtableGallery.pdf)
+* `gtsummary` (<https://www.danieldsjoberg.com/gtsummary/index.html>)
+* `xtable` (<https://cran.r-project.org/web/packages/xtable/vignettes/xtableGallery.pdf>)
 
 **But:** Learning how to use `R` functions to create tables takes a while, and using them can be tedious and prone to errors.
 
@@ -480,12 +480,12 @@ The *European Social Survey (ESS)* is a large survey project that is conducted i
 
 You can use the *ESS* to study, for example, why people vote or participate otherwise politically (e.g., by joining demonstrations or protests), which parties they voted for, how people think about social inequality, climate change, sexuality, the welfare state, and many other topics. Political scientists and sociologists often use data from the *ESS* in their research.^[Examples are: Rehm, P. (2009). Risks and redistribution: An individual-level analysis. *Comparative Political Studies*, 42(7):855–81; Giger, N. and Nelson, M. (2013). The welfare state or the economy? Preferences, constituencies, and strategies for retrenchment. *European Sociological Review*, 29(5):1083–94; Hooghe, M., Reeskens, T., Stolle, D., and Trappers, A. (2009). Ethnic diversity and generalized trust in Europe: A cross-national multilevel study. *Comparative Political Studies*, 42(2):198– 223; Gallego, A. (2007). Unequal political participation in Europe. *International Journal of Sociology*, 37(4):10–25; or Finseraas, H. (2008). Immigration and preferences for redistribution: An empirical analysis of European survey data. *Comparative European Politics*, 6(4):407–431.]
 
-See https://www.europeansocialsurvey.org/ for more details.
+See <https://www.europeansocialsurvey.org/> for more details.
 
 \newpage
 ### Accessing & downloading *ESS* data
 
-You can access all data from the *ESS* via the SIKT Data Portal: https://ess.sikt.no/en/.^[Alternatively, go to https://www.europeansocialsurvey.org/ and click on "Data" in the menu at the top. On the following page, click on "ESS Data Portal" button.] 
+You can access all data from the *ESS* via the SIKT Data Portal: <https://ess.sikt.no/en/>.^[Alternatively, go to <https://www.europeansocialsurvey.org/> and click on "Data" in the menu at the top. On the following page, click on "ESS Data Portal" button.] 
 
 Once you have the page open:
 
@@ -513,7 +513,7 @@ Here, you can check if everything worked by opening the *Files* tab in the lower
 
 The ESS dataset file you just downloaded is a `.dta` file --- which means this dataset is saved in the Stata file format, and `R` by itself cannot open it.
 
-But, luckily, there are a few packages that allow you to import these types of files into `R`. One of these is the `haven` package, and this is the one we will be using in this course.^[Other alternatives are `foreign`, `memisc`, or `readstata13`.] `haven` is a part of the `tidyverse` collection (see https://haven.tidyverse.org/), which means that you already installed it when you installed the `tidyverse` earlier. 
+But, luckily, there are a few packages that allow you to import these types of files into `R`. One of these is the `haven` package, and this is the one we will be using in this course.^[Other alternatives are `foreign`, `memisc`, or `readstata13`.] `haven` is a part of the `tidyverse` collection (see <https://haven.tidyverse.org/>), which means that you already installed it when you installed the `tidyverse` earlier. 
 
 ::: {.callout-note title="Just in case"}
 

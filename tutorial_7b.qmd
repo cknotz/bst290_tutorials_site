@@ -336,7 +336,7 @@ ess7 %>%
     labs(caption = "The data were jittered.")
 ```
 
-`shape = 1` means: "Use hollow black rings".^[See also http://www.sthda.com/english/wiki/ggplot2-point-shapes] But again, if there is any pattern in the data then it is still difficult to see.
+`shape = 1` means: "Use hollow black rings".^[See also <http://www.sthda.com/english/wiki/ggplot2-point-shapes>] But again, if there is any pattern in the data then it is still difficult to see.
 
 \newpage
 ## `geom_smooth()`
