@@ -2,6 +2,7 @@
 title: "Tutorial 7b: Correlation"
 author: "Carlo Knotz"
 toc: true
+number-sections: true
 format:
   html: default
   pdf: default

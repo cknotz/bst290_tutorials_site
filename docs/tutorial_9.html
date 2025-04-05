@@ -275,20 +275,20 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a>
   <ul class="collapse">
-  <li><a href="#packages-data-import-and-first-data-cleaning" id="toc-packages-data-import-and-first-data-cleaning" class="nav-link" data-scroll-target="#packages-data-import-and-first-data-cleaning">Packages, data import, and first data cleaning</a></li>
-  <li><a href="#new-data-management-additional-independent-variables" id="toc-new-data-management-additional-independent-variables" class="nav-link" data-scroll-target="#new-data-management-additional-independent-variables">New data management: additional independent variables</a></li>
+  <li><a href="#packages-data-import-and-first-data-cleaning" id="toc-packages-data-import-and-first-data-cleaning" class="nav-link" data-scroll-target="#packages-data-import-and-first-data-cleaning"><span class="header-section-number">2.1</span> Packages, data import, and first data cleaning</a></li>
+  <li><a href="#new-data-management-additional-independent-variables" id="toc-new-data-management-additional-independent-variables" class="nav-link" data-scroll-target="#new-data-management-additional-independent-variables"><span class="header-section-number">2.2</span> New data management: additional independent variables</a></li>
   </ul></li>
-  <li><a href="#new-descriptive-statistics" id="toc-new-descriptive-statistics" class="nav-link" data-scroll-target="#new-descriptive-statistics">(New) descriptive statistics</a></li>
-  <li><a href="#regression-analysis" id="toc-regression-analysis" class="nav-link" data-scroll-target="#regression-analysis">Regression analysis</a>
+  <li><a href="#new-descriptive-statistics" id="toc-new-descriptive-statistics" class="nav-link" data-scroll-target="#new-descriptive-statistics"><span class="header-section-number">3</span> (New) descriptive statistics</a></li>
+  <li><a href="#regression-analysis" id="toc-regression-analysis" class="nav-link" data-scroll-target="#regression-analysis"><span class="header-section-number">4</span> Regression analysis</a>
   <ul class="collapse">
-  <li><a href="#models-formulas-again" id="toc-models-formulas-again" class="nav-link" data-scroll-target="#models-formulas-again">Models &amp; formulas (again)</a></li>
-  <li><a href="#the-lm-function" id="toc-the-lm-function" class="nav-link" data-scroll-target="#the-lm-function">The <code>lm()</code> function</a></li>
-  <li><a href="#presenting-the-regression-results-in-a-publication-quality-table" id="toc-presenting-the-regression-results-in-a-publication-quality-table" class="nav-link" data-scroll-target="#presenting-the-regression-results-in-a-publication-quality-table">Presenting the regression results in a publication-quality table</a></li>
+  <li><a href="#models-formulas-again" id="toc-models-formulas-again" class="nav-link" data-scroll-target="#models-formulas-again"><span class="header-section-number">4.0.1</span> Models &amp; formulas (again)</a></li>
+  <li><a href="#the-lm-function" id="toc-the-lm-function" class="nav-link" data-scroll-target="#the-lm-function"><span class="header-section-number">4.1</span> The <code>lm()</code> function</a></li>
+  <li><a href="#presenting-the-regression-results-in-a-publication-quality-table" id="toc-presenting-the-regression-results-in-a-publication-quality-table" class="nav-link" data-scroll-target="#presenting-the-regression-results-in-a-publication-quality-table"><span class="header-section-number">4.2</span> Presenting the regression results in a publication-quality table</a></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">5</span> Conclusion</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="tutorial_9.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -320,8 +320,8 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>In the previous tutorial, you learned how to estimate a <em>bivariate</em> linear regression model in <code>R</code>. You used a linear regression model to see if people’s level of education influences their level of trust in politicians. The expectation was that higher education would lead to greater trust in politicians, and that is also what we found.</p>
 <p>In this tutorial, we go one step further and test if this bivariate relationship stays the same (“is robust”) when we control for additional factors. We do so by estimating a <em>multivariate</em> regression model. In this type of model, we estimate the effects of several independent variables (<em>predictors</em>) on a dependent variable simultaneously.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -339,10 +339,10 @@ Tip
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="setup" class="level1">
-<h1>Setup</h1>
-<section id="packages-data-import-and-first-data-cleaning" class="level2">
-<h2 class="anchored" data-anchor-id="packages-data-import-and-first-data-cleaning">Packages, data import, and first data cleaning</h2>
+<section id="setup" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Setup</h1>
+<section id="packages-data-import-and-first-data-cleaning" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="packages-data-import-and-first-data-cleaning"><span class="header-section-number">2.1</span> Packages, data import, and first data cleaning</h2>
 <p>As before, we use the <code>tidyverse</code> to help with data management and visualization and <code>texreg</code> to make neat-looking regression tables.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -364,8 +364,8 @@ Tip
 </ol>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="new-data-management-additional-independent-variables" class="level2">
-<h2 class="anchored" data-anchor-id="new-data-management-additional-independent-variables">New data management: additional independent variables</h2>
+<section id="new-data-management-additional-independent-variables" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="new-data-management-additional-independent-variables"><span class="header-section-number">2.2</span> New data management: additional independent variables</h2>
 <p>In addition to the main predictor from the previous tutorial (<code>eduyrs</code>, the respondent’s level of education), we want to add controls for two additional variables:</p>
 <ul>
 <li>The respondent’s age in years, using <code>agea</code></li>
@@ -386,8 +386,8 @@ Tip
 <div style="page-break-after: always;"></div>
 </section>
 </section>
-<section id="new-descriptive-statistics" class="level1">
-<h1>(New) descriptive statistics</h1>
+<section id="new-descriptive-statistics" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> (New) descriptive statistics</h1>
 <p>As before, we print out some descriptive statistics for our variables. It is important to report these so that readers get an idea of how our data look like and can interpret the results correctly.</p>
 <p>To report statistics for our numeric variables, we simply expand the descriptive table we created in the previous tutorial:</p>
 <div class="cell">
@@ -430,10 +430,10 @@ Tip
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="regression-analysis" class="level1">
-<h1>Regression analysis</h1>
-<section id="models-formulas-again" class="level3">
-<h3 class="anchored" data-anchor-id="models-formulas-again">Models &amp; formulas (again)</h3>
+<section id="regression-analysis" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Regression analysis</h1>
+<section id="models-formulas-again" class="level3" data-number="4.0.1">
+<h3 data-number="4.0.1" class="anchored" data-anchor-id="models-formulas-again"><span class="header-section-number">4.0.1</span> Models &amp; formulas (again)</h3>
 <p>Recall the formula for the <em>bivariate</em> regression model we estimated in the last tutorial. This model included only a single independent variable (<code>eduyrs</code>) but no control variables:</p>
 <p><span class="math display">\[\begin{align*}
   \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \epsilon
@@ -454,8 +454,8 @@ Tip
 <p>As before, <code>R</code> takes care of the intercept and the error term — all we have to do to get a multivariate regression model is to list more than one independent variable. Easy.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="the-lm-function" class="level2">
-<h2 class="anchored" data-anchor-id="the-lm-function">The <code>lm()</code> function</h2>
+<section id="the-lm-function" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="the-lm-function"><span class="header-section-number">4.1</span> The <code>lm()</code> function</h2>
 <p>Just to refresh your memory, we first estimate the bivariate regression model from the previous tutorial and store the result as <code>model1</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(trstplt_num <span class="sc">~</span> eduyrs, </span>
@@ -522,8 +522,8 @@ Tip
 <!-- * According to the coefficient estimate for the `agea` variable, age has a negative effect: As someone's age increases by one year, their score on the `trstplt_num` variable decreases by 0.0075 points. Simply put: Older people have less trust in politicians, all other factors held equal. This effect is statistically significant. -->
 <div style="page-break-after: always;"></div>
 </section>
-<section id="presenting-the-regression-results-in-a-publication-quality-table" class="level2">
-<h2 class="anchored" data-anchor-id="presenting-the-regression-results-in-a-publication-quality-table">Presenting the regression results in a publication-quality table</h2>
+<section id="presenting-the-regression-results-in-a-publication-quality-table" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="presenting-the-regression-results-in-a-publication-quality-table"><span class="header-section-number">4.2</span> Presenting the regression results in a publication-quality table</h2>
 <p>To present the results and export them as a nice-looking table, we use again the <code>texreg</code> package.</p>
 <p>First, we print out a preview of our table using the <code>screenreg()</code> function. Now we have two regression models to print, so we have to list both in the function:</p>
 <div class="cell">
@@ -589,8 +589,8 @@ Tip
 <div style="page-break-after: always;"></div>
 </section>
 </section>
-<section id="conclusion" class="level1">
-<h1>Conclusion</h1>
+<section id="conclusion" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Conclusion</h1>
 <p>Now you know how to estimate, interpret, and present a multivariate linear regression model in <code>R</code>. This opens a lot of doors, because you can now use data such as those from the ESS to really disentangle the drivers and determinants of complex social and political phenomena. Also, if you read political science and sociological research, you will find many, many publications that use this type of method, so you now have first-hand knowledge of what is behind the results that are presented there.</p>
 <!-- **Assumption: You have gone through the entire tutorial, step by step and without errors, until here.** -->
 <!-- ## Trust in the United Nations: A multivariate model -->
@@ -1158,7 +1158,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","selector":".lightbox","openEffect":"zoom","loop":false});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","loop":false,"selector":".lightbox","openEffect":"zoom","closeEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

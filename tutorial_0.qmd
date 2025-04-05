@@ -3,6 +3,7 @@ title: "Tutorial 0: Installation & Setup"
 author: "Carlo Knotz"
 bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 toc: true
+number-sections: true
 format:
   html: default
   pdf: default

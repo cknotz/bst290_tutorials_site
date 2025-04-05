@@ -275,26 +275,26 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses">Hypotheses</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses"><span class="header-section-number">2</span> Hypotheses</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">3</span> Setup</a>
   <ul class="collapse">
-  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages">Loading packages</a></li>
-  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning">Data cleaning</a></li>
-  <li><a href="#initial-exploratory-data-analysis-eda" id="toc-initial-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#initial-exploratory-data-analysis-eda">Initial exploratory data analysis (EDA)</a></li>
+  <li><a href="#loading-packages" id="toc-loading-packages" class="nav-link" data-scroll-target="#loading-packages"><span class="header-section-number">3.1</span> Loading packages</a></li>
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning"><span class="header-section-number">3.2</span> Data cleaning</a></li>
+  <li><a href="#initial-exploratory-data-analysis-eda" id="toc-initial-exploratory-data-analysis-eda" class="nav-link" data-scroll-target="#initial-exploratory-data-analysis-eda"><span class="header-section-number">3.3</span> Initial exploratory data analysis (EDA)</a></li>
   </ul></li>
-  <li><a href="#bivariate-analysis" id="toc-bivariate-analysis" class="nav-link" data-scroll-target="#bivariate-analysis">Bivariate analysis</a>
+  <li><a href="#bivariate-analysis" id="toc-bivariate-analysis" class="nav-link" data-scroll-target="#bivariate-analysis"><span class="header-section-number">4</span> Bivariate analysis</a>
   <ul class="collapse">
-  <li><a href="#descriptive-analysis" id="toc-descriptive-analysis" class="nav-link" data-scroll-target="#descriptive-analysis">Descriptive analysis</a>
+  <li><a href="#descriptive-analysis" id="toc-descriptive-analysis" class="nav-link" data-scroll-target="#descriptive-analysis"><span class="header-section-number">4.1</span> Descriptive analysis</a>
   <ul class="collapse">
-  <li><a href="#a-cross-table-showing-frequencies" id="toc-a-cross-table-showing-frequencies" class="nav-link" data-scroll-target="#a-cross-table-showing-frequencies">A cross-table showing frequencies</a></li>
-  <li><a href="#a-cross-table-showing-percentages" id="toc-a-cross-table-showing-percentages" class="nav-link" data-scroll-target="#a-cross-table-showing-percentages">A cross-table showing percentages</a></li>
+  <li><a href="#a-cross-table-showing-frequencies" id="toc-a-cross-table-showing-frequencies" class="nav-link" data-scroll-target="#a-cross-table-showing-frequencies"><span class="header-section-number">4.1.1</span> A cross-table showing frequencies</a></li>
+  <li><a href="#a-cross-table-showing-percentages" id="toc-a-cross-table-showing-percentages" class="nav-link" data-scroll-target="#a-cross-table-showing-percentages"><span class="header-section-number">4.1.2</span> A cross-table showing percentages</a></li>
   </ul></li>
-  <li><a href="#running-a-chi2-test" id="toc-running-a-chi2-test" class="nav-link" data-scroll-target="#running-a-chi2-test">Running a <span class="math inline">\(\chi^2\)</span> test</a></li>
-  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
+  <li><a href="#running-a-chi2-test" id="toc-running-a-chi2-test" class="nav-link" data-scroll-target="#running-a-chi2-test"><span class="header-section-number">4.2</span> Running a <span class="math inline">\(\chi^2\)</span> test</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">4.3</span> Interpretation</a></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  <li><a href="#voluntary-creating-mosaic-plots" id="toc-voluntary-creating-mosaic-plots" class="nav-link" data-scroll-target="#voluntary-creating-mosaic-plots">(Voluntary) Creating mosaic plots</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">5</span> Conclusion</a></li>
+  <li><a href="#voluntary-creating-mosaic-plots" id="toc-voluntary-creating-mosaic-plots" class="nav-link" data-scroll-target="#voluntary-creating-mosaic-plots"><span class="header-section-number">6</span> (Voluntary) Creating mosaic plots</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="tutorial_6.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -326,8 +326,8 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>As (social) data analysts, we are very often interested in <em>relationships between variables</em> or <em>causal effects</em>: Does one variable (e.g., gender) have an impact on another variable (e.g., political attitudes)?</p>
 <p>We can look for evidence of relationships in two ways:</p>
 <ol type="1">
@@ -351,18 +351,18 @@ Tip
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="hypotheses" class="level1">
-<h1>Hypotheses</h1>
+<section id="hypotheses" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Hypotheses</h1>
 <p>Some previous studies have shown that there are some (small) differences in the rates at which men and women participate politically: Specifically, that women are a bit <em>less</em> likely to vote or to be active in political movements.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> But other studies have found that the role of gender has been drastically changing over the last decades, so it is an open question if the relationship between gender and political participation is still true when we look at more recent data.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>But, because we are cautious researchers, our guiding hypothesis for this analysis is: <em>Women participate less politically than men.</em> As mentioned above, we will look at one specific form of political participation: Trade union membership.</p>
 <p>The corresponding <em>null hypothesis</em> is that there is <em>no difference</em> between men and women when it comes to trade union membership.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="setup" class="level1">
-<h1>Setup</h1>
+<section id="setup" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Setup</h1>
 <p>As always, you need to load all the packages you need and then import and clean your dataset. First, make sure that you are working in your project for this course (upper-right corner of the <em>RStudio</em> screen; make sure the correct project is active).</p>
-<section id="loading-packages" class="level2">
-<h2 class="anchored" data-anchor-id="loading-packages">Loading packages</h2>
+<section id="loading-packages" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="loading-packages"><span class="header-section-number">3.1</span> Loading packages</h2>
 <p>In this tutorial, you will need two packages: <code>tidyverse</code> for the data management and <code>bst290</code> for a special function to make cross tables. As you know, you load these with the <code>library()</code> function:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -374,8 +374,8 @@ Tip
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="data-cleaning" class="level2">
-<h2 class="anchored" data-anchor-id="data-cleaning">Data cleaning</h2>
+<section id="data-cleaning" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="data-cleaning"><span class="header-section-number">3.2</span> Data cleaning</h2>
 <p>Now that the dataset is loaded, you can clean and trim it.</p>
 <p>First, you need to convert how the dataset is stored within <code>R</code> back to the familiar format with <code>labelled::unlabelled()</code>:</p>
 <div class="cell">
@@ -400,8 +400,8 @@ Tip
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="initial-exploratory-data-analysis-eda" class="level2">
-<h2 class="anchored" data-anchor-id="initial-exploratory-data-analysis-eda">Initial exploratory data analysis (EDA)</h2>
+<section id="initial-exploratory-data-analysis-eda" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="initial-exploratory-data-analysis-eda"><span class="header-section-number">3.3</span> Initial exploratory data analysis (EDA)</h2>
 <p>Now that you have your dataset in order, you can take a closer look at your main variables. As mentioned in the Introduction, we will look at the relationship between gender and trade union membership in the main part of this tutorial. This means the two variables we need to work with are gender (<code>gndr</code>) and trade union membership (<code>mbtru</code>).</p>
 <p>You can use <code>attributes()</code> to get a first overview over the two variables and how they are stored.</p>
 <div class="cell">
@@ -465,10 +465,10 @@ Tip
 <div style="page-break-after: always;"></div>
 </section>
 </section>
-<section id="bivariate-analysis" class="level1">
-<h1>Bivariate analysis</h1>
-<section id="descriptive-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="descriptive-analysis">Descriptive analysis</h2>
+<section id="bivariate-analysis" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Bivariate analysis</h1>
+<section id="descriptive-analysis" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="descriptive-analysis"><span class="header-section-number">4.1</span> Descriptive analysis</h2>
 <p>As explained in Kellstedt &amp; Whitten (2018, Chapter 8), the standard way to starting looking for relationships between categorical variables is to cross-tabulate them. This table would be organized like this:</p>
 <ul>
 <li>The <em>independent</em> variable would appear in the <em>columns</em>;</li>
@@ -480,8 +480,8 @@ Tip
 <li><code>mbtru</code> is the <em>dependent</em> variable;</li>
 </ul>
 <div style="page-break-after: always;"></div>
-<section id="a-cross-table-showing-frequencies" class="level3">
-<h3 class="anchored" data-anchor-id="a-cross-table-showing-frequencies">A cross-table showing frequencies</h3>
+<section id="a-cross-table-showing-frequencies" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="a-cross-table-showing-frequencies"><span class="header-section-number">4.1.1</span> A cross-table showing frequencies</h3>
 <p>To cross-tabulate the two variables, you can use the <code>table()</code> function, which you already know from before. The variable that should be shown in the rows is named first, then the variable that should be shown in the columns:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess7<span class="sc">$</span>mbtru,ess7<span class="sc">$</span>gndr)</span>
@@ -494,8 +494,8 @@ Tip
 <p>This table shows you the “raw” numbers of respondents that fall into each category — the <em>frequencies</em>. As it is now, this table is a bit difficult to read because it is not easy to see if there is an over- or underrepresentation of women or men among trade union members.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="a-cross-table-showing-percentages" class="level3">
-<h3 class="anchored" data-anchor-id="a-cross-table-showing-percentages">A cross-table showing percentages</h3>
+<section id="a-cross-table-showing-percentages" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="a-cross-table-showing-percentages"><span class="header-section-number">4.1.2</span> A cross-table showing percentages</h3>
 <p>A better way to present the data is in the form of a cross-table that shows <em>column percentages</em> (see again Kellstedt and Whitten 2018, Chapter 8). Creating such a table is possible in <code>R</code> (see Hermansen 2019, <em>Lær deg R</em> Chapter 5.3.1), but that is a multi-step process with lots of potential for error messages and frustration.</p>
 <p>To make this easier and quicker, you can use a special function from the <code>bst290</code> package called <code>krysstabell()</code>. When using this function, you just need to specify a) the dataset; b) the variable that should be shown in the rows; and c) the variable to be shown in the columns:</p>
 <div class="cell">
@@ -514,8 +514,8 @@ Tip
 <div style="page-break-after: always;"></div>
 </section>
 </section>
-<section id="running-a-chi2-test" class="level2">
-<h2 class="anchored" data-anchor-id="running-a-chi2-test">Running a <span class="math inline">\(\chi^2\)</span> test</h2>
+<section id="running-a-chi2-test" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="running-a-chi2-test"><span class="header-section-number">4.2</span> Running a <span class="math inline">\(\chi^2\)</span> test</h2>
 <p>The previous descriptive analysis suggests that there <em>might</em> be a relationship between gender and trade union membership. <em>But:</em> It is possible that this reflects only <em>sampling variation</em>: After all, we are working with a <em>sample</em> of the entire Norwegian population. Maybe we were really unlucky and ended up by mere chance with a survey sample in which women are more likely to be trade union members, even though this is not true for the wider Norwegian population?</p>
 <p>To find out if our relationship is <em>systematic</em> or <em>statistically significant</em>, we can use the <span class="math inline">\(\chi^2\)</span> test. As you know, this is a formal statistical test for relationships between two categorical variables.</p>
 <p>Running this test in <code>R</code> is easy because there is a built-in function for it: <code>chisq.test()</code>. Usually, you run this function directly on the cross table.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
@@ -534,8 +534,8 @@ Tip
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="interpretation" class="level2">
-<h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
+<section id="interpretation" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="interpretation"><span class="header-section-number">4.3</span> Interpretation</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(crosstab)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
@@ -568,14 +568,14 @@ Tip
 <!-- ## De-bugging exercises -->
 </section>
 </section>
-<section id="conclusion" class="level1">
-<h1>Conclusion</h1>
+<section id="conclusion" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Conclusion</h1>
 <p>You now know how to use <code>R</code> to test for relationships between two categorical variables and to see if you can generalize any patterns you find in your sample data to the underlying general population.</p>
 <p>There are again some de-bugging exercises (plus quizzes) that you can use to practice tabular analysis and interpreting <span class="math inline">\(\chi^2\)</span> tests (“De-bugging exercises: Tabular analysis”). There, you will study the relationship between gender and voting in elections (using the small practice dataset).</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="voluntary-creating-mosaic-plots" class="level1">
-<h1>(Voluntary) Creating mosaic plots</h1>
+<section id="voluntary-creating-mosaic-plots" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> (Voluntary) Creating mosaic plots</h1>
 <p>A cross table showing column percentages is a good way to show relationships between categorical variables — but there is another option that can be even better in some cases: a <em>mosaic plot</em> (see also Hermansen 2019, <em>Lær deg R</em>, pp.&nbsp;91-2). Such a plot is, simply put, a graphical representation of a cross table and it is often the case that relationships are easier to see in the form of a graph than when they are presented in table-form.</p>
 <p>Creating a mosaic plot is not difficult because there is a dedicated function for it in <code>R</code>: <code>mosaicplot()</code>. This function works basically the same way as the <code>chisq.test()</code> function: You first create a simple cross table of two categorical variables with <code>table()</code> and then feed the result of that operation into the <code>mosaicplot()</code> function. The only thing to be aware of is that the variables go into the <code>table()</code> function in the opposite order than they would otherwise.</p>
 <p>For example, to get a mosaic plot that shows the relationship between gender and trade union membership, you would first create a cross table:</p>
@@ -1063,7 +1063,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"openEffect":"zoom"});
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","loop":false,"closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

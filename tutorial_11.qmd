@@ -2,6 +2,7 @@
 title: "Tutorial 11: Logistic regression for binomial dependent variables"
 author: "Carlo Knotz"
 toc: true
+number-sections: true
 format:
   html: default
   pdf: default

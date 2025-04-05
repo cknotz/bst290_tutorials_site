@@ -275,24 +275,24 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data preparation</a></li>
-  <li><a href="#graphical-analysis" id="toc-graphical-analysis" class="nav-link" data-scroll-target="#graphical-analysis">Graphical analysis</a></li>
-  <li><a href="#getting-a-confidence-interval" id="toc-getting-a-confidence-interval" class="nav-link" data-scroll-target="#getting-a-confidence-interval">Getting a confidence interval</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation"><span class="header-section-number">3</span> Data preparation</a></li>
+  <li><a href="#graphical-analysis" id="toc-graphical-analysis" class="nav-link" data-scroll-target="#graphical-analysis"><span class="header-section-number">4</span> Graphical analysis</a></li>
+  <li><a href="#getting-a-confidence-interval" id="toc-getting-a-confidence-interval" class="nav-link" data-scroll-target="#getting-a-confidence-interval"><span class="header-section-number">5</span> Getting a confidence interval</a>
   <ul class="collapse">
-  <li><a href="#calculating-the-sample-mean" id="toc-calculating-the-sample-mean" class="nav-link" data-scroll-target="#calculating-the-sample-mean">Calculating the sample mean</a></li>
-  <li><a href="#estimating-the-confidence-interval-using-a-built-in-function" id="toc-estimating-the-confidence-interval-using-a-built-in-function" class="nav-link" data-scroll-target="#estimating-the-confidence-interval-using-a-built-in-function">Estimating the confidence interval using a built-in function</a>
+  <li><a href="#calculating-the-sample-mean" id="toc-calculating-the-sample-mean" class="nav-link" data-scroll-target="#calculating-the-sample-mean"><span class="header-section-number">5.1</span> Calculating the sample mean</a></li>
+  <li><a href="#estimating-the-confidence-interval-using-a-built-in-function" id="toc-estimating-the-confidence-interval-using-a-built-in-function" class="nav-link" data-scroll-target="#estimating-the-confidence-interval-using-a-built-in-function"><span class="header-section-number">5.2</span> Estimating the confidence interval using a built-in function</a>
   <ul class="collapse">
-  <li><a href="#using-t.test" id="toc-using-t.test" class="nav-link" data-scroll-target="#using-t.test">Using <code>t.test()</code></a></li>
-  <li><a href="#adjusting-the-level-of-confidence" id="toc-adjusting-the-level-of-confidence" class="nav-link" data-scroll-target="#adjusting-the-level-of-confidence">Adjusting the level of confidence</a></li>
+  <li><a href="#using-t.test" id="toc-using-t.test" class="nav-link" data-scroll-target="#using-t.test"><span class="header-section-number">5.2.1</span> Using <code>t.test()</code></a></li>
+  <li><a href="#adjusting-the-level-of-confidence" id="toc-adjusting-the-level-of-confidence" class="nav-link" data-scroll-target="#adjusting-the-level-of-confidence"><span class="header-section-number">5.2.2</span> Adjusting the level of confidence</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  <li><a href="#voluntary-calculating-a-confidence-interval-by-hand" id="toc-voluntary-calculating-a-confidence-interval-by-hand" class="nav-link" data-scroll-target="#voluntary-calculating-a-confidence-interval-by-hand">(Voluntary) Calculating a confidence interval “by hand”</a>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
+  <li><a href="#voluntary-calculating-a-confidence-interval-by-hand" id="toc-voluntary-calculating-a-confidence-interval-by-hand" class="nav-link" data-scroll-target="#voluntary-calculating-a-confidence-interval-by-hand"><span class="header-section-number">7</span> (Voluntary) Calculating a confidence interval “by hand”</a>
   <ul class="collapse">
-  <li><a href="#the-math" id="toc-the-math" class="nav-link" data-scroll-target="#the-math">The math</a></li>
-  <li><a href="#the-calculation-in-r" id="toc-the-calculation-in-r" class="nav-link" data-scroll-target="#the-calculation-in-r">The calculation in <code>R</code></a></li>
+  <li><a href="#the-math" id="toc-the-math" class="nav-link" data-scroll-target="#the-math"><span class="header-section-number">7.1</span> The math</a></li>
+  <li><a href="#the-calculation-in-r" id="toc-the-calculation-in-r" class="nav-link" data-scroll-target="#the-calculation-in-r"><span class="header-section-number">7.2</span> The calculation in <code>R</code></a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="tutorial_5.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -325,16 +325,16 @@ window.Quarto = {
 </header>
 
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>You have now made it through the software- and code-heavy parts of the course and learned the basics of data handling and visualization with <code>R</code>. Now, beginning with this tutorial, the focus will shift away from software and code and instead focus more on statistics. This means that the tutorials will say less about how to write code and more about how you make sense of your results.</p>
 <p>The reason for this is the following: Running statistical tests and estimations in <code>R</code> is not really difficult as far as coding is concerned. As you will see, most statistical estimations require only a few brief lines of code. The tricky thing is knowing how to write the necessary bits of code correctly. But the most difficult part is how to make sense of the results. Here you need to understand what the different statistical concepts such as <em>p</em>-values or standard errors are and how you identify them in the output that <code>R</code> gives you. And this is why we focus mostly on the latter part, the interpretation.</p>
 <p>This being said, we will still use these tutorials to repeat and practice the data management and visualization skills that you learned previously.</p>
 <p>We start in this tutorial with the first building block of <em>inferential</em> statistics: confidence intervals. You will learn how to use <code>R</code> to calculate a confidence interval for a sample mean and how to interpret the result — as was explained in Kellstedt &amp; Whitten (2018, Chapter 7). As before, we start by working with the small <code>ess</code> practice dataset included in the <code>bst290</code> package. You will then apply what you learned on real ESS data in the in-class exercises.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="setup" class="level1">
-<h1>Setup</h1>
+<section id="setup" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Setup</h1>
 <p><code>R</code> has many statistical tests already built in, so you do not have to install and load specific packages for confidence intervals. But you will need to load the two packages that we have been using in the previous tutorials, the <code>tidyverse</code> and <code>bst290</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -346,8 +346,8 @@ window.Quarto = {
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="data-preparation" class="level1">
-<h1>Data preparation</h1>
+<section id="data-preparation" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Data preparation</h1>
 <p>The <code>ess</code> dataset includes a variable that measures how satisfied people are with their life in general, and which is called <code>stflife</code>. This is the variable we will be working with.</p>
 <p>You probably remember that you have seen this variable in a previous tutorial, the one one data cleaning and management. Just to refresh your memory: The variable contains responses to the following question: <em>“All things considered, how satisfied are you with your life as a whole nowadays?”</em>. The respondents could answer on a scale from 0 (<em>“Extremely dissatisifed”</em>) to 10 (<em>“Extremely satisfied”</em>). With a 0-10 scale, the variable qualifies as numeric or linear — and this is good because this means that calculating the mean of that variable and a confidence interval for the mean makes sense!</p>
 <p><strong>But:</strong> Perhaps you also remember that, although this variable <em>qualifies</em> as a numeric variable, it is stored as a <em>factor</em> in the dataset: You can confirm this using the <code>class()</code> function:</p>
@@ -362,8 +362,8 @@ window.Quarto = {
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="graphical-analysis" class="level1">
-<h1>Graphical analysis</h1>
+<section id="graphical-analysis" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Graphical analysis</h1>
 <p>Before we get to the confidence interval, let’s also quickly look at the variable graphically with a bar graph:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
@@ -387,11 +387,11 @@ window.Quarto = {
 <p>Overall, most respondents are fairly satisfied with their lives. This makes sense: The data are from Norway, and Norway is one of the countries in which people are most satisified with their lives (similar to Denmark, Sweden, Iceland, or Finland).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="getting-a-confidence-interval" class="level1">
-<h1>Getting a confidence interval</h1>
+<section id="getting-a-confidence-interval" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Getting a confidence interval</h1>
 <p>We have a variable to work with — now to the interesting part: Confidence intervals.</p>
-<section id="calculating-the-sample-mean" class="level2">
-<h2 class="anchored" data-anchor-id="calculating-the-sample-mean">Calculating the sample mean</h2>
+<section id="calculating-the-sample-mean" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="calculating-the-sample-mean"><span class="header-section-number">5.1</span> Calculating the sample mean</h2>
 <p>Step 1 is to calculate the mean of the new <code>stflife_num</code> variable — after all, we want to have a confidence interval for the <em>sample mean</em>, which means we have to first figure out what that sample mean is!</p>
 <p>Calculating the sample mean is, of course, easy:</p>
 <div class="cell">
@@ -401,8 +401,8 @@ window.Quarto = {
 <p>The high value of almost 8 on the 0-10 scale again reflects the overall high level of life satisfaction in Norway.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="estimating-the-confidence-interval-using-a-built-in-function" class="level2">
-<h2 class="anchored" data-anchor-id="estimating-the-confidence-interval-using-a-built-in-function">Estimating the confidence interval using a built-in function</h2>
+<section id="estimating-the-confidence-interval-using-a-built-in-function" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="estimating-the-confidence-interval-using-a-built-in-function"><span class="header-section-number">5.2</span> Estimating the confidence interval using a built-in function</h2>
 <p>To calculate a confidence interval for a sample mean in <code>R</code>, you use the <code>t.test()</code> function. This may seem confusing: Why is that function not called <code>conf.int()</code> or similar? Does that function really use the same formula that was explained in Kellstedt &amp; Whitten?</p>
 <p>The reason behind this is that the <em>t</em>-test (which you will learn about in two weeks) and the confidence interval are related, and <code>R</code> uses the <code>t.test()</code> function for both procedures. The difference between the “by-hand” approach in Kellstedt &amp; Whitten and the <code>t.test()</code> function is the following:</p>
 <ul>
@@ -411,8 +411,8 @@ window.Quarto = {
 </ul>
 <p>Generally speaking, you are safe if you use the <code>t.test()</code> function (and you work with a random sample, of course!).</p>
 <div style="page-break-after: always;"></div>
-<section id="using-t.test" class="level3">
-<h3 class="anchored" data-anchor-id="using-t.test">Using <code>t.test()</code></h3>
+<section id="using-t.test" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="using-t.test"><span class="header-section-number">5.2.1</span> Using <code>t.test()</code></h3>
 <p>The code to calculate the confidence interval with <code>t.test()</code> is simple:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="at">x =</span> ess<span class="sc">$</span>stflife_num)</span>
@@ -434,8 +434,8 @@ window.Quarto = {
 <p>You also see the sample mean of 7.86014 mentioned again at the bottom of the output.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="adjusting-the-level-of-confidence" class="level3">
-<h3 class="anchored" data-anchor-id="adjusting-the-level-of-confidence">Adjusting the level of confidence</h3>
+<section id="adjusting-the-level-of-confidence" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="adjusting-the-level-of-confidence"><span class="header-section-number">5.2.2</span> Adjusting the level of confidence</h3>
 <p>It is easy to get a different level of confidence: You just change the level with the <code>conf.level</code> option (“argument”). For example, to get a 90% confidence interval, you run:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(<span class="at">x =</span> ess<span class="sc">$</span>stflife_num, <span class="at">conf.level =</span> <span class="fl">0.90</span>)</span>
@@ -471,8 +471,8 @@ window.Quarto = {
 </section>
 </section>
 </section>
-<section id="conclusion" class="level1">
-<h1>Conclusion</h1>
+<section id="conclusion" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Conclusion</h1>
 <p>You now know how to use <code>R</code> to calculate a confidence interval for a sample mean. As before, there are de-bugging exercises that you can do to practice a bit more. You find these under <em>Tutorials</em> (“De-bugging exercises: Confidence intervals”).</p>
 <!-- # Exercises -->
 <!-- ## Exercise 1 -->
@@ -488,19 +488,19 @@ window.Quarto = {
 <!-- ## De-bugging exercises -->
 <div style="page-break-after: always;"></div>
 </section>
-<section id="voluntary-calculating-a-confidence-interval-by-hand" class="level1">
-<h1>(Voluntary) Calculating a confidence interval “by hand”</h1>
+<section id="voluntary-calculating-a-confidence-interval-by-hand" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> (Voluntary) Calculating a confidence interval “by hand”</h1>
 <p>You probably remember from Kellstedt and Whitten (2018, Chapter 7) that you can also use a fairly simple formula to calculate confidence intervals by hand. And since <code>R</code> can be used as a pocket calculator, you can calculate the confidence interval for a sample mean step-by-step using <code>R</code>.</p>
-<section id="the-math" class="level2">
-<h2 class="anchored" data-anchor-id="the-math">The math</h2>
+<section id="the-math" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="the-math"><span class="header-section-number">7.1</span> The math</h2>
 <p>As explained in Kellstedt &amp; Whitten, the formula to get the 95% confidence interval for the sample mean of a variable <span class="math inline">\(Y\)</span> is the following: <span class="math display">\[CI_{\bar{Y}} = \bar{Y} \pm 1.96 \times \sigma_{\bar{Y}}\]</span></p>
 <p>where <span class="math inline">\(\bar{Y}\)</span> is the sample mean of the variable, <span class="math inline">\(\sigma_{\bar{Y}}\)</span> is the standard error of that mean, and 1.96 (no, not 2!) is the critical value for a 95% confidence level.</p>
 <p>The standard error of the mean <span class="math inline">\(\sigma_{\bar{Y}}\)</span> is calculated as follows: <span class="math display">\[\sigma_{\bar{Y}} = \frac{s_Y}{\sqrt{n}}\]</span></p>
 <p>where <span class="math inline">\(s_Y\)</span> is the sample standard deviation of the <span class="math inline">\(Y\)</span> variable, and <span class="math inline">\(n\)</span> is the sample size.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="the-calculation-in-r" class="level2">
-<h2 class="anchored" data-anchor-id="the-calculation-in-r">The calculation in <code>R</code></h2>
+<section id="the-calculation-in-r" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="the-calculation-in-r"><span class="header-section-number">7.2</span> The calculation in <code>R</code></h2>
 <p>As before, step 1 is get the mean with the <code>mean()</code> function. Important: We need to store the result so we can use it in our later calculations:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Y_bar <span class="ot">&lt;-</span> <span class="fu">mean</span>(ess<span class="sc">$</span>stflife_num, <span class="at">na.rm =</span> T)</span>
@@ -986,7 +986,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom","openEffect":"zoom","loop":false});
+<script>var lightboxQuarto = GLightbox({"loop":false,"closeEffect":"zoom","selector":".lightbox","descPosition":"bottom","openEffect":"zoom"});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

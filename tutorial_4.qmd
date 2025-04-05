@@ -2,6 +2,7 @@
 title: "Tutorial 4: Data visualization with `ggplot2`"
 author: "Carlo Knotz"
 toc: true
+number-sections: true
 format:
   html: default
   pdf: default

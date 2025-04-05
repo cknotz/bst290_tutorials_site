@@ -2,6 +2,7 @@
 title: "Tutorial 10: *It depends!* Interactive regression models"
 author: "Carlo Knotz"
 toc: true
+number-sections: true
 format:
   html: default
   pdf: default
