@@ -329,7 +329,7 @@ ess %>%  # 1.
 Translated into "human", the code tells `R` to:
 
 1. "Take the `ess` dataset and..."
-2. "...create a new variable called `health_dummy` based on the *condition* that the `health`-variable has either the value 'Very good' or the value 'Good'. (*Notice* that we use the `%in%` operator here to indicate that `health` should be eiter "Very good" or "Good".)"
+2. "...create a new variable called `health_dummy` based on the *condition* that the `health`-variable has either the value "Very good" or the value "Good". (*Notice* that we use the `%in%` operator here to indicate that `health` should be *either*  "Very good" or "Good".)"
 3. "If that condition is *true*, the new variable gets the value 'Good health',..."
 4. "...and if that condition is *false*, the variable gets the value 'Not good health'.
 
@@ -349,11 +349,11 @@ ess %>%
 
 You see that all respondents who felt that their health was either "very good" or "good" got the value "Good health" on the new variable. The three respondents who judged their own health to be only "fair" got the value "Not good health", and this would obviously be the same for all respondents that rated their own health as "bad" or "very bad".
 
----
+::: {.callout-tip}
 
-**Good to know:** When you use `if_else()`, you can decide what type of variable the new dummy-coded variable will be. If you use numbers (like in the first example where we dummy-coded `agea`), the new variable will be `numeric`. If you use text (like in the second example), the new variable will be a `character`-type variable. You can then transform this variable to a *factor* with `as.factor()`, if you like (see also below for details).
+When you use `if_else()`, you can directly control what type of variable the new dummy-coded variable will be. If you use numbers (like in the first example where we dummy-coded `agea`), the new variable will be `numeric`. If you use text (like in the second example), the new variable will be a `character`-type variable. You can directly transform this variable to a *factor* with `factor()`, if you like (see also below for details).
 
----
+:::
 
 
 \newpage

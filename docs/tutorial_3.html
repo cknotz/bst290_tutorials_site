@@ -625,7 +625,7 @@ Important
 <p>Translated into “human”, the code tells <code>R</code> to:</p>
 <ol type="1">
 <li>“Take the <code>ess</code> dataset and…”</li>
-<li>“…create a new variable called <code>health_dummy</code> based on the <em>condition</em> that the <code>health</code>-variable has either the value ‘Very good’ or the value ‘Good’. (<em>Notice</em> that we use the <code>%in%</code> operator here to indicate that <code>health</code> should be eiter”Very good” or “Good”.)”</li>
+<li>“…create a new variable called <code>health_dummy</code> based on the <em>condition</em> that the <code>health</code>-variable has either the value”Very good” or the value “Good”. (<em>Notice</em> that we use the <code>%in%</code> operator here to indicate that <code>health</code> should be <em>either</em> “Very good” or “Good”.)”</li>
 <li>“If that condition is <em>true</em>, the new variable gets the value ‘Good health’,…”</li>
 <li>“…and if that condition is <em>false</em>, the variable gets the value ‘Not good health’.</li>
 </ol>
@@ -646,9 +646,19 @@ Important
 10 21336      Good     Good health</code></pre>
 </div>
 <p>You see that all respondents who felt that their health was either “very good” or “good” got the value “Good health” on the new variable. The three respondents who judged their own health to be only “fair” got the value “Not good health”, and this would obviously be the same for all respondents that rated their own health as “bad” or “very bad”.</p>
-<hr>
-<p><strong>Good to know:</strong> When you use <code>if_else()</code>, you can decide what type of variable the new dummy-coded variable will be. If you use numbers (like in the first example where we dummy-coded <code>agea</code>), the new variable will be <code>numeric</code>. If you use text (like in the second example), the new variable will be a <code>character</code>-type variable. You can then transform this variable to a <em>factor</em> with <code>as.factor()</code>, if you like (see also below for details).</p>
-<hr>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When you use <code>if_else()</code>, you can directly control what type of variable the new dummy-coded variable will be. If you use numbers (like in the first example where we dummy-coded <code>agea</code>), the new variable will be <code>numeric</code>. If you use text (like in the second example), the new variable will be a <code>character</code>-type variable. You can directly transform this variable to a <em>factor</em> with <code>factor()</code>, if you like (see also below for details).</p>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
 </section>
 </section>
