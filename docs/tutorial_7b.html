@@ -293,12 +293,19 @@ window.Quarto = {
   <li><a href="#testing-if-the-true-r-is-smaller-than-0" id="toc-testing-if-the-true-r-is-smaller-than-0" class="nav-link" data-scroll-target="#testing-if-the-true-r-is-smaller-than-0"><span class="header-section-number">4.2.3</span> Testing if the true <em>r</em> is smaller than 0</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">5</span> Conclusion</a></li>
-  <li><a href="#voluntary-visualization" id="toc-voluntary-visualization" class="nav-link" data-scroll-target="#voluntary-visualization"><span class="header-section-number">6</span> (Voluntary): Visualization</a>
+  <li><a href="#visualization" id="toc-visualization" class="nav-link" data-scroll-target="#visualization"><span class="header-section-number">5</span> Visualization</a>
   <ul class="collapse">
-  <li><a href="#geom_jitter" id="toc-geom_jitter" class="nav-link" data-scroll-target="#geom_jitter"><span class="header-section-number">6.1</span> <code>geom_jitter()</code></a></li>
-  <li><a href="#geom_smooth" id="toc-geom_smooth" class="nav-link" data-scroll-target="#geom_smooth"><span class="header-section-number">6.2</span> <code>geom_smooth()</code></a></li>
+  <li><a href="#geom_point" id="toc-geom_point" class="nav-link" data-scroll-target="#geom_point"><span class="header-section-number">5.1</span> <code>geom_point()</code></a></li>
+  <li><a href="#geom_jitter" id="toc-geom_jitter" class="nav-link" data-scroll-target="#geom_jitter"><span class="header-section-number">5.2</span> <code>geom_jitter()</code></a></li>
+  <li><a href="#geom_smooth" id="toc-geom_smooth" class="nav-link" data-scroll-target="#geom_smooth"><span class="header-section-number">5.3</span> <code>geom_smooth()</code></a></li>
+  <li><a href="#geom_hex" id="toc-geom_hex" class="nav-link" data-scroll-target="#geom_hex"><span class="header-section-number">5.4</span> <code>geom_hex()</code></a>
+  <ul class="collapse">
+  <li><a href="#adjusting-the-binsize" id="toc-adjusting-the-binsize" class="nav-link" data-scroll-target="#adjusting-the-binsize"><span class="header-section-number">5.4.1</span> Adjusting the binsize</a></li>
+  <li><a href="#adjusting-the-color" id="toc-adjusting-the-color" class="nav-link" data-scroll-target="#adjusting-the-color"><span class="header-section-number">5.4.2</span> Adjusting the color</a></li>
+  <li><a href="#final-polishing" id="toc-final-polishing" class="nav-link" data-scroll-target="#final-polishing"><span class="header-section-number">5.4.3</span> Final polishing</a></li>
   </ul></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="tutorial_7b.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -597,8 +604,280 @@ There are different ways in which you can use this function:
 </section>
 </section>
 </section>
-<section id="conclusion" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Conclusion</h1>
+<section id="visualization" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Visualization</h1>
+<p>You may be wondering: The previous two tutorials included a part on descriptive statistics before showing how to run the formal statistical tests, but not this one — why?!</p>
+<p>It is also quite important to visualize the data when looking at correlations because two variables can have the exact same degree of correlation between them but the actual relationship can be very different. The statistican Francis Anscombe famously illustrated this with the four graphs below (also known as “Anscombe’s Quartet”).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> The underlying data are available as a built-in dataset in <code>R</code> called <code>anscombe</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>anscombe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   x1 x2 x3 x4    y1   y2    y3    y4
+1  10 10 10  8  8.04 9.14  7.46  6.58
+2   8  8  8  8  6.95 8.14  6.77  5.76
+3  13 13 13  8  7.58 8.74 12.74  7.71
+4   9  9  9  8  8.81 8.77  7.11  8.84
+5  11 11 11  8  8.33 9.26  7.81  8.47
+6  14 14 14  8  9.96 8.10  8.84  7.04
+7   6  6  6  8  7.24 6.13  6.08  5.25
+8   4  4  4 19  4.26 3.10  5.39 12.50
+9  12 12 12  8 10.84 9.13  8.15  5.56
+10  7  7  7  8  4.82 7.26  6.42  7.91
+11  5  5  5  8  5.68 4.74  5.73  6.89</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+<p>When visualizing the relationship between each of the <code>x</code> and <code>y</code> pairs, we get the following pattern:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/unnamed-chunk-3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="tutorial_7b_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As mentioned, there is <em>technically speaking</em> the same degree of correlation between the variables (indicated by the gray dashed lines) — but the underlying patterns are obviously very different. This is often the case when we work with real data, and it is therefore usually important to visualize relationships between two variables in addition to calculating correlation coefficients or (later) regression models.</p>
+<p>The following parts of the tutorial show you different options for how to visualize the relationship between age and religiosity.</p>
+<section id="geom_point" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="geom_point"><span class="header-section-number">5.1</span> <code>geom_point()</code></h2>
+<p>Perhaps you remember that it is fairly easy to visualize the relationship between two continuous variables with a scatter plot (i.e., with <code>geom_point()</code>). And this is true, in principle. In most cases, <code>geom_point()</code> will get the job done.</p>
+<p>But, unfortunately, not in this case. Consider what happens when we try to visualize the data with <code>geom_point()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/scat-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="tutorial_7b_files/figure-html/scat-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You can see clearly that, well, you cannot really see anything clearly.</p>
+<p>The problem: While <code>agea</code> is a proper metric variable that can have any value between 0 and somewhere above 100, this is not the case for the <code>relig_num</code> variable. This variable is technically an ordinal variable and can only have whole numbers between 0 and 10 (1,2,3,…) but not any numbers in between (e.g., 1.2234, 6.2562). This means that the observations on the <code>relig_num</code> variable all fall into a few discrete categories, and this makes it very difficult to see where in the graph most observations are, and if there is any association in the data.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="geom_jitter" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="geom_jitter"><span class="header-section-number">5.2</span> <code>geom_jitter()</code></h2>
+<p>One thing you can do in this case is to “jitter” the data. “Jittering” means that you gently shake the data out of their discrete categories. In technical terms, you add a bit of random noise to the data.</p>
+<p>To “jitter” the data in the graph, you just replace <code>geom_point()</code> with <code>geom_jitter()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y=</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>() <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"The data were jittered."</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/jit-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="tutorial_7b_files/figure-html/jit-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now it is <em>a bit</em> easier to see where most of the observations are. Important: If you jitter your data, you need to tell your readers (e.g., by including a note with the <code>caption</code> option).</p>
+<p>Still, the graph is hard to read and it is not clear what, if any, relationship there is between the data.</p>
+<div style="page-break-after: always;"></div>
+<p>You can make it a bit easier to see where observations “pile up” by making the points more transparent. To do that, you use the <code>alpha</code> option within <code>geom_jitter()</code>. <code>alpha</code> can range from 0 (completely transparent/invisible) to 1 (completely intransparent/solid).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"The data were jittered."</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/jit2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="tutorial_7b_files/figure-html/jit2-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>But again, the pattern in the data is still difficult to see.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="geom_smooth" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="geom_smooth"><span class="header-section-number">5.3</span> <code>geom_smooth()</code></h2>
+<p>What you can do now is to add a “fitted line” to the graph. This means that <code>R</code> estimates a linear (i.e., OLS) regression (which you will learn about in the next weeks) and plots the predicted or “fitted” values from this estimation to the graph. This can show you more clearly any patterns in the data.</p>
+<p>To add such a fitted line, you use <code>geom_smooth()</code>. Importantly, you also need to specify that you want this line to be based on a linear model (<code>method = "lm"</code>).<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> In this case, we also turn off the confidence intervals (<code>se = FALSE</code>), but you can of course show these if you like!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"The data were jittered."</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="do">## `geom_smooth()` using formula = 'y ~ x'</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing non-finite outside the scale range</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/smooth-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="tutorial_7b_files/figure-html/smooth-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>And now you can clearly see the <em>positive</em> association between the two variables: As age (<code>agea</code>) increases, religiosity (<code>relig_num</code>) increases as well!</p>
+<div style="page-break-after: always;"></div>
+<p>With some more polishing, we get a decent publication-quality graph:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age"</span>, <span class="at">y =</span> <span class="st">"''How religious are you?''"</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"The data were jittered."</span>) <span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>()</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="do">## `geom_smooth()` using formula = 'y ~ x'</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing non-finite outside the scale range</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/smooth2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="tutorial_7b_files/figure-html/smooth2-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note that we made the points a bit larger (<code>size = 3</code>) and changed the color and type of the fitted line.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="geom_hex" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="geom_hex"><span class="header-section-number">5.4</span> <code>geom_hex()</code></h2>
+<p>A different — and more fancy — way to visualize the data is with a so called <em>hexbin</em> plot. A hexbin plot is, in essence, a two-dimensional histogram: The computer (or you as the user) defines a set of “bins” to put the data into, and then visualizes the number of observations within each bin with a different shade or color. The difference to a regular histogram is that this happens in two dimensions, and the bins have a hexagonal shape.</p>
+<p>To create a hexbin plot with <code>ggplot()</code>, you use <code>geom_hex()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hex</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
+(`stat_binhex()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/unnamed-chunk-4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="tutorial_7b_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Obviously, this is not yet very fancy looking, so we have do a bit of polishing.</p>
+<div style="page-break-after: always;"></div>
+<section id="adjusting-the-binsize" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="adjusting-the-binsize"><span class="header-section-number">5.4.1</span> Adjusting the binsize</h3>
+<p>Just like with a regular histogram, we can adjust either the number of bins or the size of each bin. You may notice that the plot above uses relatively small hexagonals to group the data, and the pattern in the data might become clearer if we use larger bins. To do that, we adjust the <code>binwidth</code> option within <code>geom_hex()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hex</span>(<span class="at">binwidth =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
+(`stat_binhex()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="tutorial_7b_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note that we specify <strong>two</strong> numbers here: The size of bins along the x-axis (5) and their size along the y-axis (1). Basically, we group the age-variable into 5-year intervals and the reliosity-variable into 1-step intervals. (You can play around with different bin sizes to see what makes most sense.)</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="adjusting-the-color" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="adjusting-the-color"><span class="header-section-number">5.4.2</span> Adjusting the color</h3>
+<p>The standard blue fill color might not be ideal in all circumstances. It is also not ideal that a lighter shade means “more observations” — many readers might find the opposite more intuitive.</p>
+<p>We can change the fill color with the <code>scale_fill_gradient()</code> option. Here, we specify a gray scheme (which is ideal if the result is supposed to be printed out on paper) and we declare that light shades should represent few observations and dark shades should indicate that there are many observations:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hex</span>(<span class="at">binwidth =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"grey80"</span>, <span class="at">high =</span> <span class="st">"grey10"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
+(`stat_binhex()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/unnamed-chunk-6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="tutorial_7b_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Alternatively, if you really want colors, you can use the viridis color scheme, a color-blind friendly scheme that you can call with <code>scale_fill_viridis_c()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hex</span>(<span class="at">binwidth =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_c</span>(<span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
+(`stat_binhex()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/unnamed-chunk-7-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="tutorial_7b_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note that we specify <code>direction = -1</code> to make sure that lighter colors represent fewer observations and vice versa.</p>
+</section>
+<section id="final-polishing" class="level3" data-number="5.4.3">
+<h3 data-number="5.4.3" class="anchored" data-anchor-id="final-polishing"><span class="header-section-number">5.4.3</span> Final polishing</h3>
+<p>Finally, we can again add a fitted line, add informative labels, move the legend to the bottom, and adjust the overall theme to give the graph a more polished look:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hex</span>(<span class="at">binwidth =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_viridis_c</span>(<span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age"</span>, <span class="at">y =</span> <span class="st">"''How religious are you?''"</span>,</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"Binwidths = 5 (age) &amp; 1 (religiosity)"</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">fill =</span> <span class="st">"Observations"</span>) <span class="sc">+</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
+(`stat_binhex()`).</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 5 rows containing non-finite outside the scale range
+(`stat_smooth()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="tutorial_7b_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="tutorial_7b_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As above, it is visible that there is a positive relationship between age and religiosity — older people tend to be more religius — but the relationship is driven mainly by two groups of observations: A larger group of younger people that is not religious at all, and people between 50 and 75 who are moderately religious. The pattern here roughly corresponds to case #3 in Anscombe’s Quartet above.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Conclusion</h1>
 <p>This was the last of the three tutorials on bivariate statistical tests and how you implement them in <code>R</code>. You now now how to look for relationships between different types of variables:</p>
 <ul>
 <li>Two categorical variables with the <span class="math inline">\(\chi^2\)</span> test.</li>
@@ -614,121 +893,8 @@ There are different ways in which you can use this function:
 <!-- 2. Calculate the Person correlation between the `rlgueim` variable (or a transformed version) and `agea`; -->
 <!-- 3. Test if this correlation is statistically significant; -->
 <!-- 4. Interpret the results; -->
-<div style="page-break-after: always;"></div>
-</section>
-<section id="voluntary-visualization" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> (Voluntary): Visualization</h1>
-<p>You may be wondering: The previous two tutorials included a part on descriptive statistics before showing how to run the formal statistical tests, but not this one — why?! Perhaps you also remember that it is fairly easy to visualize the relationship between two continuous variables with a scatter plot (i.e., with <code>geom_point()</code>).</p>
-<p>And this is true, in principle, but the data we are working here make a descriptive analysis a bit complicated. Consider what happens when we try to visualize the data with a scatterplot:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><a href="tutorial_7b_files/figure-html/scat-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="tutorial_7b_files/figure-html/scat-1.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<p>You can see clearly that, well, you cannot really see anything clearly.</p>
-<p>The problem: While <code>agea</code> is a true metric variable that can have any value between 0 and somewhere above 100, this is not the case for the <code>relig_num</code> variable. This variable can only have whole numbers between 0 and 10 (1,2,3,…) but not any numbers in between (e.g., 1.2234, 6.2562). This means that the observations on the <code>relig_num</code> variable are “binned” into whole numbers — and this is directly visible in the graph. But this makes it very difficult to see where in the graph most observations are, and if there is any association in the data.</p>
-<div style="page-break-after: always;"></div>
-<section id="geom_jitter" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="geom_jitter"><span class="header-section-number">6.1</span> <code>geom_jitter()</code></h2>
-<p>One thing you can do in this case is to “jitter” the data. “Jittering” means that you gently shake the data out of their discrete categories. In technical terms, you add a bit of random noise to the data.</p>
-<p>To “jitter” the data in the graph, you just replace <code>geom_point()</code> with <code>geom_jitter()</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y=</span> relig_num)) <span class="sc">+</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>() <span class="sc">+</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"The data were jittered."</span>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><a href="tutorial_7b_files/figure-html/jit-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="tutorial_7b_files/figure-html/jit-1.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Now it is <em>a bit</em> easier to see where most of the observations are. Important: If you jitter your data, you need to tell your readers (e.g., by including a note with the <code>caption</code> option).</p>
-<p>Still, the graph is hard to read and it is not clear what, if any, relationship there is between the data.</p>
-<div style="page-break-after: always;"></div>
-<p>You can make it a bit easier to read still by changing the shape of the points with the <code>shape</code> option:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"The data were jittered."</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><a href="tutorial_7b_files/figure-html/jit2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="tutorial_7b_files/figure-html/jit2-1.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<p><code>shape = 1</code> means: “Use hollow black rings”.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> But again, if there is any pattern in the data then it is still difficult to see.</p>
-<div style="page-break-after: always;"></div>
-</section>
-<section id="geom_smooth" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="geom_smooth"><span class="header-section-number">6.2</span> <code>geom_smooth()</code></h2>
-<p>What you can do now is to add a “fitted line” to the graph. This means that <code>R</code> estimates a linear (i.e., OLS) regression (which you will learn about in the next weeks) and plots the predicted or “fitted” values from this estimation to the graph. This can show you more clearly any patterns in the data.</p>
-<p>To add such a fitted line, you use <code>geom_smooth()</code>. Importantly, you also need to specify that you want this line to be based on a linear model (<code>method = "lm"</code>).<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> In this case, we also turn off the confidence intervals (<code>se = FALSE</code>), but you can of course show these if you like!</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="at">shape =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">"The data were jittered."</span>)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="do">## `geom_smooth()` using formula = 'y ~ x'</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing non-finite outside the scale range</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><a href="tutorial_7b_files/figure-html/smooth-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="tutorial_7b_files/figure-html/smooth-1.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<p>And now you can clearly see the <em>positive</em> association between the two variables: As age (<code>agea</code>) increases, religiosity (<code>relig_num</code>) increases as well!</p>
-<div style="page-break-after: always;"></div>
-<p>With some more polishing, we get a decent publication-quality graph:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> agea, <span class="at">y =</span> relig_num)) <span class="sc">+</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">shape =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age"</span>, <span class="at">y =</span> <span class="st">"''How religious are you?''"</span>,</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"The data were jittered."</span>) <span class="sc">+</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="do">## `geom_smooth()` using formula = 'y ~ x'</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing non-finite outside the scale range</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="do">## (`stat_smooth()`).</span></span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning: Removed 5 rows containing missing values or values outside the scale range</span></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="do">## (`geom_point()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><a href="tutorial_7b_files/figure-html/smooth2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="tutorial_7b_files/figure-html/smooth2-1.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Note that we made the points a bit larger (<code>size = 2</code>) and changed the color and type of the fitted line.</p>
 
 
-</section>
 </section>
 
 
@@ -737,7 +903,7 @@ There are different ways in which you can use this function:
 <ol>
 <li id="fn1"><p>Hout, M. and Fischer, C. S. (2014). Explaining why more Americans have no religious preference: Political backlash and generational succession, 1987-2012. <em>Sociological Science</em>, 1:423–447; Marwell, G. and Demerath, N. (2003). “Secularization” by any other name. <em>American Sociological Review</em>, 68(2):314–316.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>See also Inglehart, R. (1971). The silent revolution in Europe: Intergenerational change in post-industrial societies. <em>American Political Science Review</em>, 65(4):991–1017.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>See also <a href="http://www.sthda.com/english/wiki/ggplot2-point-shapes" class="uri">http://www.sthda.com/english/wiki/ggplot2-point-shapes</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Anscombe, F. J. (1973). Graphs in statistical analysis. <em>The American Statistician</em>, 27(1):17–21.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Otherwise, <code>R</code> will use a fancy “smoothed” regression estimation procedure, which usually produces a very pretty result—but which is also difficult to understand. It is often better to keep it simple and just use the OLS method, which most people understand.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
@@ -1174,7 +1340,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","loop":false});
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","loop":false});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {

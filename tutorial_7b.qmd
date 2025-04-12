@@ -269,6 +269,178 @@ Do you see the difference to the earlier results? Can you figure out what this m
 
 
 \newpage
+# Visualization
+
+In addition to calculating correlation coefficients, it is also quite important to visualize the data. This is because two variables can have the exact same degree of correlation between them but the actual underlying relationship can be very different. The statistican Francis Anscombe famously illustrated this with the four graphs below (also known as "Anscombe's Quartet"):^[Anscombe, F. J. (1973). Graphs in statistical analysis. *The American Statistician*, 27(1):17–21. The underlying data are available as a built-in dataset in `R` called `anscombe`.]
+
+```{r, echo=F, message=F}
+anscombe %>% 
+  pivot_longer(everything(), 
+    names_to = c(".value", "set"), 
+    names_pattern = "(.)(.)") %>% 
+  ggplot(aes(x = x, y = y)) +
+    geom_point(size = 3, color = "orange", alpha = .6) +
+    geom_smooth(method = "lm", se = F, linetype = "dashed", color = "grey") +
+    facet_wrap(~set) +
+    theme_classic()
+```
+
+There is *technically speaking* the same degree of correlation between the variables (indicated by the gray dashed lines) --- but the underlying patterns are obviously very different. This is often the case when we work with real data, and it is therefore usually important to visualize relationships between two variables in addition to calculating correlation coefficients or (later) regression models.
+
+The following parts of the tutorial show you different options for how to visualize the relationship between age and religiosity.
+
+## `geom_point()`
+
+Perhaps you remember that it is fairly easy to visualize the relationship between two continuous variables with a scatter plot (i.e., with `geom_point()`). And this is true, in principle. In most cases, `geom_point()` will get the job done.
+
+But, unfortunately, not in this case. Consider what happens when we try to visualize the data with `geom_point()`:
+```{r scat, eval=T, echo=T, collapse=T}
+ess7 %>% 
+  ggplot(aes(x = agea, y = relig_num)) +
+    geom_point()
+```
+
+You can see clearly that, well, you cannot really see anything clearly. 
+
+The problem: While `agea` is a proper metric variable that can have any value between 0 and somewhere above 100, this is not the case for the `relig_num` variable. This variable is technically an ordinal variable and can only have whole numbers between 0 and 10 (1,2,3,...) but not any numbers in between (e.g., 1.2234, 6.2562). This means that the observations on the `relig_num` variable all fall into a few discrete categories, and this makes it very difficult to see where in the graph most observations are, and if there is any association in the data.
+
+\newpage
+## `geom_jitter()`
+One thing you can do in this case is to "jitter" the data. "Jittering" means that you gently shake the data out of their discrete categories. In technical terms, you add a bit of random noise to the data.
+
+To "jitter" the data in the graph, you just replace `geom_point()` with `geom_jitter()`:
+```{r jit, eval=T, echo=T, collapse=T}
+ess7 %>% 
+  ggplot(aes(x = agea, y= relig_num)) +
+    geom_jitter() +
+    labs(caption = "The data were jittered.")
+```
+
+Now it is *a bit* easier to see where most of the observations are. Important: If you jitter your data, you need to tell your readers (e.g., by including a note with the `caption` option).
+
+Still, the graph is hard to read and it is not clear what, if any, relationship there is between the data.
+
+\newpage
+You can make it a bit easier to see where observations "pile up" by making the points more transparent. To do that, you use the `alpha` option within `geom_jitter()`. `alpha` can range from 0 (completely transparent/invisible) to 1 (completely intransparent/solid).
+
+```{r jit2, eval=T, echo=T, collapse=T}
+ess7 %>% 
+  ggplot(aes(x = agea, y = relig_num)) +
+    geom_jitter(alpha = .3) +
+    labs(caption = "The data were jittered.")
+```
+
+But again, the pattern in the data is still difficult to see.
+
+\newpage
+## `geom_smooth()`
+
+What you can do now is to add a "fitted line" to the graph. This means that `R` estimates a linear (i.e., OLS) regression (which you will learn about in the next weeks) and plots the predicted or "fitted" values from this estimation to the graph. This can show you more clearly any patterns in the data.
+
+To add such a fitted line, you use `geom_smooth()`. Importantly, you also need to specify that you want this line to be based on a linear model (`method = "lm"`).^[Otherwise, `R` will use a fancy "smoothed" regression estimation procedure, which usually produces a very pretty result---but which is also difficult to understand. It is often better to keep it simple and just use the OLS method, which most people understand.] In this case, we also turn off the confidence intervals (`se = FALSE`), but you can of course show these if you like!
+```{r smooth, eval=T, echo=T, collapse=T, message=F, warning = F}
+ess7 %>% 
+  ggplot(aes(x = agea, y = relig_num)) +
+    geom_jitter(alpha = .3) +
+    geom_smooth(method = "lm", se = FALSE) +
+    labs(caption = "The data were jittered.")
+```
+
+And now you can clearly see the *positive* association between the two variables: As age (`agea`) increases, religiosity (`relig_num`) increases as well!
+
+\newpage
+
+With some more polishing, we get a decent publication-quality graph:
+```{r smooth2, eval=T, echo=T, collapse=T}
+ess7 %>% 
+  ggplot(aes(x = agea, y = relig_num)) +
+    geom_jitter(size = 2, alpha = .3) +
+    geom_smooth(method = "lm", se = FALSE, 
+                color = "black", linetype = "dashed") +
+    labs(x = "Age", y = "''How religious are you?''",
+         caption = "The data were jittered.") +
+    theme_classic()
+```
+
+Note that we made the points a bit larger (`size = 2`) and changed the color and type of the fitted line.
+
+\newpage
+
+## `geom_hex()`
+
+A different --- and more fancy --- way to visualize the data is with a so called *hexbin* plot. A hexbin plot is, in essence, a two-dimensional histogram: The computer (or you as the user) defines a set of "bins" to put the data into, and then visualizes the number of observations within each bin with a different shade or color. The difference to a regular histogram is that this happens in two dimensions, and the bins have a hexagonal shape.
+
+To create a hexbin plot with `ggplot()`, you use `geom_hex()`:
+```{r}
+ess7 %>% 
+  ggplot(aes(x = agea, y = relig_num)) +
+    geom_hex()
+```
+
+Obviously, this is not yet very fancy looking, so we have do a bit of polishing.
+
+\newpage
+
+### Adjusting the binsize
+
+Just like with a regular histogram, we can adjust either the number of bins or the size of each bin. You may notice that the plot above uses relatively small hexagonals to group the data, and the pattern in the data might become clearer if we use larger bins. To do that, we adjust the `binwidth` option within `geom_hex()`:
+
+```{r}
+ess7 %>% 
+  ggplot(aes(x = agea, y = relig_num)) +
+    geom_hex(binwidth = c(5,1))
+```
+
+Note that we specify **two** numbers here: The size of bins along the x-axis (5) and their size along the y-axis (1). Basically, we group the age-variable into 5-year intervals and the reliosity-variable into 1-step intervals. (You can play around with different bin sizes to see what makes most sense.)
+
+\newpage
+
+### Adjusting the color
+
+The standard blue fill color might not be ideal in all circumstances. It is also not ideal that a lighter shade means "more observations" --- many readers might find the opposite more intuitive.
+
+We can change the fill color with the `scale_fill_gradient()` option. Here, we specify a gray scheme (which is ideal if the result is supposed to be printed out on paper) and we declare that light shades should represent few observations and dark shades should indicate that there are many observations:
+
+```{r}
+ess7 %>% 
+  ggplot(aes(x = agea, y = relig_num)) +
+    geom_hex(binwidth = c(5,1)) +
+    scale_fill_gradient(low = "grey80", high = "grey10")
+```
+
+\newpage
+Alternatively, if you really want colors, you can use the viridis color scheme, a colorblind-friendly scheme that you can call with `scale_fill_viridis_c()`:
+
+```{r}
+ess7 %>% 
+  ggplot(aes(x = agea, y = relig_num)) +
+    geom_hex(binwidth = c(5,1)) +
+    scale_fill_viridis_c(direction = -1)
+```
+
+Note that we specify `direction = -1` to make sure that lighter colors represent fewer observations and vice versa.
+
+\newpage
+### Final polishing
+
+Finally, we can again add a fitted line, add informative labels, hide the legend, and adjust the overall theme to give the graph a more polished look:
+
+```{r}
+ess7 %>% 
+  ggplot(aes(x = agea, y = relig_num)) +
+    geom_hex(binwidth = c(5,1)) +
+    scale_fill_viridis_c(direction = -1) +
+    geom_smooth(method = "lm", se = FALSE, 
+                color = "grey", linetype = "dashed") +
+    labs(x = "Age", y = "''How religious are you?''",
+         caption = "Binwidths = 5 (age) & 1 (religiosity)") +
+    theme_classic() +
+    theme(legend.position = "hidden")
+```
+
+As above, it is visible that there is a positive relationship between age and religiosity --- older people tend to be more religius --- but the relationship is driven mainly by two groups of observations: A larger group of younger people that is not religious at all, and people between 50 and 75 who are moderately religious. The pattern here roughly corresponds to case #3 in Anscombe's Quartet above.
+
+\newpage
 
 # Conclusion
 
@@ -292,81 +464,5 @@ As before, there are de-bugging exercises you can do to practice more. You know 
 <!-- 2. Calculate the Person correlation between the `rlgueim` variable (or a transformed version) and `agea`; -->
 <!-- 3. Test if this correlation is statistically significant; -->
 <!-- 4. Interpret the results; -->
-
-
-
-
-\newpage
-# (Voluntary): Visualization
-
-You may be wondering: The previous two tutorials included a part on descriptive statistics before showing how to run the formal statistical tests, but not this one --- why?! Perhaps you also remember that it is fairly easy to visualize the relationship between two continuous variables with a scatter plot (i.e., with `geom_point()`).
-
-And this is true, in principle, but the data we are working here make a descriptive analysis a bit complicated. Consider what happens when we try to visualize the data with a scatterplot:
-```{r scat, eval=T, echo=T, collapse=T}
-ess7 %>% 
-  ggplot(aes(x = agea, y = relig_num)) +
-    geom_point()
-```
-
-You can see clearly that, well, you cannot really see anything clearly. 
-
-The problem: While `agea` is a true metric variable that can have any value between 0 and somewhere above 100, this is not the case for the `relig_num` variable. This variable can only have whole numbers between 0 and 10 (1,2,3,...) but not any numbers in between (e.g., 1.2234, 6.2562). This means that the observations on the `relig_num` variable are "binned" into whole numbers --- and this is directly visible in the graph. But this makes it very difficult to see where in the graph most observations are, and if there is any association in the data.
-
-\newpage
-## `geom_jitter()`
-One thing you can do in this case is to "jitter" the data. "Jittering" means that you gently shake the data out of their discrete categories. In technical terms, you add a bit of random noise to the data.
-
-To "jitter" the data in the graph, you just replace `geom_point()` with `geom_jitter()`:
-```{r jit, eval=T, echo=T, collapse=T}
-ess7 %>% 
-  ggplot(aes(x = agea, y= relig_num)) +
-    geom_jitter() +
-    labs(caption = "The data were jittered.")
-```
-
-Now it is *a bit* easier to see where most of the observations are. Important: If you jitter your data, you need to tell your readers (e.g., by including a note with the `caption` option).
-
-Still, the graph is hard to read and it is not clear what, if any, relationship there is between the data.
-
-\newpage
-You can make it a bit easier to read still by changing the shape of the points with the `shape` option:
-```{r jit2, eval=T, echo=T, collapse=T}
-ess7 %>% 
-  ggplot(aes(x = agea, y = relig_num)) +
-    geom_jitter(shape = 1) +
-    labs(caption = "The data were jittered.")
-```
-
-`shape = 1` means: "Use hollow black rings".^[See also <http://www.sthda.com/english/wiki/ggplot2-point-shapes>] But again, if there is any pattern in the data then it is still difficult to see.
-
-\newpage
-## `geom_smooth()`
-What you can do now is to add a "fitted line" to the graph. This means that `R` estimates a linear (i.e., OLS) regression (which you will learn about in the next weeks) and plots the predicted or "fitted" values from this estimation to the graph. This can show you more clearly any patterns in the data.
-
-To add such a fitted line, you use `geom_smooth()`. Importantly, you also need to specify that you want this line to be based on a linear model (`method = "lm"`).^[Otherwise, `R` will use a fancy "smoothed" regression estimation procedure, which usually produces a very pretty result---but which is also difficult to understand. It is often better to keep it simple and just use the OLS method, which most people understand.] In this case, we also turn off the confidence intervals (`se = FALSE`), but you can of course show these if you like!
-```{r smooth, eval=T, echo=T, collapse=T}
-ess7 %>% 
-  ggplot(aes(x = agea, y = relig_num)) +
-    geom_jitter(shape = 1) +
-    geom_smooth(method = "lm", se = FALSE) +
-    labs(caption = "The data were jittered.")
-```
-
-And now you can clearly see the *positive* association between the two variables: As age (`agea`) increases, religiosity (`relig_num`) increases as well!
-
-\newpage
-
-With some more polishing, we get a decent publication-quality graph:
-```{r smooth2, eval=T, echo=T, collapse=T}
-ess7 %>% 
-  ggplot(aes(x = agea, y = relig_num)) +
-    geom_jitter(size = 2, shape = 1) +
-    geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
-    labs(x = "Age", y = "''How religious are you?''",
-         caption = "The data were jittered.") +
-    theme_bw()
-```
-
-Note that we made the points a bit larger (`size = 2`) and changed the color and type of the fitted line.
 
 
