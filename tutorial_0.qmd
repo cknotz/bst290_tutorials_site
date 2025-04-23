@@ -33,13 +33,15 @@ This tutorial introduces you to `R` and `RStudio` and shows you how you install 
 
 `R` is one of the most popular software tools for data analysis and data science. `R` can be used for "traditional" quantitative data analysis (e.g., regression analysis), but also much more: **Quantitative text analysis, web scraping, interactive data visualization, Big Data analysis, and machine learning.**
 
-**`R` is what professional data analysts, data scientists, and researchers use in their work**. It is used in academia, but also at government agencies, news channels (e.g., the BBC), and private companies (e.g., YouGov, Netflix, or Meta/Facebook). If you want to get an idea of who uses `R` and for what, you can check out the example job ads on *Canvas* (under "Why do I have to learn this?!"). Knowing how to work with `R` is a big advantage when you look for jobs --- and this is one reason for why we want you to learn it.
+**`R` is what professional data analysts, data scientists, and researchers use in their work**. It is used in academia, but also in the private sector or the media (e.g., news channels like the *BBC* and companies like *YouGov*, *Netflix*, or *Meta/Facebook*).^[See also the example job ads on *Canvas* (under "Why do I have to learn this?!").] Therefore, knowing how to work with `R` is a big advantage when you look for jobs --- and this is one reason for why we want you to learn it.
 
 `R` is also a really **good tool to have for your studies**. The work for your BA and perhaps MA thesis will get considerably easier if you are able to quickly download and analyze a dataset --- no hours of transcribing interviews or digging through dusty archives. 
 
+`R` looks and works also quite similarly to other widely used tools like `Python` and `Javascript`. This means that learning `Python` or `Javascript` becomes a lot easier and quicker if you already know at least a bit of `R`.
+
 Last but not least, `R` is open-source and free.
 
-**Working with `R` means writing computer code**. You will not be able to run your analyses by clicking your way through menus or dragging and dropping things around, as you would do when working with Microsoft Word etc. Obviously, this may come as quite a change for you and may even feel strange.
+**Working with `R` means writing computer code** --- again, just like `Python` or `Javascript`. You will not be able to run your analyses by clicking your way through menus or dragging and dropping things around, as you would do when working with Microsoft Word etc. Obviously, this may come as quite a change for you and may even feel strange.
 
 **But**: `R` can be learned. Others have done it before, and there are many who start using `R` who have no prior experience with programming or computer languages. Still, it might take some time before you are really used to it.
 
