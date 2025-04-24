@@ -316,16 +316,19 @@ The result contains lots and lots of numbers, and any patterns in it will be mor
 prediction_summary(model = model3,
                    at = list(gndr = c("Male","Female"),
                              agea = seq(from = 20, to = 80, by = 10))) %>% 
-  ggplot(aes(x = `at(agea)`, y = Prediction,fill = `at(gndr)`,
+  ggplot(aes(x = `at(agea)`, y = Prediction, fill = `at(gndr)`,
              shape = `at(gndr)`, ymin = lower, ymax = upper)) +
     geom_ribbon(alpha = .4) +
+    facet_wrap(~`at(gndr)`) +
     geom_point() +
     geom_line() +
     scale_y_continuous(breaks = seq(from = 4.5, to = 6, by = .5),
                        limits = c(4.5,6)) # this adjust the range and labels of the y-axis
 ```
 
-You can see that as women get older, their level of trust barely changes. For men, on the other hand, there is a more pronounced decrease over time. Of course, the change is *substantively* small -- as you can also see when you look at the range of the y-axis. 
+Notice that we use `facet_wrap()` to divide the result by gender into two separate graphs. 
+
+You can see that as women get older, their level of trust decreases slightly --- but, for men, the decrease is visibly stronger. This again reflects the fact that the effect of age on trust depends on gender.
 
 \newpage
 
@@ -337,6 +340,7 @@ prediction_summary(model = model3,
   ggplot(aes(x = `at(agea)`, y = Prediction,fill = `at(gndr)`,
              shape = `at(gndr)`, ymin = lower, ymax = upper)) +
     geom_ribbon(alpha = .4) +
+    facet_wrap(~`at(gndr)`) +
     geom_point(size = 2) +
     geom_line(linetype = "dashed") +
     scale_y_continuous(breaks = seq(from = 4.5, to = 6, by = .5),
@@ -347,7 +351,7 @@ prediction_summary(model = model3,
     labs(x = "Age", y = "Predicted level of trust in politicians",
          caption = "95% confidence intervals") +
     theme_classic() +
-    theme(legend.position = "bottom", # move legend to bottom
+    theme(legend.position = "none", # hide legend
           legend.title = element_blank()) # remove legend title
 ```
 
