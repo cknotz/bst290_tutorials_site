@@ -60,11 +60,11 @@ You will of course first need to install both `R` and `RStudio` before you can u
 If you like, you can also watch a video that will guide you through the installation process: [https://vimeo.com/415501284](https://vimeo.com/415501284){target="_blank"}. The video is a *bit* outdated (the website for *RStudio* is different now), but the most important information is still correct.
 
 
-::: {.callout-important title="You absolutely need to install the latest versions of R and RStudio!"}
+::: {.callout-important title="You absolutely need to install the latest versions of `R` and `RStudio`!"}
 
-If your operating system (Windows, MacOS, Linux) is too old to support the latest versions of R and RStudio, then you have to update your operating system first.
+If your operating system (Windows, MacOS, Linux) is too old to support the latest versions of `R` and `RStudio`, then you have to update your operating system first.
 
-**No, there really is no other way. If you do not have the latest versions of R and RStudio installed because you refuse to update your computer, then you will run into problems.**
+**Yes, this is absolutely necessary. Many of the procedures and tools that you need to use during this course work only with the latest versions of `R` and `RStudio`.** 
 
 :::
 
