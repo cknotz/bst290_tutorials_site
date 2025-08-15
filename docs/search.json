@@ -314,7 +314,7 @@
     "href": "tutorial_1.html",
     "title": "Tutorial 1: Your first steps in R",
     "section": "",
-    "text": "In the previous tutorial, you have learned how you can install R and RStudio and how you install add-on packages.\nBut even if you managed to get everything to work, it might still have felt strange to work with computer code.\nThe aim of this tutorial is to help you get familiar with R and more used to writing code. This means that you will do a few simply warm-up exercises and learn about the main logic of R and R code.\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 2 & 4.1.1",
+    "text": "In the previous tutorial, you have learned how you can install R and RStudio and how you install add-on packages.\nBut even if you managed to get everything to work, it might still have felt strange to work with computer code.\nThe aim of this tutorial is to help you get familiar with R and more used to writing code. This means that you will do a few simple warm-up exercises and learn about the logic of R and R code.\n\n\n\n\n\n\nTip\n\n\n\nHvis du ønsker å lese en norsk tekst i tillegg: “Lær deg R”, Kapittel 2 & 4.1.1",
     "crumbs": [
       "Tutorial 1: Your first steps in `R`"
     ]

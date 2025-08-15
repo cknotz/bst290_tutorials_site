@@ -19,7 +19,7 @@ In the previous tutorial, you have learned how you can install `R` and `RStudio`
 
 But even if you managed to get everything to work, it might still have felt strange to work with computer code.
 
-The aim of this tutorial is to help you get familiar with `R` and more used to writing code. This means that you will do a few simply warm-up exercises and learn about the main logic of `R` and `R` code.
+The aim of this tutorial is to help you get familiar with `R` and more used to writing code. This means that you will do a few simple warm-up exercises and learn about the logic of `R` and `R` code.
 
 ::: {.callout-tip}
 
