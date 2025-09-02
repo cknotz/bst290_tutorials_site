@@ -335,8 +335,8 @@ library(tidyverse) # add-on package for data management & visualization
 # Data management
 #################
 
-# Downloading data
-cpds <- haven::read_dta("https://www.cpds-data.org/images/Update2021/CPDS_1960-2019_Update_2021.dta")
+# Importing data
+cpds <- haven::read_dta("CPDS_1960-2019_Update_2021.dta")
 
 # Data cleaning (selecting relevant variables, changing name of one)
 cpds %>%
