@@ -364,29 +364,22 @@ You see that only five (plus the `NA`s) of the nine categories are listed --- an
 
 \newpage
 
-## Custom functions for summary tables
+## Summary tables
 
-Since it is a statistical programming language, `R` can be used to generate pretty much any type of summary table for any kind of situation you could think of. In addition, there are special packages for more advanced tables, for instance:
+Since `R` is a statistical programming language, it can be used to generate pretty much any type of summary table for any kind of situation you could think of. However, learning how to use `R` to create your own custom tables takes a while and can be tedious and prone to errors.
 
-* `gtsummary` (<https://www.danieldsjoberg.com/gtsummary/index.html>)
-* `xtable` (<https://cran.r-project.org/web/packages/xtable/vignettes/xtableGallery.pdf>)
+To make your life easier while you take this course, you can use two functions from the `bst290` package to easily generate the most important descriptive tables you will need:
 
-**But:** Learning how to use `R` functions to create tables takes a while, and using them can be tedious and prone to errors.
-
-### Functions from the `bst290` package
-
-To make your life easier while you take this course, you can use special functions from the `bst290` package to easily generate the most important descriptive tables you will need:
-
-* `oppsumtabell`: To generate univariate summary tables; this is helpful for numeric variables.
-* `oppsum_grupp`: To get a table with summary statistics for one variable, over categories of another variable; this is helpful when you have a a numeric and a categorical variable.
+* `oppsumtabell()`: To generate a univariate summary table for one or more numeric variables.
+* `oppsum_grupp()`: To get a table with summary statistics for one variable over categories of another variable; this is helpful when you have a a numeric and a categorical variable (e.g., income and gender).
 
 <!-- (In addition, the `bst290` package also includes the `krysstabell` function, which produces a two-variable cross table showing column percentages. You will learn about this in the later tutorial on tabular analysis and the chi-squared test.) -->
 
 \newpage
 
-### Using `oppsumtabell`
+### Using `oppsumtabell()`
 
-`oppsumtabell` produces a table with the most important summary statistics of one or more *numeric* variables.^[It does also work with factor variables, but you will get a warning message.] All you need to do is specify the dataset that contains your variable(s) and the specific variables you want summary statistics for.
+`oppsumtabell()` produces a table with the most important summary statistics of one or more *numeric* variables.^[It does also work with factor variables, but you will get a warning message.] All you need to do is specify the dataset that contains your variable(s) and the specific variables you want summary statistics for.
 
 For example, to get summary statistics for the `agea` variable you just run:
 ```{r opps, eval=T, echo=T, collapse=F}
@@ -418,7 +411,7 @@ If you take a look at the new version of the table, you will see that all Englis
 
 ### Exporting the table to Word
 
-`oppsumtabell` also has an *export*-functionality: You can switch on the export-function to get a result that you can directly copy and paste into a Word document and then transform into a nice, publication-quality table.
+`oppsumtabell()` also has an *export*-functionality: You can switch on the export-function to get a result that you can directly copy and paste into a Word document and then transform into a nice, publication-quality table.
 
 For example, to export the last table from above you simply add `export=TRUE` to your code:
 ```{r exopp, eval=T, echo=T, collapse=T}
@@ -441,7 +434,7 @@ This result arguably looks even less presentable than the other one, but:
 
 \newpage
 
-### Using `oppsum_grupp`
+### Using `oppsum_grupp()`
 
 Sometimes you want summary statistics for one variable, but separately for different categories of another variable. For example, assume you are interested in whether (and if yes, by how much) Norwegian men are on average taller than Norwegian women.
 
@@ -468,6 +461,17 @@ Also, if you want to get more detailed help on any of the functions covered in t
 * `?oppsumtabell`
 
 The help files also contain examples that show you how to use the functions. Feel free to explore!
+
+\newpage
+
+### More advanced options
+
+If you want to, you can also explore some of the specialized `R` packages for tables. These are more difficult to use, but allow you to create just about any type of table you want and to export it to lots of different file formats.
+
+Two widely-used packages for summary tables are:
+
+* `gtsummary` (<https://www.danieldsjoberg.com/gtsummary/index.html>)
+* `xtable` (<https://cran.r-project.org/web/packages/xtable/vignettes/xtableGallery.pdf>)
 
 \newpage
 
@@ -625,4 +629,8 @@ The final part of this tutorial (and the next three) are interactive de-bugging 
 
 1. In `RStudio`, navigate to the *Tutorial* tab (upper-right corner of your screen, where the *Environment* tab is). 
 2. Start the interactive exercise for this tutorial (*"De-bugging exercises: Getting to know your data"*), pop out the window (the little button between the house and red stop button) and maximize, and follow the instructions there.^[If there are no tutorials called *"De-bugging exercises:..."* shown, just restart `R` by clicking on "Session" in the menu at the top of your screen, and there on "Restart R". You may also have to install the `learnr` package --- in that case, `RStudio` will let you know and you only have to do this once.]
+
+
+
+
 
