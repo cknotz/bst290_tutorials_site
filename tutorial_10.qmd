@@ -224,11 +224,11 @@ margins(model = model3,
         at = list(gndr = c("Female","Male")))
 ```
 
-These numbers may seem cryptic at first sight, but they are actually relatively easy to read. The first line gives you the effect of age for women. You read this as: *If someone is a woman, every additional year of age decreases trust in politicians by a very tiny -0.002 points.* 
+These numbers may seem cryptic at first sight, but they are actually relatively easy to read. The number in the line starting with `Male` gives you the effect of age on trust in politicans *among men*, and the line starting with `Female` gives you the corresponding effect *among women*.
 
-The second line gives you the corresponding result for men: *If someone is a man, every additional year of age decreases trust in politicians by -0.012 points.*
+You can read the result as follows: *Among women, every additional year of age decreases trust in politicians by only a very tiny -0.0024 points. However, among men, the effect is larger and every additional year of age decreases trust in politicians by -0.012 points.*
 
-In both cases, the effects are surely not very large --- but you also see that the effect of age for men, however small it may be, is still about five times as large as the tiny effect for women (-0.012221/-0.002403 = 5.085726). So, it does look like the effect of age differs by gender!
+In both cases, the effects are surely not very large --- but you also see that the effect of age for men, however small it may be, is still about five times as large as the tiny effect for women (-0.012221/-0.002403 = 5.085726). So, it does look like the effect of age really differs by gender!
 
 
 \newpage
@@ -237,19 +237,19 @@ In both cases, the effects are surely not very large --- but you also see that t
 
 The results we have so far are interesting, but they are only half of the story --- we also need to account for the fact that these numbers are *estimates* based on *sample data* and that we cannot just take them at face value. We also need to look if they really are *statistically significant*, meaning if we can say with sufficient confidence that these effects also exist in the general population for which we want to make inferences. As you know, we look at *p*-values and confidence intervals to figure this out.
 
-To get these additional statistics, we use `margins()`'s sister-function, `margins_nummary()`:
+To get these additional statistics, we use `margins()`'s sister-function, `margins_summary()`:
 ```{r margssum, collapse=T}
 margins_summary(model = model3, 
                 variables = "agea", 
                 at = list(gndr = c("Male","Female")))
 ```
 
-This result now tells us the complete story, only the values of the `gndr` variable are presented in a less informative way. But we can simply use `bst::visfactor()` to figure out what 1 and 2 correspond to:
+This result now tells us the complete story, only the values of the `gndr` variable are presented in a less informative way. But we can simply use `bst290::visfactor()` to figure out what 1 and 2 correspond to:
 ```{r vifac, collapse=T}
 bst290::visfactor(variable = "gndr", dataset = ess7)
 ```
 
-If we now look at the `margins_summary()` result and specifically at the *p*-values (under `p`), we see that only the marginal effect of age for men (see `AME`) is really statistically significant (*p* = 0.0013 < 0.05). The marginal effect of age for women, on the other hand, is not (*p* = 0.5459). 
+If we now look at the `margins_summary()` result and specifically at the *p*-values (under `p`), we see that only the marginal effect of age for men (see `AME`) is statistically significant (*p* = 0.0013 < 0.05). The marginal effect of age for women, on the other hand, is not (*p* = 0.5459). 
 
 This means: *There (probably) is a small negative effect of age on trust in politicians in the general Norwegian population --- but this effect exists only among Norwegian men. In the case of women, we cannot say with sufficient confidence if the true effect is really different from 0 or not, and so we assume that age has no effect on political trust in the case of Norwegian women.*
 

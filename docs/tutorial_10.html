@@ -534,15 +534,15 @@ window.Quarto = {
    Female -0.002403</code></pre>
 </div>
 </div>
-<p>These numbers may seem cryptic at first sight, but they are actually relatively easy to read. The first line gives you the effect of age for women. You read this as: <em>If someone is a woman, every additional year of age decreases trust in politicians by a very tiny -0.002 points.</em></p>
-<p>The second line gives you the corresponding result for men: <em>If someone is a man, every additional year of age decreases trust in politicians by -0.012 points.</em></p>
-<p>In both cases, the effects are surely not very large — but you also see that the effect of age for men, however small it may be, is still about five times as large as the tiny effect for women (-0.012221/-0.002403 = 5.085726). So, it does look like the effect of age differs by gender!</p>
+<p>These numbers may seem cryptic at first sight, but they are actually relatively easy to read. The number in the line starting with <code>Male</code> gives you the effect of age on trust in politicans <em>among men</em>, and the line starting with <code>Female</code> gives you the corresponding effect <em>among women</em>.</p>
+<p>You can read the result as follows: <em>Among women, every additional year of age decreases trust in politicians by only a very tiny -0.0024 points. However, among men, the effect is larger and every additional year of age decreases trust in politicians by -0.012 points.</em></p>
+<p>In both cases, the effects are surely not very large — but you also see that the effect of age for men, however small it may be, is still about five times as large as the tiny effect for women (-0.012221/-0.002403 = 5.085726). So, it does look like the effect of age really differs by gender!</p>
 <div style="page-break-after: always;"></div>
 </section>
 <section id="getting-p-values-and-confidence-intervals" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="getting-p-values-and-confidence-intervals"><span class="header-section-number">5.2</span> Getting <em>p</em>-values and confidence intervals</h2>
 <p>The results we have so far are interesting, but they are only half of the story — we also need to account for the fact that these numbers are <em>estimates</em> based on <em>sample data</em> and that we cannot just take them at face value. We also need to look if they really are <em>statistically significant</em>, meaning if we can say with sufficient confidence that these effects also exist in the general population for which we want to make inferences. As you know, we look at <em>p</em>-values and confidence intervals to figure this out.</p>
-<p>To get these additional statistics, we use <code>margins()</code>’s sister-function, <code>margins_nummary()</code>:</p>
+<p>To get these additional statistics, we use <code>margins()</code>’s sister-function, <code>margins_summary()</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">variables =</span> <span class="st">"agea"</span>, </span>
@@ -551,14 +551,14 @@ window.Quarto = {
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>   agea <span class="fl">1.0000</span> <span class="sc">-</span><span class="fl">0.0122</span> <span class="fl">0.0038</span> <span class="sc">-</span><span class="fl">3.2186</span> <span class="fl">0.0013</span> <span class="sc">-</span><span class="fl">0.0197</span> <span class="sc">-</span><span class="fl">0.0048</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>   agea <span class="fl">2.0000</span> <span class="sc">-</span><span class="fl">0.0024</span> <span class="fl">0.0040</span> <span class="sc">-</span><span class="fl">0.6039</span> <span class="fl">0.5459</span> <span class="sc">-</span><span class="fl">0.0102</span>  <span class="fl">0.0054</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This result now tells us the complete story, only the values of the <code>gndr</code> variable are presented in a less informative way. But we can simply use <code>bst::visfactor()</code> to figure out what 1 and 2 correspond to:</p>
+<p>This result now tells us the complete story, only the values of the <code>gndr</code> variable are presented in a less informative way. But we can simply use <code>bst290::visfactor()</code> to figure out what 1 and 2 correspond to:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bst290<span class="sc">::</span><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"gndr"</span>, <span class="at">dataset =</span> ess7)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a> values labels</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span>   Male</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span> Female</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>If we now look at the <code>margins_summary()</code> result and specifically at the <em>p</em>-values (under <code>p</code>), we see that only the marginal effect of age for men (see <code>AME</code>) is really statistically significant (<em>p</em> = 0.0013 &lt; 0.05). The marginal effect of age for women, on the other hand, is not (<em>p</em> = 0.5459).</p>
+<p>If we now look at the <code>margins_summary()</code> result and specifically at the <em>p</em>-values (under <code>p</code>), we see that only the marginal effect of age for men (see <code>AME</code>) is statistically significant (<em>p</em> = 0.0013 &lt; 0.05). The marginal effect of age for women, on the other hand, is not (<em>p</em> = 0.5459).</p>
 <p>This means: <em>There (probably) is a small negative effect of age on trust in politicians in the general Norwegian population — but this effect exists only among Norwegian men. In the case of women, we cannot say with sufficient confidence if the true effect is really different from 0 or not, and so we assume that age has no effect on political trust in the case of Norwegian women.</em></p>
 <p>You can also see this if you look at the last two columns of the result, which give you the upper and lower limits of the confidence intervals of the marginal effect estimates. The confidence interval for men does not include 0, while the one for women does overlap with 0.</p>
 <div style="page-break-after: always;"></div>
