@@ -18,6 +18,7 @@ website:
       - href: tutorial_2.qmd
       - href: tutorial_3.qmd
       - href: tutorial_4.qmd
+      - href: tutorial_4a.qmd
       - href: tutorial_5.qmd
       - href: tutorial_6.qmd
       - href: tutorial_7a.qmd

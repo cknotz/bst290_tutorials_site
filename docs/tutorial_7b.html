@@ -221,6 +221,12 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./tutorial_4a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visualizing overlapping points with geom_count()</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./tutorial_5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial 5: Confidence intervals</span></a>
   </div>
@@ -300,11 +306,12 @@ window.Quarto = {
   <li><a href="#geom_point" id="toc-geom_point" class="nav-link" data-scroll-target="#geom_point"><span class="header-section-number">5.1</span> <code>geom_point()</code></a></li>
   <li><a href="#geom_jitter" id="toc-geom_jitter" class="nav-link" data-scroll-target="#geom_jitter"><span class="header-section-number">5.2</span> <code>geom_jitter()</code></a></li>
   <li><a href="#geom_smooth" id="toc-geom_smooth" class="nav-link" data-scroll-target="#geom_smooth"><span class="header-section-number">5.3</span> <code>geom_smooth()</code></a></li>
-  <li><a href="#geom_hex" id="toc-geom_hex" class="nav-link" data-scroll-target="#geom_hex"><span class="header-section-number">5.4</span> <code>geom_hex()</code></a>
+  <li><a href="#geom_count" id="toc-geom_count" class="nav-link" data-scroll-target="#geom_count"><span class="header-section-number">5.4</span> <code>geom_count</code></a></li>
+  <li><a href="#geom_hex" id="toc-geom_hex" class="nav-link" data-scroll-target="#geom_hex"><span class="header-section-number">5.5</span> <code>geom_hex()</code></a>
   <ul class="collapse">
-  <li><a href="#adjusting-the-binsize" id="toc-adjusting-the-binsize" class="nav-link" data-scroll-target="#adjusting-the-binsize"><span class="header-section-number">5.4.1</span> Adjusting the binsize</a></li>
-  <li><a href="#adjusting-the-color" id="toc-adjusting-the-color" class="nav-link" data-scroll-target="#adjusting-the-color"><span class="header-section-number">5.4.2</span> Adjusting the color</a></li>
-  <li><a href="#final-polishing" id="toc-final-polishing" class="nav-link" data-scroll-target="#final-polishing"><span class="header-section-number">5.4.3</span> Final polishing</a></li>
+  <li><a href="#adjusting-the-binsize" id="toc-adjusting-the-binsize" class="nav-link" data-scroll-target="#adjusting-the-binsize"><span class="header-section-number">5.5.1</span> Adjusting the binsize</a></li>
+  <li><a href="#adjusting-the-color" id="toc-adjusting-the-color" class="nav-link" data-scroll-target="#adjusting-the-color"><span class="header-section-number">5.5.2</span> Adjusting the color</a></li>
+  <li><a href="#final-polishing" id="toc-final-polishing" class="nav-link" data-scroll-target="#final-polishing"><span class="header-section-number">5.5.3</span> Final polishing</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
@@ -726,9 +733,14 @@ There are different ways in which you can use this function:
 <p>Note that we made the points a bit larger (<code>size = 2</code>) and changed the color and type of the fitted line.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="geom_hex" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="geom_hex"><span class="header-section-number">5.4</span> <code>geom_hex()</code></h2>
-<p>A different — and more fancy — way to visualize the data is with a so called <em>hexbin</em> plot. A hexbin plot is, in essence, a two-dimensional histogram: The computer (or you as the user) defines a set of “bins” to put the data into, and then visualizes the number of observations within each bin with a different shade or color. The difference to a regular histogram is that this happens in two dimensions, and the bins have a hexagonal shape.</p>
+<section id="geom_count" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="geom_count"><span class="header-section-number">5.4</span> <code>geom_count</code></h2>
+<p>As mentioned in <a href="./tutorial_4.html">Tutorial 4</a>, a second (and superior) way to plot relationships between quasi-numeric 0-10 scale variables is to use <code>geom_count()</code>. This <a href="./tutorial_4a.html">mini-tutorial</a> by Rosa Ottestad and Normal Sunde explains how you do that.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="geom_hex" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="geom_hex"><span class="header-section-number">5.5</span> <code>geom_hex()</code></h2>
+<p>A final — and more fancy — way to visualize the data is with a so called <em>hexbin</em> plot. A hexbin plot is, in essence, a two-dimensional histogram: The computer (or you as the user) defines a set of “bins” to put the data into, and then visualizes the number of observations within each bin with a different shade or color. The difference to a regular histogram is that this happens in two dimensions, and the bins have a hexagonal shape.</p>
 <p>To create a hexbin plot with <code>ggplot()</code>, you use <code>geom_hex()</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
@@ -748,8 +760,8 @@ There are different ways in which you can use this function:
 </div>
 <p>Obviously, this is not yet very fancy looking, so we have do a bit of polishing.</p>
 <div style="page-break-after: always;"></div>
-<section id="adjusting-the-binsize" class="level3" data-number="5.4.1">
-<h3 data-number="5.4.1" class="anchored" data-anchor-id="adjusting-the-binsize"><span class="header-section-number">5.4.1</span> Adjusting the binsize</h3>
+<section id="adjusting-the-binsize" class="level3" data-number="5.5.1">
+<h3 data-number="5.5.1" class="anchored" data-anchor-id="adjusting-the-binsize"><span class="header-section-number">5.5.1</span> Adjusting the binsize</h3>
 <p>Just like with a regular histogram, we can adjust either the number of bins or the size of each bin. You may notice that the plot above uses relatively small hexagonals to group the data, and the pattern in the data might become clearer if we use larger bins. To do that, we adjust the <code>binwidth</code> option within <code>geom_hex()</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>
@@ -770,8 +782,8 @@ There are different ways in which you can use this function:
 <p>Note that we specify <strong>two</strong> numbers here: The size of bins along the x-axis (5) and their size along the y-axis (1). Basically, we group the age-variable into 5-year intervals and the reliosity-variable into 1-step intervals. (You can play around with different bin sizes to see what makes most sense.)</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="adjusting-the-color" class="level3" data-number="5.4.2">
-<h3 data-number="5.4.2" class="anchored" data-anchor-id="adjusting-the-color"><span class="header-section-number">5.4.2</span> Adjusting the color</h3>
+<section id="adjusting-the-color" class="level3" data-number="5.5.2">
+<h3 data-number="5.5.2" class="anchored" data-anchor-id="adjusting-the-color"><span class="header-section-number">5.5.2</span> Adjusting the color</h3>
 <p>The standard blue fill color might not be ideal in all circumstances. It is also not ideal that a lighter shade means “more observations” — many readers might find the opposite more intuitive.</p>
 <p>We can change the fill color with the <code>scale_fill_gradient()</code> option. Here, we specify a gray scheme (which is ideal if the result is supposed to be printed out on paper) and we declare that light shades should represent few observations and dark shades should indicate that there are many observations:</p>
 <div class="cell">
@@ -813,8 +825,8 @@ There are different ways in which you can use this function:
 <p>Note that we specify <code>direction = -1</code> to make sure that lighter colors represent fewer observations and vice versa.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="final-polishing" class="level3" data-number="5.4.3">
-<h3 data-number="5.4.3" class="anchored" data-anchor-id="final-polishing"><span class="header-section-number">5.4.3</span> Final polishing</h3>
+<section id="final-polishing" class="level3" data-number="5.5.3">
+<h3 data-number="5.5.3" class="anchored" data-anchor-id="final-polishing"><span class="header-section-number">5.5.3</span> Final polishing</h3>
 <p>Finally, we can again add a fitted line, add informative labels, hide the legend, and adjust the overall theme to give the graph a more polished look:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="sc">%&gt;%</span> </span>

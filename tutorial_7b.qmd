@@ -365,10 +365,14 @@ ess7 %>%
 Note that we made the points a bit larger (`size = 2`) and changed the color and type of the fitted line.
 
 \newpage
+## `geom_count`
 
+As mentioned in [Tutorial 4](tutorial_4.qmd), a second (and superior) way to plot relationships between quasi-numeric 0-10 scale variables is to use `geom_count()`. This [mini-tutorial](tutorial_4a.qmd) by Rosa Ottestad and Normal Sunde explains how you do that.
+
+\newpage
 ## `geom_hex()`
 
-A different --- and more fancy --- way to visualize the data is with a so called *hexbin* plot. A hexbin plot is, in essence, a two-dimensional histogram: The computer (or you as the user) defines a set of "bins" to put the data into, and then visualizes the number of observations within each bin with a different shade or color. The difference to a regular histogram is that this happens in two dimensions, and the bins have a hexagonal shape.
+A final  --- and more fancy --- way to visualize the data is with a so called *hexbin* plot. A hexbin plot is, in essence, a two-dimensional histogram: The computer (or you as the user) defines a set of "bins" to put the data into, and then visualizes the number of observations within each bin with a different shade or color. The difference to a regular histogram is that this happens in two dimensions, and the bins have a hexagonal shape.
 
 To create a hexbin plot with `ggplot()`, you use `geom_hex()`:
 ```{r}

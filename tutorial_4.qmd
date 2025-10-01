@@ -256,6 +256,16 @@ ggplot(data = ess,
 What do you learn from the graph about the differences in body height between men and women (see Kellstedt & Whitten 2018, 135 for how to read a boxplot)?
 
 \newpage
+## Plotting overlapping points with `geom_count()`
+
+When you work with survey data, you often deal with quasi-numerical scales like the 0-10 left-right political ideology scale, 0-10 scales of trust in political institutions, or 0-10 happiness scales. Technically, these variables are ordinal -- but they have enough categories to allow us to treat them as numeric.
+
+Visualizing relationships between two of such 0-10 or 1-7 scale variables can be difficult. In principle, you can use `geom_point()` to create a scatterplot, but this will often not be very informative because the individual observations will overlap and any patterns in the data will be difficult to see.
+
+Luckily, there is an alternative: `geom_count()`, and two BSTAT students at UiS, Rosa Ottestad and Norman Sunde, have written a mini-tutorial on how to use this function to plot associations between two quasi-numeric 0-10 scale variables. You can read the tutorial [here](tutorial_4a.qmd).
+
+
+\newpage
 ## Univariate graphs: Histograms
 
 The graphs you created so far were types of *bivariate* graphs: They show the relationship between two different variables.

@@ -66,7 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tutorial_5.html" rel="next">
+<link href="./tutorial_4a.html" rel="next">
 <link href="./tutorial_3.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -221,6 +221,12 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./tutorial_4a.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visualizing overlapping points with geom_count()</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./tutorial_5.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Tutorial 5: Confidence intervals</span></a>
   </div>
@@ -291,14 +297,15 @@ window.Quarto = {
   <li><a href="#changing-the-overall-look-of-the-graph-theme" id="toc-changing-the-overall-look-of-the-graph-theme" class="nav-link" data-scroll-target="#changing-the-overall-look-of-the-graph-theme"><span class="header-section-number">3.1.6</span> Changing the overall look of the graph (‘theme’)</a></li>
   </ul></li>
   <li><a href="#bivariate-boxplots" id="toc-bivariate-boxplots" class="nav-link" data-scroll-target="#bivariate-boxplots"><span class="header-section-number">3.2</span> Bivariate boxplots</a></li>
-  <li><a href="#univariate-graphs-histograms" id="toc-univariate-graphs-histograms" class="nav-link" data-scroll-target="#univariate-graphs-histograms"><span class="header-section-number">3.3</span> Univariate graphs: Histograms</a>
+  <li><a href="#plotting-overlapping-points-with-geom_count" id="toc-plotting-overlapping-points-with-geom_count" class="nav-link" data-scroll-target="#plotting-overlapping-points-with-geom_count"><span class="header-section-number">3.3</span> Plotting overlapping points with <code>geom_count()</code></a></li>
+  <li><a href="#univariate-graphs-histograms" id="toc-univariate-graphs-histograms" class="nav-link" data-scroll-target="#univariate-graphs-histograms"><span class="header-section-number">3.4</span> Univariate graphs: Histograms</a>
   <ul class="collapse">
-  <li><a href="#drawing-a-histogram" id="toc-drawing-a-histogram" class="nav-link" data-scroll-target="#drawing-a-histogram"><span class="header-section-number">3.3.1</span> Drawing a histogram</a></li>
-  <li><a href="#improving-appearance" id="toc-improving-appearance" class="nav-link" data-scroll-target="#improving-appearance"><span class="header-section-number">3.3.2</span> Improving appearance</a></li>
-  <li><a href="#changing-the-number-of-bins" id="toc-changing-the-number-of-bins" class="nav-link" data-scroll-target="#changing-the-number-of-bins"><span class="header-section-number">3.3.3</span> Changing the number of “bins”</a></li>
-  <li><a href="#final-polishing" id="toc-final-polishing" class="nav-link" data-scroll-target="#final-polishing"><span class="header-section-number">3.3.4</span> Final polishing</a></li>
+  <li><a href="#drawing-a-histogram" id="toc-drawing-a-histogram" class="nav-link" data-scroll-target="#drawing-a-histogram"><span class="header-section-number">3.4.1</span> Drawing a histogram</a></li>
+  <li><a href="#improving-appearance" id="toc-improving-appearance" class="nav-link" data-scroll-target="#improving-appearance"><span class="header-section-number">3.4.2</span> Improving appearance</a></li>
+  <li><a href="#changing-the-number-of-bins" id="toc-changing-the-number-of-bins" class="nav-link" data-scroll-target="#changing-the-number-of-bins"><span class="header-section-number">3.4.3</span> Changing the number of “bins”</a></li>
+  <li><a href="#final-polishing" id="toc-final-polishing" class="nav-link" data-scroll-target="#final-polishing"><span class="header-section-number">3.4.4</span> Final polishing</a></li>
   </ul></li>
-  <li><a href="#univariate-graphs-bar-graphs" id="toc-univariate-graphs-bar-graphs" class="nav-link" data-scroll-target="#univariate-graphs-bar-graphs"><span class="header-section-number">3.4</span> Univariate graphs: Bar graphs</a></li>
+  <li><a href="#univariate-graphs-bar-graphs" id="toc-univariate-graphs-bar-graphs" class="nav-link" data-scroll-target="#univariate-graphs-bar-graphs"><span class="header-section-number">3.5</span> Univariate graphs: Bar graphs</a></li>
   </ul></li>
   <li><a href="#linking-data-management-and-visualization" id="toc-linking-data-management-and-visualization" class="nav-link" data-scroll-target="#linking-data-management-and-visualization"><span class="header-section-number">4</span> Linking data management and visualization</a>
   <ul class="collapse">
@@ -608,13 +615,20 @@ Tip
 <p>What do you learn from the graph about the differences in body height between men and women (see Kellstedt &amp; Whitten 2018, 135 for how to read a boxplot)?</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="univariate-graphs-histograms" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="univariate-graphs-histograms"><span class="header-section-number">3.3</span> Univariate graphs: Histograms</h2>
+<section id="plotting-overlapping-points-with-geom_count" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="plotting-overlapping-points-with-geom_count"><span class="header-section-number">3.3</span> Plotting overlapping points with <code>geom_count()</code></h2>
+<p>When you work with survey data, you often deal with quasi-numerical scales like the 0-10 left-right political ideology scale, 0-10 scales of trust in political institutions, or 0-10 happiness scales. Technically, these variables are ordinal – but they have enough categories to allow us to treat them as numeric.</p>
+<p>Visualizing relationships between two of such 0-10 or 1-7 scale variables can be difficult. In principle, you can use <code>geom_point()</code> to create a scatterplot, but this will often not be very informative because the individual observations will overlap and any patterns in the data will be difficult to see.</p>
+<p>Luckily, there is an alternative: <code>geom_count()</code>, and two BSTAT students at UiS, Rosa Ottestad and Norman Sunde, have written a mini-tutorial on how to use this function to plot associations between two quasi-numeric 0-10 scale variables. You can read the tutorial <a href="./tutorial_4a.html">here</a>.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="univariate-graphs-histograms" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="univariate-graphs-histograms"><span class="header-section-number">3.4</span> Univariate graphs: Histograms</h2>
 <p>The graphs you created so far were types of <em>bivariate</em> graphs: They show the relationship between two different variables.</p>
 <p>You can of course also create graphs that describe single variables: <em>univariate</em> graphs such as histograms or bar graphs.</p>
 <div style="page-break-after: always;"></div>
-<section id="drawing-a-histogram" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="drawing-a-histogram"><span class="header-section-number">3.3.1</span> Drawing a histogram</h3>
+<section id="drawing-a-histogram" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="drawing-a-histogram"><span class="header-section-number">3.4.1</span> Drawing a histogram</h3>
 <p>A <em>histogram</em> is a type of graph that is very useful to visualize the distribution of a single continuous or metric variable.</p>
 <p>Since you have seen earlier how a <code>ggplot</code>-graph is built, you should now be able to look at the code below and understand how you can produce a histogram:</p>
 <div class="cell">
@@ -636,8 +650,8 @@ Tip
 </ol>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="improving-appearance" class="level3" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="improving-appearance"><span class="header-section-number">3.3.2</span> Improving appearance</h3>
+<section id="improving-appearance" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="improving-appearance"><span class="header-section-number">3.4.2</span> Improving appearance</h3>
 <p>The graph on the previous page is quite dull and, more importantly, the individual “bins” are difficult to distinguish from each other. This is easy to fix, however.</p>
 <p>All we need to do is to change the color of the bins’ outlines with the <code>color</code> argument (“option”). White is a good option here since it contrasts with the dark gray bins but does not add extra complexity to the graph:</p>
 <div class="cell">
@@ -654,8 +668,8 @@ Tip
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="changing-the-number-of-bins" class="level3" data-number="3.3.3">
-<h3 data-number="3.3.3" class="anchored" data-anchor-id="changing-the-number-of-bins"><span class="header-section-number">3.3.3</span> Changing the number of “bins”</h3>
+<section id="changing-the-number-of-bins" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="changing-the-number-of-bins"><span class="header-section-number">3.4.3</span> Changing the number of “bins”</h3>
 <p>As you know from Kellstedt &amp; Whitten (2018, 138–39), the number of “blocks” or “bins” into which we group the data is an important choice that can really affect our impression of the variable we look at.</p>
 <p>By default, <code>geom_histogram()</code> uses 30 bins, but this might obviously not be ideal in all situations. Fortunately, you can change the number of bins easily with the <code>bins</code> option.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>For example, we could set the number of bins to 20 instead of 30:</p>
@@ -674,8 +688,8 @@ Tip
 <p>Feel free to play around with different numbers and see how the graph changes!</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="final-polishing" class="level3" data-number="3.3.4">
-<h3 data-number="3.3.4" class="anchored" data-anchor-id="final-polishing"><span class="header-section-number">3.3.4</span> Final polishing</h3>
+<section id="final-polishing" class="level3" data-number="3.4.4">
+<h3 data-number="3.4.4" class="anchored" data-anchor-id="final-polishing"><span class="header-section-number">3.4.4</span> Final polishing</h3>
 <p>Finally, the histogram can also still be improved by changing the background theme and by adding axis labels:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ess,</span>
@@ -701,8 +715,8 @@ Tip
 <div style="page-break-after: always;"></div>
 </section>
 </section>
-<section id="univariate-graphs-bar-graphs" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="univariate-graphs-bar-graphs"><span class="header-section-number">3.4</span> Univariate graphs: Bar graphs</h2>
+<section id="univariate-graphs-bar-graphs" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="univariate-graphs-bar-graphs"><span class="header-section-number">3.5</span> Univariate graphs: Bar graphs</h2>
 <p>Next to histograms, bar graphs are another type of univariate graph to show the distribution of a single variable. Bar graphs are suited for categorical or ordinal variables — variables with a few distinct categories.</p>
 <p>The code below produces a bar graph of the gender variable (<code>gndr</code>) — and it shows the number of men and women in the dataset:</p>
 <div class="cell">
@@ -1275,8 +1289,8 @@ Tip
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tutorial_5.html" class="pagination-link" aria-label="Tutorial 5: Confidence intervals">
-        <span class="nav-page-text">Tutorial 5: Confidence intervals</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./tutorial_4a.html" class="pagination-link" aria-label="Visualizing overlapping points with geom_count()">
+        <span class="nav-page-text">Visualizing overlapping points with geom_count()</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
