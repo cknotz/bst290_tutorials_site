@@ -352,7 +352,7 @@ window.Quarto = {
 <p>If that last hypothesis is true, then we would expect that older generations today still carry the patterns from past times with them: Among older people, women tend to be less politically engaged. And this could mean that the negative effect of age on political trust exists only for men. Simply put, women in older generations have maybe always cared less about politics in general, and their getting older has therefore less of an effect on their trust in politicians than it has in the case of men.</p>
 <p>The guiding hypothesis for this tutorial is therefore:</p>
 <blockquote class="blockquote">
-<p><em>Gender conditions the negative effect of age on trust in politicians: The effect exists only for men, but not for women.</em></p>
+<p><em>The effect of age on trust in politicians <strong>depends on</strong> gender: The effect exists only for men, but not for women.</em></p>
 </blockquote>
 <p>The corresponding null hypothesis is:</p>
 <blockquote class="blockquote">
@@ -410,7 +410,7 @@ window.Quarto = {
   \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \beta_2 \texttt{gndr} + \beta_3 \texttt{agea} + \epsilon
 \end{align*}\]</span></p>
 <p>This last model assumes that all the independent variables work separately, that each has its own unique effect and this effect does not depend on the other variables. But the guiding hypothesis for this tutorial is of course that things <em>depend</em>: Specifically, that the effect of age depends on gender. This means we need to extend the multivariate model to let the effect of age <em>vary</em> by gender, which we do by including an <em>interaction term</em>.</p>
-<p>To interact two variables, you multiply them. Specifically, you keep the two main variables in the model (plus any other additional controls) but then you also add a new term that is the product of the two constituent variables. In this case here, this would be the product of product of age and gender. If we add that interactive term, the model becomes an <strong>interactive regression model</strong>:</p>
+<p>To interact two variables, you multiply them. Specifically, you keep the two main variables in the model (plus any other additional controls) but then you also add a new term that is the product of the two constituent variables. In this case here, this would be the product of product of age and gender. If we add that interactive term, the effect of age depends on – or <em>interacts with</em> – gender (and vice versa) and the model becomes an <strong>interactive regression model</strong>:</p>
 <p><span class="math display">\[\begin{align*}
   \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \beta_2 \texttt{gndr} + \beta_3 \texttt{agea} + \textcolor{blue}{\beta_4 (\texttt{gndr} \times \texttt{agea}}) + \epsilon
 \end{align*}\]</span></p>
@@ -728,7 +728,7 @@ window.Quarto = {
 
 <ol>
 <li id="fn1"><p>For example, Liechti <em>et al.</em> (Liechti, F., Fossati, F., Bonoli, G., and Auer, D. (2017). The signalling value of labour market programmes. <em>European Sociological Review</em>, 33(2):257–274.) show that labor market re-integration programs for unemployed workers have different effects depending on whether the unemployed worker is an immigrant or not.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>A widely-cited studied that established this (and which you should cite if you estimate interactive models) is Brambor, T., Clark, W. R., and Golder, M. (2006). Understanding interaction models: Improving empirical analyses. <em>Political Analysis</em>, 14(1):63–82.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>A widely-cited article that established this (and which you should cite if you estimate interactive models) is Brambor, T., Clark, W. R., and Golder, M. (2006). Understanding interaction models: Improving empirical analyses. <em>Political Analysis</em>, 14(1):63–82.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>See Lenz, G. S. and Sahn, A. (2021). Achieving statistical significance with control variables and without transparency. <em>Political Analysis</em>, 29(3):356–369.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->

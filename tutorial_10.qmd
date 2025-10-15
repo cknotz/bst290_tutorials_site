@@ -31,7 +31,7 @@ Treating effects as separate can make sense in many cases, but there are also si
 
 Accordingly, a regression model that includes an interaction between two independent variables is called an *interactive regression model*. This type of model is widely used in political and social research.^[For example, Liechti *et al.* (Liechti, F., Fossati, F., Bonoli, G., and Auer, D. (2017). The signalling value of labour market programmes. *European Sociological Review*, 33(2):257–274.) show that labor market re-integration programs for unemployed workers have different effects depending on whether the unemployed worker is an immigrant or not.]
 
-Specifying and estimating interactive models in `R` is not particularly difficult --- but what is more difficult is the interpretation and presentation of the results. In the past, researchers often did not do this correctly, which led them to draw incorrect conclusions. But nowadays there is an established way of interpreting interaction effects by looking at *marginal effects* (or *conditional effects*), and there are packages for `R` that make calculating these marginal effects and presenting them fairly easy.^[A widely-cited studied that established this (and which you should cite if you estimate interactive models) is Brambor, T., Clark, W. R., and Golder, M. (2006). Understanding interaction models: Improving empirical analyses. *Political Analysis*, 14(1):63–82.] One of these is the `margins` package.
+Specifying and estimating interactive models in `R` is not particularly difficult --- but what is more difficult is the interpretation and presentation of the results. In the past, researchers often did not do this correctly, which led them to draw incorrect conclusions. But nowadays there is an established way of interpreting interaction effects by looking at *marginal effects* (or *conditional effects*), and there are packages for `R` that make calculating these marginal effects and presenting them fairly easy.^[A widely-cited article that established this (and which you should cite if you estimate interactive models) is Brambor, T., Clark, W. R., and Golder, M. (2006). Understanding interaction models: Improving empirical analyses. *Political Analysis*, 14(1):63–82.] One of these is the `margins` package.
 
 This tutorial will show you how you specify, interpret, and present interactive regression analyses. We continue with the case from earlier tutorials where we looked at trust in politicians using data from round 7 of the *ESS*.
 
@@ -47,7 +47,7 @@ If that last hypothesis is true, then we would expect that older generations tod
 
 The guiding hypothesis for this tutorial is therefore: 
 
-> *Gender conditions the negative effect of age on trust in politicians: The effect exists only for men, but not for women.*
+> *The effect of age on trust in politicians __depends on__ gender: The effect exists only for men, but not for women.*
 
 The corresponding null hypothesis is:
 
@@ -127,7 +127,7 @@ The multivariate model then included also age (`agea`) and gender (`gndr`) as ad
 
 This last model assumes that all the independent variables work separately, that each has its own unique effect and this effect does not depend on the other variables. But the guiding hypothesis for this tutorial is of course that things *depend*: Specifically, that the effect of age depends on gender. This means we need to extend the multivariate model to let the effect of age *vary* by gender, which we do by including an *interaction term*. 
 
-To interact two variables, you multiply them. Specifically, you keep the two main variables in the model (plus any other additional controls) but then you also add a new term that is the product of the two constituent variables. In this case here, this would be the product of product of age and gender. If we add that interactive term, the model becomes an **interactive regression model**:
+To interact two variables, you multiply them. Specifically, you keep the two main variables in the model (plus any other additional controls) but then you also add a new term that is the product of the two constituent variables. In this case here, this would be the product of product of age and gender. If we add that interactive term, the effect of age depends on -- or *interacts with* -- gender (and vice versa) and the model becomes an **interactive regression model**:
 
 \begin{align*}
   \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \beta_2 \texttt{gndr} + \beta_3 \texttt{agea} + \textcolor{blue}{\beta_4 (\texttt{gndr} \times \texttt{agea}}) + \epsilon
