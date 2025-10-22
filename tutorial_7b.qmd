@@ -392,10 +392,10 @@ Just like with a regular histogram, we can adjust either the number of bins or t
 ```{r}
 ess7 %>% 
   ggplot(aes(x = agea, y = relig_num)) +
-    geom_hex(binwidth = c(5,1))
+    geom_hex(binwidth = c(7.5,1))
 ```
 
-Note that we specify **two** numbers here: The size of bins along the x-axis (5) and their size along the y-axis (1). Basically, we group the age-variable into 5-year intervals and the reliosity-variable into 1-step intervals. (You can play around with different bin sizes to see what makes most sense.)
+Note that we specify **two** numbers here: The size of bins along the x-axis (7.5) and their size along the y-axis (1). Basically, we group the age-variable into 7.5-year intervals and the reliosity-variable into 1-step intervals. (You can play around with different bin sizes to see what makes most sense in your case.)
 
 \newpage
 
@@ -408,7 +408,7 @@ We can change the fill color with the `scale_fill_gradient()` option. Here, we s
 ```{r}
 ess7 %>% 
   ggplot(aes(x = agea, y = relig_num)) +
-    geom_hex(binwidth = c(5,1)) +
+    geom_hex(binwidth = c(7.5,1)) +
     scale_fill_gradient(low = "grey80", high = "grey10")
 ```
 
@@ -418,11 +418,9 @@ Alternatively, if you really want colors, you can use the viridis color scheme, 
 ```{r}
 ess7 %>% 
   ggplot(aes(x = agea, y = relig_num)) +
-    geom_hex(binwidth = c(5,1)) +
-    scale_fill_viridis_c(direction = -1)
+    geom_hex(binwidth = c(7.5,1)) +
+    scale_fill_viridis_c()
 ```
-
-Note that we specify `direction = -1` to make sure that lighter colors represent fewer observations and vice versa.
 
 \newpage
 ### Final polishing
@@ -432,14 +430,14 @@ Finally, we can again add a fitted line, add informative labels, hide the legend
 ```{r}
 ess7 %>% 
   ggplot(aes(x = agea, y = relig_num)) +
-    geom_hex(binwidth = c(5,1)) +
-    scale_fill_viridis_c(direction = -1) +
+    geom_hex(binwidth = c(7.5,1)) +
+    scale_fill_viridis_c() +
     geom_smooth(method = "lm", se = FALSE, 
                 color = "grey", linetype = "dashed") +
     labs(x = "Age", y = "''How religious are you?''",
-         caption = "Binwidths = 5 (age) & 1 (religiosity)") +
-    theme_classic() +
-    theme(legend.position = "hidden")
+         fill = "Observations",
+         caption = "Binwidths = 7.5 (age) & 1 (religiosity)") +
+    theme_classic()
 ```
 
 As above, it is visible that there is a positive relationship between age and religiosity --- older people tend to be more religius --- but the relationship is driven mainly by two groups of observations: A larger group of younger people that is not religious at all, and people between 50 and 75 who are moderately religious. The pattern here roughly corresponds to case #3 in Anscombe's Quartet above.
