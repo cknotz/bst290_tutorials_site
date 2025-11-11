@@ -366,6 +366,7 @@ window.Quarto = {
 <p>This process of cleaning and organizing a dataset, and of creating new variables is called <em>data management</em> (or ‘munging’, ‘wrangling’, or ‘data manipulation’). It is the process of turning a raw dataset, which usually contains irrelevant observations or variables and where some variables need to be transformed or newly constructed, into the neat and tidy dataset you use in your statistical analysis.</p>
 <p>Let’s be honest for a moment: Data cleaning is often not very entertaining, and is generally the thing that is most difficult to get through when you are just starting and you do not yet have a good intuition or “muscle memory” for working with data. In that case, data cleaning can be a major hurdle and source of frustration.</p>
 <p>Fortunately, things have improved a lot with the arrival of the <code>tidyverse</code> (see <a href="https://www.tidyverse.org/" class="uri">https://www.tidyverse.org/</a>). As mentioned in the first tutorial, the <code>tidyverse</code> collection includes several packages that make data cleaning, and even otherwise difficult operations much easier and quicker.</p>
+<p>Plus, one of the newest additions to the <code>tidyverse</code> is <code>genzplyr</code>, which provides Gen Z-friendly versions of many of the data cleaning and management functions that we will go through here. For example, instead of <code>filter()</code> to select observations that satisfy some criteria, you use <code>yeet()</code>, instead of <code>select()</code> to choose some variables of interest, you use <code>vibe_check()</code>, and instead of using <code>mutate()</code> to recode a variable, you use <code>glow_up()</code>. You might actually learn more effectively if you install the <code>genzplyr</code> package (<a href="https://hadley.github.io/genzplyr/" class="uri">https://hadley.github.io/genzplyr/</a>) and try to figure out how to do each of the things we do in this tutorial with <code>genzplyr</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Still: Expect to be struggling with these things at the beginning, and that this tutorial will likely be the one that feels most dull and confusing. Just hang in there, and ask if you really need help!</p>
 <p>In this tutorial, you will first learn how to do basic data cleaning and preparation tasks with functions from the <code>tidyverse</code> (sections 4-6). In section 7, you will learn how to change how a particular variable is stored (e.g., from <code>numeric</code> to <code>character</code>). Here, you will use functions from ‘base <code>R</code>’.</p>
 <p>As in the previous tutorial, you will first practice all these operations with the small <code>ess</code> dataset from the <code>bst290</code> package. Later, when doing the exercises, you will apply what you have learned to real-life data from the ESS.</p>
@@ -409,7 +410,7 @@ Tip
 </section>
 <section id="trimming-your-dataset" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Trimming your dataset</h1>
-<p>A typical research dataset (e.g., data from the <em>ESS</em>) will usually contain many more variables than you need for your analysis.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Therefore, it is very useful to know how to get rid of variables that are irrelevant for what you want to do.</p>
+<p>A typical research dataset (e.g., data from the <em>ESS</em>) will usually contain many more variables than you need for your analysis.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Therefore, it is very useful to know how to get rid of variables that are irrelevant for what you want to do.</p>
 <p>You may also remember that the full ESS dataset included more than 40.000 observations for more than 20 countries. It can happen that you need to work with all of these observations, but there are also many times when you only need data for a single country (such as in this course!). In that case, you need to exclude the irrelevant observations.</p>
 <p>Fortunately, dealing with these two problems is easy. The <code>tidyverse</code> (or, more precisely, the <code>dplyr</code> package in the <code>tidyverse</code>) contains two functions that make this easy:</p>
 <ul>
@@ -419,7 +420,7 @@ Tip
 <div style="page-break-after: always;"></div>
 <section id="select" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="select"><span class="header-section-number">3.1</span> <code>select()</code></h2>
-<p>The small <code>ess</code> practice dataset includes 22 variables. Let’s assume that you really need only the ID number (<code>idno</code>), age (<code>agea</code>), and gender (<code>gndr</code>) variables for an analysis. You therefore want to reduce your dataset to these three variables and get rid of all the others.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The <code>select()</code> function allows you to do that.</p>
+<p>The small <code>ess</code> practice dataset includes 22 variables. Let’s assume that you really need only the ID number (<code>idno</code>), age (<code>agea</code>), and gender (<code>gndr</code>) variables for an analysis. You therefore want to reduce your dataset to these three variables and get rid of all the others.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> The <code>select()</code> function allows you to do that.</p>
 <section id="using-select" class="level3" data-number="3.1.1">
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="using-select"><span class="header-section-number">3.1.1</span> Using <code>select()</code></h3>
 <p>Here is how you keep specific variables with <code>select()</code>:</p>
@@ -429,7 +430,7 @@ Tip
 <p>Here you tell <code>R</code>:</p>
 <ol type="1">
 <li>That you want to select variables with the <code>select()</code> function;</li>
-<li>That you want to select from the <code>ess</code> dataset (with <code>.data = ess</code>). It is important that you do not forget to add a dot before <code>data</code>;<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
+<li>That you want to select from the <code>ess</code> dataset (with <code>.data = ess</code>). It is important that you do not forget to add a dot before <code>data</code>;<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
 <li>Then you simply list the variables you want to select, separated by commas;</li>
 </ol>
 </section>
@@ -471,7 +472,7 @@ Tip
 <li><code>&gt;=</code> “greater or equal to”</li>
 <li><code>==</code> “<em>must</em> be equal to” (the double equal sign means we are extra sure here)</li>
 <li><code>!=</code> “must <em>not</em> be equal to” (generally, <code>!</code> stands for “is not”)</li>
-<li><code>%in%</code> “is included in”, usually followed by a vector (e.g., <code>cntry %in% c("Norway","Sweden","Denmark")</code>)<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
+<li><code>%in%</code> “is included in”, usually followed by a vector (e.g., <code>cntry %in% c("Norway","Sweden","Denmark")</code>)<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></li>
 </ul>
 <p>You can also specify <em>multiple conditions</em> in <code>filter()</code>. For example, to limit the data to women who are older than 35 you would do the following:</p>
 <div class="cell">
@@ -529,7 +530,7 @@ Tip
 <h2 data-number="4.2" class="anchored" data-anchor-id="the-new-pipe-operator"><span class="header-section-number">4.2</span> The new pipe operator (<code>|&gt;</code>)</h2>
 <p>The “traditional” pipe operator (<code>%&gt;%</code>) that we used so far is a part of the <code>tidyverse</code> — and it will only work if you have the <code>tidyverse</code> or one of the central packages (<code>dplyr</code>, <code>ggplot2</code>) loaded.</p>
 <p>With the release of <code>R</code> version 4.1.0, a new pipe operator was introduced: <code>|&gt;</code>. This one works like the old one, but is “native” to <code>R</code> — you shouldn’t need to load packages to be able to use it.</p>
-<p>While there are some differences in how they work, <strong>you can generally use either of them</strong> (or both) without running into any problems or getting wrong results.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>While there are some differences in how they work, <strong>you can generally use either of them</strong> (or both) without running into any problems or getting wrong results.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -540,7 +541,7 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The two pipe operators may not work with all functions in <code>R</code>. They should work fine with functions that come from the <code>tidyverse</code> package collection (<code>select()</code>, <code>filter()</code>, <code>drop_na()</code>,…) and they work also with <em>some</em> other functions, but this is not always the case. If you notice that your “pipeline” breaks when you add a particular function, then it is best if you just store the result after the last functioning step of your pipeline and then use that result with the “offending” function separately.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
+<p>The two pipe operators may not work with all functions in <code>R</code>. They should work fine with functions that come from the <code>tidyverse</code> package collection (<code>select()</code>, <code>filter()</code>, <code>drop_na()</code>,…) and they work also with <em>some</em> other functions, but this is not always the case. If you notice that your “pipeline” breaks when you add a particular function, then it is best if you just store the result after the last functioning step of your pipeline and then use that result with the “offending” function separately.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -569,7 +570,7 @@ Important
 </section>
 <section id="advanced-mutate-dummy-coding-variables" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="advanced-mutate-dummy-coding-variables"><span class="header-section-number">5.2</span> Advanced <code>mutate()</code>: “Dummy-coding” variables</h2>
-<p>Next to mathematical transformations, you also often have to “dichotomize” or “dummy-code” one or more of your variables. “Dummy-coding” means that you turn a more complex variable into a simple yes/no or (1/0) “dummy” variable. To dummy-code a variable, you use the <code>if_else()</code> function <strong>within <code>mutate()</code></strong>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p>Next to mathematical transformations, you also often have to “dichotomize” or “dummy-code” one or more of your variables. “Dummy-coding” means that you turn a more complex variable into a simple yes/no or (1/0) “dummy” variable. To dummy-code a variable, you use the <code>if_else()</code> function <strong>within <code>mutate()</code></strong>.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
 <p>You can do this with numeric variables (e.g., age or years spent in education) but also categorical or ordinal variables that have more than two categories (and which are stored as <em>Factors</em>). The process differs only a bit between the two scenarios.</p>
 <section id="dummy-coding-a-numeric-variable" class="level3" data-number="5.2.1">
 <h3 data-number="5.2.1" class="anchored" data-anchor-id="dummy-coding-a-numeric-variable"><span class="header-section-number">5.2.1</span> Dummy-coding a numeric variable</h3>
@@ -903,7 +904,7 @@ Tip
 </section>
 <section id="factor-to-character" class="level3" data-number="7.3.2">
 <h3 data-number="7.3.2" class="anchored" data-anchor-id="factor-to-character"><span class="header-section-number">7.3.2</span> <em>Factor</em> to character</h3>
-<p>A related problem you might have is that you want not the numerical scores but the text labels of a factor variable. For example, say you wanted to extract the labels for the different educational degrees in Norway from the <code>edlvdno</code> variable into a new pure character variable.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
+<p>A related problem you might have is that you want not the numerical scores but the text labels of a factor variable. For example, say you wanted to extract the labels for the different educational degrees in Norway from the <code>edlvdno</code> variable into a new pure character variable.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
 <p>To create a new variable that contains only the text labels from <code>edlvdno</code>, you use the <code>as.character()</code> function:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>edlv_chr <span class="ot">&lt;-</span> <span class="fu">as.character</span>(ess<span class="sc">$</span>edlvdno)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -979,14 +980,15 @@ Tip
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Think back to last week: Maybe you remember that the full ESS dataset included more than 600 variables?<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>The <code>idno</code> variable does not really contain substantive information about respondents, but it is good practice to keep this variable because it can come in handy later on — for example, in case you want to add other variables.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>“Why?”, you may ask? This is how the function was designed by its author, Hadley Wickham, and the detailed answer for why he did this is quite technical, see: <a href="https://design.tidyverse.org/dots-prefix.html" class="uri">https://design.tidyverse.org/dots-prefix.html</a>. Not to worry, you will get around this in just a bit!<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>This is a bit more advanced, but very useful in practice!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>See also <a href="https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/" class="uri">https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Alternatively, see this RStudio Community board discussion for a solution: https://community.rstudio.com/t/pipe-operator-does-not-work/66377<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p><code>if_else()</code> is a newer version of the similar <code>ifelse()</code> function that is built into <code>R</code> from the start. Both work essentially in the same way, but <code>if_else()</code> is specifically designed for <code>mutate()</code> and also a bit stricter — which helps you avoid errors.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>You already know from the previous tutorial that <code>edvldno</code> is a factor, but feel free to check again with <code>class(ess$edlvdno)</code>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>You may need to install the <code>pak</code> package first with <code>install.packages("pak")</code>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Think back to last week: Maybe you remember that the full ESS dataset included more than 600 variables?<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The <code>idno</code> variable does not really contain substantive information about respondents, but it is good practice to keep this variable because it can come in handy later on — for example, in case you want to add other variables.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>“Why?”, you may ask? This is how the function was designed by its author, Hadley Wickham, and the detailed answer for why he did this is quite technical, see: <a href="https://design.tidyverse.org/dots-prefix.html" class="uri">https://design.tidyverse.org/dots-prefix.html</a>. Not to worry, you will get around this in just a bit!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>This is a bit more advanced, but very useful in practice!<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>See also <a href="https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/" class="uri">https://www.tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/</a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Alternatively, see this RStudio Community board discussion for a solution: https://community.rstudio.com/t/pipe-operator-does-not-work/66377<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p><code>if_else()</code> is a newer version of the similar <code>ifelse()</code> function that is built into <code>R</code> from the start. Both work essentially in the same way, but <code>if_else()</code> is specifically designed for <code>mutate()</code> and also a bit stricter — which helps you avoid errors.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>You already know from the previous tutorial that <code>edvldno</code> is a factor, but feel free to check again with <code>class(ess$edlvdno)</code>.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

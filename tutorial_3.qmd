@@ -34,6 +34,8 @@ Let's be honest for a moment: Data cleaning is often not very entertaining, and 
 
 Fortunately, things have improved a lot with the arrival of the `tidyverse` (see <https://www.tidyverse.org/>). As mentioned in the first tutorial, the `tidyverse` collection includes several packages that make data cleaning, and even otherwise difficult operations much easier and quicker.
 
+Plus, one of the newest additions to the `tidyverse` is `genzplyr`, which provides Gen Z-friendly versions of many of the data cleaning and management functions that we will go through here. For example, instead of `filter()` to select observations that satisfy some criteria, you use `yeet()`, instead of `select()` to choose some variables of interest, you use `vibe_check()`, and instead of using `mutate()` to recode a variable, you use `glow_up()`. You might actually learn more effectively if you install the `genzplyr` package (<https://hadley.github.io/genzplyr/>) and try to figure out how to do each of the things we do in this tutorial with `genzplyr`.^[You may need to install the `pak` package first with `install.packages("pak")`.]
+
 Still: Expect to be struggling with these things at the beginning, and that this tutorial will likely be the one that feels most dull and confusing. Just hang in there, and ask if you really need help!
 
 In this tutorial, you will first learn how to do basic data cleaning and preparation tasks with functions from the `tidyverse` (sections 4-6). In section 7, you will learn how to change how a particular variable is stored (e.g., from `numeric` to `character`). Here, you will use functions from 'base `R`'. 
