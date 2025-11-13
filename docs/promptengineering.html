@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="nb" xml:lang="nb"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.7.32">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Kristine Vanebo-Bøe">
 
-<title>Hei! – R Tutorials for BST290</title>
+<title>Koding med AI – R Tutorials for BST290</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tutorial_0.html" rel="next">
+<link href="./tutorial_4a.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -41,6 +42,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-40e6375b29d217d81598add68a79f183.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -55,17 +59,17 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "Ingen resultater",
+    "search-matching-documents-text": "Samsvarende dokumenter",
+    "search-copy-link-title": "Kopier link for å søke",
+    "search-hide-matches-text": "Skjul ytterlige resultater",
+    "search-more-match-text": "annet resultat i dette dokumentet",
+    "search-more-matches-text": "andre resultater i dette dokumentet",
+    "search-clear-button-title": "Tøm",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Avbryt",
+    "search-submit-button-title": "Send inn",
+    "search-label": "Søk"
   }
 }</script>
 
@@ -115,18 +119,18 @@ window.Quarto = {
   </div>
         <div class="quarto-navbar-tools tools-end">
 </div>
-          <div id="quarto-search" class="" title="Search"></div>
+          <div id="quarto-search" class="" title="Søk"></div>
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Slå av eller på sidebarnavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Hei!</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorial_4a.html">Tips &amp; tricks from students</a></li><li class="breadcrumb-item"><a href="./promptengineering.html">Koding med AI</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Slå av eller på sidebarnavigering" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Søk" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -138,14 +142,14 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
+        <div id="quarto-search" class="" title="Søk"></div>
         </div>
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hei!</span></a>
   </div>
 </li>
@@ -153,7 +157,7 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Tutorials</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Slå på delen">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -243,7 +247,7 @@ window.Quarto = {
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Tips &amp; tricks from students</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Slå på delen">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -256,7 +260,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./promptengineering.html" class="sidebar-item-text sidebar-link">
+  <a href="./promptengineering.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Koding med AI</span></a>
   </div>
 </li>
@@ -267,21 +271,33 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">På denne siden</h2>
+   
+  <ul>
+  <li><a href="#koding-med-ai" id="toc-koding-med-ai" class="nav-link active" data-scroll-target="#koding-med-ai"><span class="header-section-number">1</span> Koding med AI</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Andre formater</h2><ul><li><a href="promptengineering.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tutorial_4a.html">Tips &amp; tricks from students</a></li><li class="breadcrumb-item"><a href="./promptengineering.html">Koding med AI</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Hei!</h1>
+<h1 class="title">Koding med AI</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Forfatter</div>
+    <div class="quarto-title-meta-contents">
+             <p><a href="https://www.linkedin.com/in/kristine-vanebo-boe/">Kristine Vanebo-Bøe</a> </p>
+          </div>
+  </div>
     
   
     
@@ -292,39 +308,31 @@ window.Quarto = {
 </header>
 
 
-<p>This website features all <code>R</code> tutorials for the BST290 <em>Kvantitativ forskningsmetode</em> course. Simply use the menu on the side to navigate to and between the different tutorials and use the search field (top right) to find tutorials with specific contents.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>To make reading the tutorials easier and quicker, <strong>download them as PDFs and print them out</strong>. There are download buttons at the beginning of each tutorial (under the table of contents on the right side). You <em>can</em> of course read all the material “on screen” if you really want to, but that is not recommended. Ideally, you read each of the tutorials first on paper and you use this website mainly to quickly look things up later.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Some students wrote their own short tutorials on other relevant topics (promot engineering with <em>ChatGPT</em> and additional data visualization tricks) and are sharing them with you here. You can find these if you <strong>scroll down in the navigation menu on the left</strong> 👈.</p>
-</div>
-</div>
-<p>If you have questions, notice something that is wrong or is not shown properly, please send an email to <a href="mailto:carlo.knotz@uis.no">carlo.knotz@uis.no</a>.</p>
-<p>That’s it. Lykke til!</p>
+<section id="koding-med-ai" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="koding-med-ai"><span class="header-section-number">1</span> Koding med AI</h2>
+<p>AI-verktøy som <em>ChatGPT</em> kan være svært nyttige hjelpemidler for studenter som lærer seg å programmere i <code>R</code>. Modellen kan forklare kode, gi forslag til løsninger, hjelpe deg å forstå feilmeldinger og vise hvordan ulike funksjoner fungerer i praksis. Men for å få best mulig utbytte, er det viktig å vite hvordan man bruker verktøyet riktig og kritisk.</p>
+<p>Det aller viktigste er å være&nbsp;spesifikk&nbsp;når du stiller spørsmål. <em>ChatGPT</em> gir mye bedre svar når du tydelig forklarer hva du holder på med. For eksempel bør du skrive hvilke pakker du allerede har lastet inn (for eksempel&nbsp;<code>tidyverse</code>&nbsp;eller&nbsp;<code>bst290</code>), hvilket datasett du bruker, hvilke variabler som er relevante, og hva du allerede har prøvd. Da slipper du generelle svar, og får heller kode som passer til akkurat ditt prosjekt.</p>
+<p>Et vanlig problem er at <em>ChatGPT</em> ofte legger inn kode for å laste inn pakker – som&nbsp;<code>library(tidyverse)</code>&nbsp;– hver gang du spør om noe. Det er ikke nødvendig å kopiere dette inn hver gang i <code>R</code>-skriptet ditt. Du trenger bare å laste inn pakkene én gang øverst i koden. Når man ser mange slike&nbsp;<code>library()</code>-linjer flere steder i en oppgave, kan det dessuten være et tydelig tegn på at <em>ChatGPT</em> har blitt brukt uten redigering. Det kan derfor være lurt å rydde litt i koden og fjerne unødvendige gjentakelser før du leverer.</p>
+<p>En annen ting man må være oppmerksom på, er at <em>ChatGPT</em> noen ganger foreslår løsninger som bruker&nbsp;pakker du ikke har installert, eller som&nbsp;ikke brukes i kurset ditt. Verktøyet har tilgang til et bredt utvalg av <code>R</code>-pakker, og foreslår derfor ofte funksjoner fra verktøy som ikke nødvendigvis er relevante. Da er det viktig å bruke egen vurdering: sjekk alltid at pakken faktisk finnes, og at du forstår hva koden gjør. Hvis ikke, bør du heller spørre om en løsning som kun bruker de pakkene dere bruker i undervisningen.</p>
+<p>Ved å simpelt spørre <em>ChatGPT</em> om den kan hjelpe deg med å lage et histogram i R vil den for eksempel gi deg forslag på om du vil bruke <code>Base R</code> eller <code>ggplot2</code>. I kurset bruker vi ikke <code>Base R</code>, og vi bruker også andre pakker enn <code>ggplot2</code> (<code>ggplot2</code> er inkludert <code>tidyverse</code>). I tillegg vil den ikke kunne gi deg en kode som er tilpasset dine behov, med datasettet du bruker samt variablene du ser på. Denne koden vil derfor ikke gå an å bruke i <code>R</code>.</p>
+<p><a href="pe_fig1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="pe_fig1.png" class="img-fluid"></a></p>
+<p><a href="pe_fig2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="pe_fig2.png" class="img-fluid"></a></p>
+<p>Ved å spesifisere at jeg har lastet inn pakkene og at jeg bruker <code>tidyverse</code>, gir <code>R</code> meg en bedre kode på et grunnleggende histogram, men det er fortsatt upresist og jeg vil ikke kunne bruke koden direkte inn i <code>R</code>.</p>
+<p><a href="pe_fig3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="pe_fig3.png" class="img-fluid"></a></p>
+<p><a href="pe_fig4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="pe_fig4.png" class="img-fluid"></a></p>
+<p>Hvis jeg så legger til hvilket datasett jeg bruker, variablene jeg vil se på og landet jeg vil forholde meg til gir den meg en mye mer utfyllende kode på et histogram som jeg kan bruke direkte inn i <code>R</code>.</p>
+<p><a href="pe_fig5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="pe_fig5.png" class="img-fluid"></a></p>
+<p>Den gir meg da to koder til histogram av både <code>rlgdgr</code> og <code>agea</code>, som man kan kopiere rett inn i <code>R</code>. Til tross for at jeg har fortalt <em>ChatGPT</em> at jeg allerede har lastet inn <code>tidyverse</code>-pakken inkluderes den før koden til selve grafen. I tillegg får jeg feilmelding i <code>R</code> når jeg prøver å bruke koden til histogram av religiøsitet, fordi den ikke har lagt inn at variabelen <em>rlgdgr</em> er nødt til å bli gjort om til numerisk for å utføre koden.</p>
+<p>Resultatet av histogrammet av religiøsitet ser slik ut og er fullt mulig å bruke i oppgaver for å vise fordelingen av religiøsitet:</p>
+<p><a href="pe_fig6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="pe_fig6.png" class="img-fluid"></a></p>
+<p>For å gjøre det enklere å bruke <em>ChatGPT</em> effektivt kan du lage en fast struktur når du spør. Du kan for eksempel skrive: “Jeg jobber i <code>R</code> med datasettet&nbsp;ESS runde 7, og har lastet inn&nbsp;tidyverse og bst290. Variablene jeg bruker er <code>essround</code>, <code>cntry</code>, <code>idno</code>, <code>agea</code> og <code>rlgdgr</code>. Jeg skal se på data fra Norge. Jeg har trimmet datasettet til å kun inkludere disse variablene fra Norge og navngitt det <code>ess7</code>, samt fjernet NAs. Jeg vil lage et univariat histogram som viser fordelingen av <code>rlgdgr</code>. Kan du lage en kode for dette, med 10 bins i tema svart/hvitt, og at teksten på y-aksen er «Number of observations» og på x-aksen «How religious are you (0-10)»?»</p>
+<p><a href="pe_fig7.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="pe_fig7.png" class="img-fluid"></a></p>
+<p>Til slutt er det viktig å huske at <em>ChatGPT</em> er et&nbsp;støtteverktøy, ikke en erstatning for egen forståelse. Det beste er å bruke svarene som forklaringer eller inspirasjon, og ikke bare kopiere koden direkte. Ved å kombinere egne ferdigheter med AI-hjelp lærer du både mer og jobber mer effektivt – uten å miste kontrollen over det faglige innholdet.</p>
 
 
+</section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Tilbake til toppen</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -350,12 +358,12 @@ Tip
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "Kopiert!");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "Kopiert!");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
@@ -726,14 +734,46 @@ Tip
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./tutorial_4a.html" class="pagination-link" aria-label="Visualizing overlapping points with geom_count()">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Visualizing overlapping points with geom_count()</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./tutorial_0.html" class="pagination-link" aria-label="Tutorial 0: Installation &amp; Setup">
-        <span class="nav-page-text">Tutorial 0: Installation &amp; Setup</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 

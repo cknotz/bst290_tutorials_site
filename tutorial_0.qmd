@@ -186,7 +186,14 @@ The final step of this tutorial is to install *packages*.
 
 The first package you install is called the `tidyverse` package. Strictly speaking, the `tidyverse` is an entire collection of different `R` packages, but all these packages fit neatly together and are therefore bundled in a "package of packages".
 
-The `tidyverse` packages were designed to make things that are often difficult (data import, data cleaning & management, visualization) a lot easier (see also [tidyverse.org](https://www.tidyverse.org/)). *We will use the `tidyverse` a lot in this course, so it is absolutely necessary that you install it*!
+The `tidyverse` packages were designed to make things that are often difficult (data import, data cleaning & management, visualization) a lot easier (see also [tidyverse.org](https://www.tidyverse.org/)). 
+
+
+::: {.callout-important}
+
+We will use the `tidyverse` **a lot** in this course, so it is absolutely necessary that you install it!
+
+:::
 
 You can install the `tidyverse` directly from the main `R` "app-store": The *Central R Archive Network* or *CRAN*.
 
