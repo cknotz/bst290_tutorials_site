@@ -12,7 +12,7 @@ To make reading the tutorials easier and quicker, **download them as PDFs and pr
 
 ::: {.callout-tip}
 
-Some students wrote their own short tutorials on other relevant topics (promot engineering with *ChatGPT* and additional data visualization tricks) and are sharing them with you here. You can find these if you **scroll down in the navigation menu on the left** 👈.
+Some students wrote their own short tutorials on other relevant topics (prompt engineering with *ChatGPT* and additional data visualization tricks) and are sharing them with you here. You can find these if you **scroll down in the navigation menu on the left** 👈.
 
 :::
 
