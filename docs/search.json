@@ -604,6 +604,28 @@
     ]
   },
   {
+    "objectID": "codereport.html",
+    "href": "codereport.html",
+    "title": "Creating a PDF code report",
+    "section": "",
+    "text": "This tutorial shows you how you can automatically create PDF code reports with a single click in RStudio, and it provides a few tips for how to organize your code effectively.",
+    "crumbs": [
+      "Other",
+      "Creating a PDF code report"
+    ]
+  },
+  {
+    "objectID": "codereport.html#footnotes",
+    "href": "codereport.html#footnotes",
+    "title": "Creating a PDF code report",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nSee also https://yihui.org/tinytex/.↩︎",
+    "crumbs": [
+      "Other",
+      "Creating a PDF code report"
+    ]
+  },
+  {
     "objectID": "tutorial_8.html",
     "href": "tutorial_8.html",
     "title": "Tutorial 8: Bivariate linear regression",

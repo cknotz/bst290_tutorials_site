@@ -29,6 +29,10 @@ website:
         - href: tutorial_10.qmd
         - href: tutorial_11.qmd
       - text: "---"
+      - section: "Other"
+        contents:
+        - href: codereport.qmd
+      - text: "---"
       - section: "Tips & tricks from students"
         contents:
         - href: tutorial_4a.qmd

@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Carlo Knotz">
 
-<title>Hei! – R Tutorials for BST290</title>
+<title>Creating a PDF code report – R Tutorials for BST290</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +21,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +66,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./tutorial_0.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -41,6 +76,9 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-40e6375b29d217d81598add68a79f183.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -123,7 +161,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Hei!</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./codereport.html">Other</a></li><li class="breadcrumb-item"><a href="./codereport.html">Creating a PDF code report</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -145,7 +183,7 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Hei!</span></a>
   </div>
 </li>
@@ -250,7 +288,7 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./codereport.html" class="sidebar-item-text sidebar-link">
+  <a href="./codereport.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Creating a PDF code report</span></a>
   </div>
 </li>
@@ -285,21 +323,37 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#step-1-install-the-tinytex-package-if-you-havent-already" id="toc-step-1-install-the-tinytex-package-if-you-havent-already" class="nav-link active" data-scroll-target="#step-1-install-the-tinytex-package-if-you-havent-already"><span class="header-section-number">1</span> Step 1: Install the <code>tinytex</code> package (if you haven’t already)</a></li>
+  <li><a href="#step-2-do-your-analysis-and-document-your-code" id="toc-step-2-do-your-analysis-and-document-your-code" class="nav-link" data-scroll-target="#step-2-do-your-analysis-and-document-your-code"><span class="header-section-number">2</span> Step 2: Do your analysis and document your code</a></li>
+  <li><a href="#step-3-make-sure-everything-works-without-problems" id="toc-step-3-make-sure-everything-works-without-problems" class="nav-link" data-scroll-target="#step-3-make-sure-everything-works-without-problems"><span class="header-section-number">3</span> Step 3: Make sure everything works without problems</a></li>
+  <li><a href="#step-4-create-the-report" id="toc-step-4-create-the-report" class="nav-link" data-scroll-target="#step-4-create-the-report"><span class="header-section-number">4</span> Step 4: Create the report</a></li>
+  <li><a href="#step-5-check-the-report" id="toc-step-5-check-the-report" class="nav-link" data-scroll-target="#step-5-check-the-report"><span class="header-section-number">5</span> Step 5: Check the report</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="codereport.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./codereport.html">Other</a></li><li class="breadcrumb-item"><a href="./codereport.html">Creating a PDF code report</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Hei!</h1>
+<h1 class="title">Creating a PDF code report</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carlo Knotz </p>
+          </div>
+  </div>
     
   
     
@@ -310,20 +364,10 @@ window.Quarto = {
 </header>
 
 
-<p>This website features all <code>R</code> tutorials for the BST290 <em>Kvantitativ forskningsmetode</em> course. Simply use the menu on the side to navigate to and between the different tutorials and use the search field (top right) to find tutorials with specific contents.</p>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Important
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>To make reading the tutorials easier and quicker, <strong>download them as PDFs and print them out</strong>. There are download buttons at the beginning of each tutorial (under the table of contents on the right side). You <em>can</em> of course read all the material “on screen” if you really want to, but that is not recommended. Ideally, you read each of the tutorials first on paper and you use this website mainly to quickly look things up later.</p>
-</div>
-</div>
+<p>This tutorial shows you how you can automatically create PDF code reports with a single click in <code>RStudio</code>, and it provides a few tips for how to organize your code effectively.</p>
+<div style="page-break-after: always;"></div>
+<section id="step-1-install-the-tinytex-package-if-you-havent-already" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Step 1: Install the <code>tinytex</code> package (if you haven’t already)</h1>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -334,15 +378,97 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Some students wrote their own short tutorials on other relevant topics (prompt engineering with <em>ChatGPT</em> and additional data visualization tricks) and are sharing them with you here. You can find these if you <strong>scroll down in the navigation menu on the left</strong> 👈.</p>
+<p>You should already have installed all the necessary software to create PDF reports when you went through Tutorial 0 – but just in case you did not: You need to install a package called <code>tinytex</code>.</p>
 </div>
 </div>
-<p>If you have questions, notice something that is wrong or is not shown properly, please send an email to <a href="mailto:carlo.knotz@uis.no">carlo.knotz@uis.no</a>.</p>
-<p>That’s it. Lykke til!</p>
+<p><code>tinytex</code> is really nothing more than a tool to install the <code>TinyTex</code> software automatically through <em>RStudio</em>, which you need to be able to create PDF code reports. <code>TinyTex</code> is a small version of the <code>LaTeX</code> typesetting software, which <code>RStudio</code> then uses to create the code reports.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>You install <code>tinytex</code> just like the other packages:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tinytex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once that is complete, you run the following in your <em>Console</em> to install the <code>TinyTex</code> software:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tinytex<span class="sc">::</span><span class="fu">install_tinytex</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The download may take a bit of time (and there’ll be code gibberish).</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You only have to do this <strong>a single time</strong>. Just like you do not have to re-install <em>Instagram</em> every time you want to post a picture of your knees at the beach, you do not have to re-install <code>tinytex</code> every time you want to create a code report. You also do <strong>not</strong> have to load the <code>tinytex</code> package with <code>library()</code> at the start of your code file.</p>
+</div>
+</div>
+<p>You may get an error message that looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Found <span class="st">'/Library/TeX/texbin/tlmgr'</span>, which indicates a LaTeX distribution may have existed <span class="cf">in</span> the system.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If that is the case, press N for No and cancel the installation. Most likely, you already have the necessary software installed to create PDF reports.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="step-2-do-your-analysis-and-document-your-code" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Step 2: Do your analysis and document your code</h1>
+<p>If you want to create a code report, you obviously need to have some code and results first.</p>
+<p>To make everything as smooth as possible, use the code structure guide (provided on <em>Canvas</em>) to organize your code from the start. See also the example code report (on <em>Canvas</em>) to see how yours should ideally look like.</p>
+</section>
+<section id="step-3-make-sure-everything-works-without-problems" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Step 3: Make sure everything works without problems</h1>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can only create a report if your code runs from start to end without breaking, meaning without generating an error message. This means that there cannot be any typos, etc. in your code.</p>
+</div>
+</div>
+<p>You can easily test if everything works by doing the following:</p>
+<ul>
+<li>Re-start <code>R</code> (in <code>RStudio</code>, go to <em>Session</em> in the menu at the top, then click on <em>Restart R</em>).</li>
+<li>Make sure that <code>R</code> does not load the previous results and data. Your <em>Environment</em> window should now be empty. (If it is not empty, change the settings in <code>RStudio</code> as described in Tutorial 0, section 4.1).</li>
+<li>Select <em>all</em> the code in your scriptfile (right-click, <em>Select all</em>)</li>
+<li>Run the code (e.g., by clicking on <em>Run</em> in the menu bar at the top right of your scriptfile)</li>
+</ul>
+<p>If everything works, then <code>R</code> will now execute all your code from the start to the end and reproduce all your results, one after the other. <strong>Make sure that all the results (graphs, tables, statistical tests) are the exact same as those you present in your assignment.</strong></p>
+<p>On the other hand, if there is an error in your code, <code>R</code> will stop and give you an error message. Obviously, you then need to fix this error, which means you have to “de-bug” your code.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="step-4-create-the-report" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Step 4: Create the report</h1>
+<p>If you have tested that your code runs without errors or problems, then all you have to do is to click another little button as shown in the screenshot below:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="codereport_screenshot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Creating a code report"><img src="codereport_screenshot.png" class="img-fluid figure-img" alt="Creating a code report"></a></p>
+<figcaption>Creating a code report</figcaption>
+</figure>
+</div>
+<p>A small popup window asking you in which format you want to create the report should appear now – obviously, select PDF.</p>
+<p><code>RStudio</code> should then create the report and open it as a PDF window. It may also install a few additional packages when you do this for the very first time.</p>
+</section>
+<section id="step-5-check-the-report" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Step 5: Check the report</h1>
+<p>As before: Make sure that all the results (graphs, tables, statistical tests) are the exact same as those you present in your assignment.</p>
+<p>It is fine if the report looks a bit messy as long as all the results are there and a reader can identify them. You have your main text to present the results in a neat and polished fashion.</p>
 
 
+</section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>See also <a href="https://yihui.org/tinytex/" class="uri">https://yihui.org/tinytex/</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -742,16 +868,39 @@ Tip
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="./tutorial_0.html" class="pagination-link" aria-label="Tutorial 0: Installation &amp; Setup">
-        <span class="nav-page-text">Tutorial 0: Installation &amp; Setup</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","descPosition":"bottom","loop":false,"openEffect":"zoom","selector":".lightbox"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script>
 
 
 
