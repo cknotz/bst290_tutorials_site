@@ -262,7 +262,7 @@ When you work with survey data, you often deal with quasi-numerical scales like 
 
 Visualizing relationships between two of such 0-10 or 1-7 scale variables can be difficult. In principle, you can use `geom_point()` to create a scatterplot, but this will often not be very informative because the individual observations will overlap and any patterns in the data will be difficult to see.
 
-Luckily, there is an alternative: `geom_count()`, and two BSTAT students at UiS, Rosa Ottestad and Norman Sunde, have written a mini-tutorial on how to use this function to plot associations between two quasi-numeric 0-10 scale variables. You can read the tutorial [here](tutorial_4a.qmd).
+Luckily, there is an alternative: `geom_count()`, and two BSTAT students at UiS, Rosa Ottestad and Norman Sunde, have written a mini-tutorial on how to use this function to plot associations between two quasi-numeric 0-10 scale variables. You can read the tutorial [here](https://kodehjornet.github.io/posts/geom_count/){.external target="_blank"}.
 
 
 \newpage

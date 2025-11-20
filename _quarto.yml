@@ -32,11 +32,6 @@ website:
       - section: "Other"
         contents:
         - href: codereport.qmd
-      - text: "---"
-      - section: "Tips & tricks from students"
-        contents:
-        - href: tutorial_4a.qmd
-        - href: promptengineering.qmd
 
 
 format:

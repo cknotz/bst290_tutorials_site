@@ -367,7 +367,7 @@ Note that we made the points a bit larger (`size = 2`) and changed the color and
 \newpage
 ## `geom_count`
 
-As mentioned in [Tutorial 4](tutorial_4.qmd), a second (and superior) way to plot relationships between quasi-numeric 0-10 scale variables is to use `geom_count()`. This [mini-tutorial](tutorial_4a.qmd) by Rosa Ottestad and Normal Sunde explains how you do that.
+As mentioned in [Tutorial 4](tutorial_4.qmd), a second (and superior) way to plot relationships between quasi-numeric 0-10 scale variables is to use `geom_count()`. This [mini-tutorial](https://kodehjornet.github.io/posts/geom_count/){.external target="_blank"} by Rosa Ottestad and Normal Sunde explains how you do that.
 
 \newpage
 ## `geom_hex()`

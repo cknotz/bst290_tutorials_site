@@ -12,7 +12,7 @@ To make reading the tutorials easier and quicker, **download them as PDFs and pr
 
 ::: {.callout-tip}
 
-Some students wrote their own short tutorials on other relevant topics (prompt engineering with *ChatGPT* and additional data visualization tricks) and are sharing them with you here. You can find these if you **scroll down in the navigation menu on the left** 👈.
+Some students wrote their own short tutorials on how to solve common problems that students who are just learning how to work with `R` often run into (e.g., prompt engineering with *ChatGPT* and additional data visualization tricks). You might find these very helpful. You can find these tutorials on [kodehjornet.github.io](https://kodehjornet.github.io/){.external target="_blank"}.
 
 :::
 
