@@ -368,7 +368,7 @@ cpds %>%
 
 ## Vectors & variables
 
-You have previously learned that `R` stores collections of data points as *vectors*. But you may also remember from the lecture and Kellstedt & Whitten that we, as social scientists, have also another name for collections of data points: **variables**. 
+You have previously learned that `R` stores collections of data points as *vectors*. But you may also remember from the lecture that we, as social scientists, have also another name for collections of data points: **variables**. 
 
 Measurements of a variable are really nothing else than collections of data points (usually numbers, but sometimes also text). For example, the (fictional) set of body height measurements we created earlier could be measurements of a variable ("body height") that comes from a research project. 
 
@@ -384,7 +384,7 @@ The important point to remember: In `R`, variables are represented as vectors --
 \newpage
 ## Datasets
 
-When you do a statistical analysis, you usually work with more than one variable (i.e., vector) because you usually want to know how one or more variables are related to another variable (as explained in Chapter 1 in Kellstedt & Whitten). To be able to work with two or more variables at the same time, they need to be "tied together" --- and *this is, in essence, what a dataset is: Several variables/vectors tied together.*
+When you do a statistical analysis, you usually work with more than one variable (i.e., vector) because you usually want to know how one or more variables are related to another variable (based on hypotheses that we formulate). To be able to work with two or more variables at the same time, they need to be "tied together" --- and *this is, in essence, what a dataset is: Several variables/vectors tied together.*
 
 To see what a dataset in `R` looks like, you can open one of the many "toy" datasets that are built into `R`: the "Violent Crime Rates by US State" (`USArrests`) dataset.^[To see what other "toy" datasets you have available, run `data()` in your *Console*.]
 
