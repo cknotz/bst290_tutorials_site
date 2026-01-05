@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -361,7 +381,8 @@ window.Quarto = {
 <p>You have now made it through the software- and code-heavy parts of the course and learned the basics of data handling and visualization with <code>R</code>. Now, beginning with this tutorial, the focus will shift away from software and code and instead focus more on statistics. This means that the tutorials will say less about how to write code and more about how you make sense of your results.</p>
 <p>The reason for this is the following: Running statistical tests and estimations in <code>R</code> is not really difficult as far as coding is concerned. As you will see, most statistical estimations require only a few brief lines of code. The tricky thing is knowing how to write the necessary bits of code correctly. But the most difficult part is how to make sense of the results. Here you need to understand what the different statistical concepts such as <em>p</em>-values or standard errors are and how you identify them in the output that <code>R</code> gives you. And this is why we focus mostly on the latter part, the interpretation.</p>
 <p>This being said, we will still use these tutorials to repeat and practice the data management and visualization skills that you learned previously.</p>
-<p>We start in this tutorial with the first building block of <em>inferential</em> statistics: confidence intervals. You will learn how to use <code>R</code> to calculate a confidence interval for a sample mean and how to interpret the result — as was explained in Kellstedt &amp; Whitten (2018, Chapter 7). As before, we start by working with the small <code>ess</code> practice dataset included in the <code>bst290</code> package. You will then apply what you learned on real ESS data in the in-class exercises.</p>
+<p>We start in this tutorial with the first building block of <em>inferential</em> statistics: confidence intervals. You will learn how to use <code>R</code> to calculate a confidence interval for a sample mean and how to interpret the result — as was explained in Solbakken <span class="citation" data-cites="Solbakken2019 Kellstedt2018">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019, chap. 5</a>; see also <a href="#ref-Kellstedt2018" role="doc-biblioref">Kellstedt and Whitten 2018, chap. 7</a>)</span>.</p>
+<p>As before, we start by working with the small <code>ess</code> practice dataset included in the <code>bst290</code> package. You will then apply what you learned on real ESS data in the in-class exercises.</p>
 <div style="page-break-after: always;"></div>
 </section>
 <section id="setup" class="level1" data-number="2">
@@ -434,13 +455,8 @@ window.Quarto = {
 </section>
 <section id="estimating-the-confidence-interval-using-a-built-in-function" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="estimating-the-confidence-interval-using-a-built-in-function"><span class="header-section-number">5.2</span> Estimating the confidence interval using a built-in function</h2>
-<p>To calculate a confidence interval for a sample mean in <code>R</code>, you use the <code>t.test()</code> function. This may seem confusing: Why is that function not called <code>conf.int()</code> or similar? Does that function really use the same formula that was explained in Kellstedt &amp; Whitten?</p>
-<p>The reason behind this is that the <em>t</em>-test (which you will learn about in two weeks) and the confidence interval are related, and <code>R</code> uses the <code>t.test()</code> function for both procedures. The difference between the “by-hand” approach in Kellstedt &amp; Whitten and the <code>t.test()</code> function is the following:</p>
-<ul>
-<li>The formula by Kellstedt &amp; Whitten simply assumes that you are working with a large sample (a few hundred observations or more). This is often reasonable, but not always.</li>
-<li>The <code>t.test()</code> function uses a slightly different calculation that makes an adjustment for the sample size you actually have. This will not really make a difference if your sample size is large (&gt;1.000), and usually only a minor difference for smaller samples.</li>
-</ul>
-<p>Generally speaking, you are safe if you use the <code>t.test()</code> function (and you work with a random sample, of course!).</p>
+<p>To calculate a confidence interval for a sample mean in <code>R</code>, you use the <code>t.test()</code> function. This may seem confusing: Why is that function not called <code>conf.int()</code> or similar?</p>
+<p>The reason behind this is that the <em>t</em>-test (which you will learn about shortly) and the confidence interval are related <span class="citation" data-cites="Solbakken2019">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 5</a>)</span>, and <code>R</code> uses the <code>t.test()</code> function for both procedures. Simply put, the <code>t.test()</code> function relies on the <em>t</em>-distribution, which basically makes an adjustment for the sample size you actually have.</p>
 <div style="page-break-after: always;"></div>
 <section id="using-t.test" class="level3" data-number="5.2.1">
 <h3 data-number="5.2.1" class="anchored" data-anchor-id="using-t.test"><span class="header-section-number">5.2.1</span> Using <code>t.test()</code></h3>
@@ -461,7 +477,7 @@ window.Quarto = {
 </div>
 <p>All you do is call the <code>t.test()</code> function and, within it, name the variable for which you want a confidence interval — similar to the <code>mean()</code> or <code>sd()</code> functions! The <code>t.test()</code> function uses the 95% level of confidence by default, but you can adjust this as you will see a bit further below.</p>
 <p>The important part of the output is of course the line below the one saying <code>95 percent confidence interval:</code> Here you see the lower and upper limit of the 95% confidence interval: 7.564 and 8.157.</p>
-<p><em>Can you interpret the result here (see Kellstedt/Whitten 2018, Chapter 7)?</em></p>
+<p><em>Can you interpret the result here <span class="citation" data-cites="Solbakken2019">(see <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 5</a>)</span>?</em></p>
 <p>You also see the sample mean of 7.86014 mentioned again at the bottom of the output.</p>
 <div style="page-break-after: always;"></div>
 </section>
@@ -521,10 +537,10 @@ window.Quarto = {
 </section>
 <section id="voluntary-calculating-a-confidence-interval-by-hand" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> (Voluntary) Calculating a confidence interval “by hand”</h1>
-<p>You probably remember from Kellstedt and Whitten (2018, Chapter 7) that you can also use a fairly simple formula to calculate confidence intervals by hand. And since <code>R</code> can be used as a pocket calculator, you can calculate the confidence interval for a sample mean step-by-step using <code>R</code>.</p>
+<p>You probably remember from Solbakken <span class="citation" data-cites="Solbakken2019 Kellstedt2018">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019, chap. 5.7</a>; see also <a href="#ref-Kellstedt2018" role="doc-biblioref">Kellstedt and Whitten 2018, chap. 7</a>)</span> that you can also use a fairly simple formula to calculate confidence intervals by hand. And since <code>R</code> can be used as a pocket calculator, you can calculate the confidence interval for a sample mean step-by-step using <code>R</code>.</p>
 <section id="the-math" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="the-math"><span class="header-section-number">7.1</span> The math</h2>
-<p>As explained in Kellstedt &amp; Whitten, the formula to get the 95% confidence interval for the sample mean of a variable <span class="math inline">\(Y\)</span> is the following: <span class="math display">\[CI_{\bar{Y}} = \bar{Y} \pm 1.96 \times \sigma_{\bar{Y}}\]</span></p>
+<p>The formula to get the 95% confidence interval for the sample mean of a variable <span class="math inline">\(Y\)</span> is the following: <span class="math display">\[CI_{\bar{Y}} = \bar{Y} \pm 1.96 \times \sigma_{\bar{Y}}\]</span></p>
 <p>where <span class="math inline">\(\bar{Y}\)</span> is the sample mean of the variable, <span class="math inline">\(\sigma_{\bar{Y}}\)</span> is the standard error of that mean, and 1.96 (no, not 2!) is the critical value for a 95% confidence level.</p>
 <p>The standard error of the mean <span class="math inline">\(\sigma_{\bar{Y}}\)</span> is calculated as follows: <span class="math display">\[\sigma_{\bar{Y}} = \frac{s_Y}{\sqrt{n}}\]</span></p>
 <p>where <span class="math inline">\(s_Y\)</span> is the sample standard deviation of the <span class="math inline">\(Y\)</span> variable, and <span class="math inline">\(n\)</span> is the sample size.</p>
@@ -574,11 +590,19 @@ window.Quarto = {
 <p>If you pay close attention, you may notice that the interval we get here is almost identical to the one we got when we used the <code>t.test()</code> function.</p>
 
 
+
 </section>
 </section>
 
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Kellstedt2018" class="csl-entry" role="listitem">
+Kellstedt, Paul M, and Guy D Whitten. 2018. <em>The Fundamentals of Political Science Research</em>. Cambridge: Cambridge University Press.
+</div>
+<div id="ref-Solbakken2019" class="csl-entry" role="listitem">
+Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fagbokforlaget.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>See e.g., <a href="https://worldhappiness.report/ed/2020/the-nordic-exceptionalism-what-explains-why-the-nordic-countries-are-constantly-among-the-happiest-in-the-world/" class="uri">https://worldhappiness.report/ed/2020/the-nordic-exceptionalism-what-explains-why-the-nordic-countries-are-constantly-among-the-happiest-in-the-world/</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

@@ -3,6 +3,7 @@ title: "Tutorial 7b: Correlation"
 author: "Carlo Knotz"
 toc: true
 number-sections: true
+bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 format:
   html: default
   pdf: default
@@ -30,7 +31,7 @@ ess7 <- labelled::unlabelled(haven::read_dta("ess7.dta")) %>%
 
 The last two tutorials showed you how you can study relationships between two categorical variables (with the $\chi^2$ test) and between one binomial variable and one metric or linear variable (with the *t*-test). What is left: How do you analyze relationships between *two continuous variables*?
 
-The correct test is of course *Pearson's correlation coefficient* (as you know from Kellstedt and Whitten 2018). In this tutorial, you will learn how you can implement this in `R`.
+The correct statistic for such a relationship is of course *Pearson's correlation coefficient* [@Solbakken2019, chapter 4.5]. In this tutorial, you will learn how you can calculate the correlation coefficient and test for its statistical significance (i.e., how confident you can be that the correlation coefficient you find in your data is different from, greater, or lower than 0) in `R`.
 
 The research question for this tutorial is again about religiosity, but we will now look at the effect of *age*. In other words, we will see if there is a correlation between how old a person is and how religious she feels.
 
@@ -197,11 +198,11 @@ We get a correlation coefficient of `r round(res, digits=3)`. This means `agea` 
 
 Now that we know that there is a positive association between age and religiosity, the next question is: *is this association statistically significant?* In other words, is our finding only the result of random sampling variation, or is there really a systematic relationship between age and religiosity in the underlying population?
 
-The `cor.test()` function allows you to run the significance test that is explained in Kellstedt and Whitten (2018, 183-184). To use this function, you just specify the two variables you want to use. It will take care of the `NA`s by itself.
+The `cor.test()` function allows you to run the significance test that is explained in Solbakken [-@Solbakken2019, chhapter 5.10.2; see also @Kellstedt2018, 183-184]. To use this function, you just specify the two variables you want to use. It will take care of the `NA`s by itself.
 
 ::: {.callout-important title="There are different ways in which you can use this function:"}
 
-* By default, the function tests if the correlation coefficient is *different from 0* or not. In other words, it tests if the two variables are associated *in some way*, be it positive or negative. (This is also the procedure that is described in Kellstedt and Whitten). 
+* By default, the function tests if the correlation coefficient is *different from 0* or not. In other words, it tests if the two variables are associated *in some way*, be it positive or negative. (This is also the procedure that is described by Solbakken). 
 * You can also let the function test more specifically if the correlation coefficient is *larger than 0*---if there is a positive correlation. To do that, you set the `alternative` option to `"greater"`.
 * And you can test specifically if the correlation coefficient is *smaller than 0*---if there is a negative relationship. In that case, you set `alternative="less"`.
 
@@ -221,7 +222,7 @@ If you take a quick look at the output, you see under `alternative` what `R` has
 * The *alternative* hypothesis is that the true *r* **is not equal** to 0.
 * The corresponding *null* hypothesis (which is not specifically mentioned in the output) is then that the true *r* **is equal** to 0.
 
-And, since you have now learned about two other statistical tests and their interpretation, you should know what to look for next: the *p*-value! Based on this result, can we reject the null hypothesis (see also Kellstedt/Whitten 2018, Chapter 8)? As in the previous tutorial on the *t*-test, you can use `format.pval()` to translate the *p*-value into something that is a bit easier to interpret:
+And, since you have now learned about two other statistical tests and their interpretation, you should know what to look for next: the *p*-value! Based on this result, can we reject the null hypothesis [see also @Solbakken2019, chapter 5.10; @Kellstedt2018, chapter 8]? As in the previous tutorial on the *t*-test, you can use `format.pval()` to translate the *p*-value into something that is a bit easier to interpret:
 ```{r}
 format.pval(2.2e-16, digits = 3, eps = 0.01)
 ```
@@ -232,8 +233,8 @@ You can read the other results as follows:
 
 * `sample estimates:` shows you the sample correlation coefficient, which you already know from earlier;
 * `95 percent confidence interval:` is obviously the 95% confidence interval for the correlation coefficient. 
-* `t` is the *t* statistic. As explained in Kellstedt and Whitten (2018, 183), we use the *t*-test in this case to test if the correlation coefficient is equal to 0 or not;
-* `df` are the degrees of freedom (see Kellstedt and Whitten 2018, 183);
+* `t` is the *t* statistic. As explained in Solbakken [-@Solbakken2019, chapter 5.10; see also @Kellstedt2018, 183], we use the *t*-test in this case to test if the correlation coefficient is equal to 0 or not;
+* `df` are the degrees of freedom;
 
 \newpage
 ### Testing if the the true *r* is greater than 0

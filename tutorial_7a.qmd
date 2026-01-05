@@ -3,6 +3,7 @@ title: "Tutorial 7a: *t*-test"
 author: "Carlo Knotz"
 toc: true
 number-sections: true
+bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 format:
   html: default
   pdf: default
@@ -184,7 +185,7 @@ The difference between men and women when it comes to their religiosity is direc
 \newpage
 ## Option 2: Boxplot
 
-While a bar graph is a good way to represent group differences, you can also use a boxplot (as also shown by Kellstedt and Whitten 2018, 175). As you know from the previous tutorial on Data Visualization, you can create a bivariate boxplot like this:
+While a bar graph is a good way to represent group differences, you can also use a boxplot. As you know from the previous tutorial on Data Visualization, you can create a bivariate boxplot like this:
 
 * You specify the grouping variable (`gndr`) as the variable that goes on the x-axis, and...
 * ...the outcome variable (`relig_num`) as the variable for the y-axis;
@@ -215,7 +216,7 @@ ess7 %>%
 
 We have found that the men and women in our sample differ in their average levels of religiosity, with women being on average more religious than men. But: *Is this difference also statistically significant?* In other words, does the difference we found in the *ESS* data really reflect a true difference in the general Norwegian population, or is it simply a result of *sampling variation* (the random variation in the data that result from the fact that we are only working with a *sample* of the entire population)?
 
-We can find out with a formal statistical test. In this case, since our *independent* variable (gender) is binomial (categorical, with two distinct categories) and the *dependent* variable is numeric (religiosity), the appropriate test is the difference-of-means *t*-test (see also Kellstedt and Whitten 2018, Chapter 8.4.2).
+We can find out with a formal statistical test. In this case, since our *independent* variable (gender) is binomial (categorical, with two distinct categories) and the *dependent* variable is numeric (religiosity), the appropriate test is the difference-of-means *t*-test.
 
 ## The `t.test()` function
 
@@ -248,7 +249,7 @@ As always in `R`, the output is not very polished but it just takes a bit of pra
 * Start at the bottom, where it says `sample estimates`: This reports the simple group averages in the dependent variable --- and you already know these numbers: The average of `relig_num` for men is around 3.16, while the average for women is around 4.11 (see also Section 4 above).
 * Under `alternative hypothesis`, `R` tells you what you are testing here: Is there a significant difference between the group averages for men and women?
 * Now to the 'meat part', right under `data`: 
-  + You get the *t*-statistic: `r round(res$statistic, digits = 3)`. In this case, this number reflects the ratio of the mean differences and their standard error --- or the 'signal-to-noise' ratio (see Kellstedt and Whitten 2018, 176). 
+  + You get the *t*-statistic: `r round(res$statistic, digits = 3)`. In this case, this number reflects the ratio of the mean differences and their standard error --- or the 'signal-to-noise' ratio [see also @Solbakken2019, 170]. 
   + `df` are the degrees of freedom.
   + `p-value` is, obviously, the *p*-value. `R` gives you this number in the scientific notation. It corresponds to `r format(res$p.value, scientific = F)` or a 0 followed by 10 more 0s and then 9.1... --- a *very small number*. 
   
@@ -259,7 +260,7 @@ format.pval(9.11e-11, digits = 3, eps = 0.01)
   
 As above, the *p*-value we got is *very* small -- smaller than 0.01 in any case.
 
-Now to the interesting part: What does all of this mean? *Try to interpret the results based on the explanation in Kellstedt/Whitten (2018, Chapter 8)!*  
+Now to the interesting part: What does all of this mean? *Try to interpret the results based on the explanation in Solbakken [-@Solbakken2019, chapter 5.10.3]*  
   
 <!-- **Focus on the following two things** when you interpret the result from a *t*-test: -->
 
@@ -304,13 +305,13 @@ You can find de-bugging exercises in the usual spot. There, you will test if men
 
 You may have noticed that the test result also says "**Welch** Two Sample t-test", and you may wonder where the "Welch" comes from.
 
-To explain: The *t*-test procedure explained in Kellstedt and Whitten makes a particular assumption about the underlying data. Specifically, it assumes that the two groups you compare have equal variances --- that the data are about equally 'noisy' in each group. 
+To explain: The conventional *t*-test procedure makes a particular assumption about the underlying data. Specifically, it assumes that the two groups you compare have equal variances --- that the data are about equally 'noisy' in each group. 
 
 This assumption is obviously not always justified, however --- and the "Welch's" test procedure does not make this assumption. `R` runs by default the more flexible Welch test, just to be safe. 
 
 Despite the difference in assumptions, both tests are interpreted the same way and should (usually) produce about the same results.
 
-You can tell `R` to use the Kellstedt and Whitten procedure if you set the `var.equal` option to `TRUE` (if you state explicitly that you are willing to assume that both groups have equal variances):
+You can tell `R` to use the conventional procedure if you set the `var.equal` option to `TRUE` (if you state explicitly that you are willing to assume that both groups have equal variances):
 ```{r testvareq, echo=T, eval=T, collapse=T}
 t.test(relig_num ~ gndr,
        data = ess7,

@@ -3,6 +3,7 @@ title: "Tutorial 5: Confidence intervals"
 author: "Carlo Knotz"
 toc: true
 number-sections: true
+bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 format:
   html: default
   pdf: default
@@ -20,7 +21,8 @@ The reason for this is the following: Running statistical tests and estimations 
 
 This being said, we will still use these tutorials to repeat and practice the data management and visualization skills that you learned previously.
 
-We start in this tutorial with the first building block of *inferential* statistics: confidence intervals. You will learn how to use `R` to calculate a confidence interval for a sample mean and how to interpret the result --- as was explained in Kellstedt & Whitten (2018, Chapter 7). 
+We start in this tutorial with the first building block of *inferential* statistics: confidence intervals. You will learn how to use `R` to calculate a confidence interval for a sample mean and how to interpret the result --- as was explained in Solbakken [-@Solbakken2019, chapter 5; see also @Kellstedt2018, chapter 7].
+
 As before, we start by working with the small `ess` practice dataset included in the `bst290` package. You will then apply what you learned on real ESS data in the in-class exercises. 
 
 \newpage
@@ -95,14 +97,9 @@ The high value of almost 8 on the 0-10 scale again reflects the overall high lev
 \newpage
 ## Estimating the confidence interval using a built-in function
 
-To calculate a confidence interval for a sample mean in `R`, you use the `t.test()` function. This may seem confusing: Why is that function not called `conf.int()` or similar? Does that function really use the same formula that was explained in Kellstedt & Whitten?
+To calculate a confidence interval for a sample mean in `R`, you use the `t.test()` function. This may seem confusing: Why is that function not called `conf.int()` or similar?
 
-The reason behind this is that the *t*-test (which you will learn about in two weeks) and the confidence interval are related, and `R` uses the `t.test()` function for both procedures. The difference between the "by-hand" approach in Kellstedt & Whitten and the `t.test()` function is the following:
-
-* The formula by Kellstedt & Whitten simply assumes that you are working with a large sample (a few hundred observations or more). This is often reasonable, but not always.
-* The `t.test()` function uses a slightly different calculation that makes an adjustment for the sample size you actually have. This will not really make a difference if your sample size is large (>1.000), and usually only a minor difference for smaller samples.
-
-Generally speaking, you are safe if you use the `t.test()` function (and you work with a random sample, of course!).
+The reason behind this is that the *t*-test (which you will learn about shortly) and the confidence interval are related [see also @Solbakken2019, chapter 5], and `R` uses the `t.test()` function for both procedures. Simply put, the `t.test()` function relies on the *t*-distribution, which basically makes an adjustment for the sample size you actually have. 
 
 \newpage
 ### Using `t.test()`
@@ -118,7 +115,7 @@ All you do is call the `t.test()` function and, within it, name the variable for
 
 The important part of the output is of course the line below the one saying `95 percent confidence interval:` Here you see the lower and upper limit of the 95% confidence interval: `r round(ci$conf.int[1], digits = 3)` and `r round(ci$conf.int[2], digits = 3)`.
 
-*Can you interpret the result here (see Kellstedt/Whitten 2018, Chapter 7)?*
+*Can you interpret the result here [see @Solbakken2019, chapter 5]?*
 
 You also see the sample mean of `r round(mean(ess$stflife_num), digits = 5)` mentioned again at the bottom of the output.
 
@@ -170,11 +167,11 @@ You now know how to use `R` to calculate a confidence interval for a sample mean
 \newpage
 # (Voluntary) Calculating a confidence interval "by hand"
 
-You probably remember from Kellstedt and Whitten (2018, Chapter 7) that you can also use a fairly simple formula to calculate confidence intervals by hand. And since `R` can be used as a pocket calculator, you can calculate the confidence interval for a sample mean step-by-step using `R`.
+You probably remember from Solbakken [-@Solbakken2019, chapter 5.7; see also @Kellstedt2018, chapter 7] that you can also use a fairly simple formula to calculate confidence intervals by hand. And since `R` can be used as a pocket calculator, you can calculate the confidence interval for a sample mean step-by-step using `R`.
 
 
 ## The math
-As explained in Kellstedt & Whitten, the formula to get the 95% confidence interval for the sample mean of a variable $Y$ is the following: 
+The formula to get the 95% confidence interval for the sample mean of a variable $Y$ is the following: 
 $$CI_{\bar{Y}} = \bar{Y} \pm 1.96 \times \sigma_{\bar{Y}}$$
 
 where $\bar{Y}$ is the sample mean of the variable, $\sigma_{\bar{Y}}$ is the standard error of that mean, and 1.96 (no, not 2!) is the critical value for a 95% confidence level.

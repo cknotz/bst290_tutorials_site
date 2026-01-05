@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -372,7 +392,7 @@ window.Quarto = {
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <p>The last two tutorials showed you how you can study relationships between two categorical variables (with the <span class="math inline">\(\chi^2\)</span> test) and between one binomial variable and one metric or linear variable (with the <em>t</em>-test). What is left: How do you analyze relationships between <em>two continuous variables</em>?</p>
-<p>The correct test is of course <em>Pearson’s correlation coefficient</em> (as you know from Kellstedt and Whitten 2018). In this tutorial, you will learn how you can implement this in <code>R</code>.</p>
+<p>The correct statistic for such a relationship is of course <em>Pearson’s correlation coefficient</em> <span class="citation" data-cites="Solbakken2019">(<a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 4.5</a>)</span>. In this tutorial, you will learn how you can calculate the correlation coefficient and test for its statistical significance (i.e., how confident you can be that the correlation coefficient you find in your data is different from, greater, or lower than 0) in <code>R</code>.</p>
 <p>The research question for this tutorial is again about religiosity, but we will now look at the effect of <em>age</em>. In other words, we will see if there is a correlation between how old a person is and how religious she feels.</p>
 <p>And, as before, we will start directly with the full <em>ESS</em> dataset (round 7, 2014).</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -520,7 +540,7 @@ Tip
 <section id="significance-testing-with-cor.test" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="significance-testing-with-cor.test"><span class="header-section-number">4.2</span> Significance testing with <code>cor.test()</code></h2>
 <p>Now that we know that there is a positive association between age and religiosity, the next question is: <em>is this association statistically significant?</em> In other words, is our finding only the result of random sampling variation, or is there really a systematic relationship between age and religiosity in the underlying population?</p>
-<p>The <code>cor.test()</code> function allows you to run the significance test that is explained in Kellstedt and Whitten (2018, 183-184). To use this function, you just specify the two variables you want to use. It will take care of the <code>NA</code>s by itself.</p>
+<p>The <code>cor.test()</code> function allows you to run the significance test that is explained in Solbakken <span class="citation" data-cites="Solbakken2019 Kellstedt2018">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019</a>, chhapter 5.10.2; see also <a href="#ref-Kellstedt2018" role="doc-biblioref">Kellstedt and Whitten 2018, 183–84</a>)</span>. To use this function, you just specify the two variables you want to use. It will take care of the <code>NA</code>s by itself.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="There are different ways in which you can use this function:">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -532,7 +552,7 @@ There are different ways in which you can use this function:
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>By default, the function tests if the correlation coefficient is <em>different from 0</em> or not. In other words, it tests if the two variables are associated <em>in some way</em>, be it positive or negative. (This is also the procedure that is described in Kellstedt and Whitten).</li>
+<li>By default, the function tests if the correlation coefficient is <em>different from 0</em> or not. In other words, it tests if the two variables are associated <em>in some way</em>, be it positive or negative. (This is also the procedure that is described by Solbakken).</li>
 <li>You can also let the function test more specifically if the correlation coefficient is <em>larger than 0</em>—if there is a positive correlation. To do that, you set the <code>alternative</code> option to <code>"greater"</code>.</li>
 <li>And you can test specifically if the correlation coefficient is <em>smaller than 0</em>—if there is a negative relationship. In that case, you set <code>alternative="less"</code>.</li>
 </ul>
@@ -561,7 +581,7 @@ There are different ways in which you can use this function:
 <li>The <em>alternative</em> hypothesis is that the true <em>r</em> <strong>is not equal</strong> to 0.</li>
 <li>The corresponding <em>null</em> hypothesis (which is not specifically mentioned in the output) is then that the true <em>r</em> <strong>is equal</strong> to 0.</li>
 </ul>
-<p>And, since you have now learned about two other statistical tests and their interpretation, you should know what to look for next: the <em>p</em>-value! Based on this result, can we reject the null hypothesis (see also Kellstedt/Whitten 2018, Chapter 8)? As in the previous tutorial on the <em>t</em>-test, you can use <code>format.pval()</code> to translate the <em>p</em>-value into something that is a bit easier to interpret:</p>
+<p>And, since you have now learned about two other statistical tests and their interpretation, you should know what to look for next: the <em>p</em>-value! Based on this result, can we reject the null hypothesis <span class="citation" data-cites="Solbakken2019 Kellstedt2018">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 5.10</a>; <a href="#ref-Kellstedt2018" role="doc-biblioref">Kellstedt and Whitten 2018, chap. 8</a>)</span>? As in the previous tutorial on the <em>t</em>-test, you can use <code>format.pval()</code> to translate the <em>p</em>-value into something that is a bit easier to interpret:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">format.pval</span>(<span class="fl">2.2e-16</span>, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">eps =</span> <span class="fl">0.01</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -573,8 +593,8 @@ There are different ways in which you can use this function:
 <ul>
 <li><code>sample estimates:</code> shows you the sample correlation coefficient, which you already know from earlier;</li>
 <li><code>95 percent confidence interval:</code> is obviously the 95% confidence interval for the correlation coefficient.</li>
-<li><code>t</code> is the <em>t</em> statistic. As explained in Kellstedt and Whitten (2018, 183), we use the <em>t</em>-test in this case to test if the correlation coefficient is equal to 0 or not;</li>
-<li><code>df</code> are the degrees of freedom (see Kellstedt and Whitten 2018, 183);</li>
+<li><code>t</code> is the <em>t</em> statistic. As explained in Solbakken <span class="citation" data-cites="Solbakken2019 Kellstedt2018">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019, chap. 5.10</a>; see also <a href="#ref-Kellstedt2018" role="doc-biblioref">Kellstedt and Whitten 2018, 183</a>)</span>, we use the <em>t</em>-test in this case to test if the correlation coefficient is equal to 0 or not;</li>
+<li><code>df</code> are the degrees of freedom;</li>
 </ul>
 <div style="page-break-after: always;"></div>
 </section>
@@ -904,10 +924,18 @@ There are different ways in which you can use this function:
 <!-- 4. Interpret the results; -->
 
 
+
 </section>
 
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Kellstedt2018" class="csl-entry" role="listitem">
+Kellstedt, Paul M, and Guy D Whitten. 2018. <em>The Fundamentals of Political Science Research</em>. Cambridge: Cambridge University Press.
+</div>
+<div id="ref-Solbakken2019" class="csl-entry" role="listitem">
+Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fagbokforlaget.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Hout, M. and Fischer, C. S. (2014). Explaining why more Americans have no religious preference: Political backlash and generational succession, 1987-2012. <em>Sociological Science</em>, 1:423–447; Marwell, G. and Demerath, N. (2003). “Secularization” by any other name. <em>American Sociological Review</em>, 68(2):314–316.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

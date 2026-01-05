@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -566,7 +586,7 @@ Tip
 </section>
 <section id="option-2-boxplot" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="option-2-boxplot"><span class="header-section-number">4.2</span> Option 2: Boxplot</h2>
-<p>While a bar graph is a good way to represent group differences, you can also use a boxplot (as also shown by Kellstedt and Whitten 2018, 175). As you know from the previous tutorial on Data Visualization, you can create a bivariate boxplot like this:</p>
+<p>While a bar graph is a good way to represent group differences, you can also use a boxplot. As you know from the previous tutorial on Data Visualization, you can create a bivariate boxplot like this:</p>
 <ul>
 <li>You specify the grouping variable (<code>gndr</code>) as the variable that goes on the x-axis, and…</li>
 <li>…the outcome variable (<code>relig_num</code>) as the variable for the y-axis;</li>
@@ -612,7 +632,7 @@ Tip
 <section id="statistical-test" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> Statistical test</h1>
 <p>We have found that the men and women in our sample differ in their average levels of religiosity, with women being on average more religious than men. But: <em>Is this difference also statistically significant?</em> In other words, does the difference we found in the <em>ESS</em> data really reflect a true difference in the general Norwegian population, or is it simply a result of <em>sampling variation</em> (the random variation in the data that result from the fact that we are only working with a <em>sample</em> of the entire population)?</p>
-<p>We can find out with a formal statistical test. In this case, since our <em>independent</em> variable (gender) is binomial (categorical, with two distinct categories) and the <em>dependent</em> variable is numeric (religiosity), the appropriate test is the difference-of-means <em>t</em>-test (see also Kellstedt and Whitten 2018, Chapter 8.4.2).</p>
+<p>We can find out with a formal statistical test. In this case, since our <em>independent</em> variable (gender) is binomial (categorical, with two distinct categories) and the <em>dependent</em> variable is numeric (religiosity), the appropriate test is the difference-of-means <em>t</em>-test.</p>
 <section id="the-t.test-function" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="the-t.test-function"><span class="header-section-number">5.1</span> The <code>t.test()</code> function</h2>
 <p>You already know the <code>t.test()</code> function from the tutorial on confidence intervals — and this is obviously also the function to use here.</p>
@@ -648,7 +668,7 @@ Tip
 <li>Under <code>alternative hypothesis</code>, <code>R</code> tells you what you are testing here: Is there a significant difference between the group averages for men and women?</li>
 <li>Now to the ‘meat part’, right under <code>data</code>:
 <ul>
-<li>You get the <em>t</em>-statistic: -6.532. In this case, this number reflects the ratio of the mean differences and their standard error — or the ‘signal-to-noise’ ratio (see Kellstedt and Whitten 2018, 176).</li>
+<li>You get the <em>t</em>-statistic: -6.532. In this case, this number reflects the ratio of the mean differences and their standard error — or the ‘signal-to-noise’ ratio <span class="citation" data-cites="Solbakken2019">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, 170</a>)</span>.</li>
 <li><code>df</code> are the degrees of freedom.</li>
 <li><code>p-value</code> is, obviously, the <em>p</em>-value. <code>R</code> gives you this number in the scientific notation. It corresponds to 0.00000000009109578 or a 0 followed by 10 more 0s and then 9.1… — a <em>very small number</em>.</li>
 </ul></li>
@@ -661,7 +681,7 @@ Tip
 </div>
 </div>
 <p>As above, the <em>p</em>-value we got is <em>very</em> small – smaller than 0.01 in any case.</p>
-<p>Now to the interesting part: What does all of this mean? <em>Try to interpret the results based on the explanation in Kellstedt/Whitten (2018, Chapter 8)!</em></p>
+<p>Now to the interesting part: What does all of this mean? <em>Try to interpret the results based on the explanation in Solbakken <span class="citation" data-cites="Solbakken2019">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019, chap. 5.10.3</a>)</span></em></p>
 <!-- **Focus on the following two things** when you interpret the result from a *t*-test: -->
 <!-- The first thing you would look at is the *p*-value, which tells you if the difference between the two groups is *statistically* significant --- if you can conclude that there probably is also a difference in the wider population and therefore reject the null hypothesis.  -->
 <!-- As explained in Kellstedt & Whitten (2018, Chapter 8.3), the *lower* the *p*-value, the *more confident* we can be that there is a meaningful difference in the wider population. Usually, we want *p* to be lower than 0.05 (which corresponds to the 5% level of significance). In our case, *p* is very clearly smaller than 0.05. We can therefore reject the null hypothesis and conclude that there likely is a difference in the wider population between men and women when it comes to their religiosity. -->
@@ -689,10 +709,10 @@ Tip
 <section id="voluntary-welch-test" class="level1" data-number="7">
 <h1 data-number="7"><span class="header-section-number">7</span> (Voluntary) “Welch test?!”</h1>
 <p>You may have noticed that the test result also says “<strong>Welch</strong> Two Sample t-test”, and you may wonder where the “Welch” comes from.</p>
-<p>To explain: The <em>t</em>-test procedure explained in Kellstedt and Whitten makes a particular assumption about the underlying data. Specifically, it assumes that the two groups you compare have equal variances — that the data are about equally ‘noisy’ in each group.</p>
+<p>To explain: The conventional <em>t</em>-test procedure makes a particular assumption about the underlying data. Specifically, it assumes that the two groups you compare have equal variances — that the data are about equally ‘noisy’ in each group.</p>
 <p>This assumption is obviously not always justified, however — and the “Welch’s” test procedure does not make this assumption. <code>R</code> runs by default the more flexible Welch test, just to be safe.</p>
 <p>Despite the difference in assumptions, both tests are interpreted the same way and should (usually) produce about the same results.</p>
-<p>You can tell <code>R</code> to use the Kellstedt and Whitten procedure if you set the <code>var.equal</code> option to <code>TRUE</code> (if you state explicitly that you are willing to assume that both groups have equal variances):</p>
+<p>You can tell <code>R</code> to use the conventional procedure if you set the <code>var.equal</code> option to <code>TRUE</code> (if you state explicitly that you are willing to assume that both groups have equal variances):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(relig_num <span class="sc">~</span> gndr,</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">data =</span> ess7,</span>
@@ -728,10 +748,15 @@ Tip
 <p>The results are basically the same as above.</p>
 
 
+
 </section>
 
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Solbakken2019" class="csl-entry" role="listitem">
+Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fagbokforlaget.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>On the gender wage gap see e.g., Blau and Kahn (2000). Gender differences in pay. <em>Journal of Economic Perspectives</em>, 14(4):75–99.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
