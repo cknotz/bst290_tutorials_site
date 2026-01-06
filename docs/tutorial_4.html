@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -427,7 +447,7 @@ Tip
 <div style="page-break-after: always;"></div>
 <section id="scatterplots" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="scatterplots"><span class="header-section-number">3.1</span> Scatterplots</h2>
-<p>Scatterplots show the relationship between two <em>numeric</em> or <em>continuous</em> variables, and they are widely used in both academic research but also the “real world” (maybe you have seen Hans Rosling’s famous “200 countries, 400 years, 4 minutes” presentation that featured a scatterplot?).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Therefore, knowing how to make a scatterplot is obviously handy!</p>
+<p>Scatterplots show the relationship between two <em>numeric</em> or <em>continuous</em> variables <span class="citation" data-cites="Solbakken2019">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 4</a>)</span>, and they are widely used in both academic research but also the “real world” (maybe you have seen Hans Rosling’s famous “200 countries, 400 years, 4 minutes” presentation that featured a scatterplot?).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Therefore, knowing how to make a scatterplot is obviously handy!</p>
 <p>Scatterplots are also a great way to show you the basic logic of <code>ggplot2</code>. For our scatterplot, you use two numeric variables from the small <code>ess</code> practice-dataset:</p>
 <ol type="1">
 <li><code>height</code>: The respondent’s height in cm;</li>
@@ -596,8 +616,7 @@ Tip
 <section id="bivariate-boxplots" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="bivariate-boxplots"><span class="header-section-number">3.2</span> Bivariate boxplots</h2>
 <p>A scatterplot like the one you just created is a great way to visualize the relationship between two numeric (or metric) variables. But there may be situations <strong>where only one of your variables is numeric and the other is categorical or ordinal</strong>. In that case, a scatterplot will not be helpful.</p>
-<p>But you can visualize the relationship between a categorical and a numeric variable with a <em>boxplot</em> (or <em>“box-whisker plot”</em>). You should remember that a boxplot is a type of graph that allows you to visualize the distribution of a numeric variable (see Kellstedt &amp; Whitten 2018, 135). A boxplot shows you the median (or “middle value”) but also the 1st and 3rd quartile and any outliers in the data.</p>
-<p>By drawing boxplots of a numeric variable (such as age) over the groups of a categorical variable (such as gender), you can visualize any relationships between these variables.</p>
+<p>But you can visualize the relationship between a categorical and a numeric variable with a <em>boxplot</em> (or <em>“box-whisker plot”</em>). A boxplot shows you the median (or “middle value”) but also the 1st and 3rd quartile and any outliers in the data. By drawing boxplots of a numeric variable (such as age) over the groups of a categorical variable (such as gender), you can visualize any relationships between these variables.</p>
 <div style="page-break-after: always;"></div>
 <p>For example, let’s assume you are interested in the relationship between gender (a categorical variable) and body height (a numeric variable): Are men typically taller than women?</p>
 <p>The code below shows how you can visualize this relationship using a boxplot:</p>
@@ -635,7 +654,7 @@ Tip
 </div>
 </div>
 </div>
-<p>What do you learn from the graph about the differences in body height between men and women (see Kellstedt &amp; Whitten 2018, 135 for how to read a boxplot)?</p>
+<p>What do you learn from the graph about the differences in body height between men and women?</p>
 <div style="page-break-after: always;"></div>
 </section>
 <section id="plotting-overlapping-points-with-geom_count" class="level2" data-number="3.3">
@@ -652,7 +671,7 @@ Tip
 <div style="page-break-after: always;"></div>
 <section id="drawing-a-histogram" class="level3" data-number="3.4.1">
 <h3 data-number="3.4.1" class="anchored" data-anchor-id="drawing-a-histogram"><span class="header-section-number">3.4.1</span> Drawing a histogram</h3>
-<p>A <em>histogram</em> is a type of graph that is very useful to visualize the distribution of a single continuous or metric variable.</p>
+<p>A <em>histogram</em> is a type of graph that is very useful to visualize the distribution of a single continuous or metric variable <span class="citation" data-cites="Solbakken2019">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, 59–60</a>)</span>.</p>
 <p>Since you have seen earlier how a <code>ggplot</code>-graph is built, you should now be able to look at the code below and understand how you can produce a histogram:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ess,</span>
@@ -693,7 +712,7 @@ Tip
 </section>
 <section id="changing-the-number-of-bins" class="level3" data-number="3.4.3">
 <h3 data-number="3.4.3" class="anchored" data-anchor-id="changing-the-number-of-bins"><span class="header-section-number">3.4.3</span> Changing the number of “bins”</h3>
-<p>As you know from Kellstedt &amp; Whitten (2018, 138–39), the number of “blocks” or “bins” into which we group the data is an important choice that can really affect our impression of the variable we look at.</p>
+<p>One important choice when drawing a histogram is the the number of “blocks” or “bins” into which we group the data, because this can really affect our impression of the variable we look at.</p>
 <p>By default, <code>geom_histogram()</code> uses 30 bins, but this might obviously not be ideal in all situations. Fortunately, you can change the number of bins easily with the <code>bins</code> option.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>For example, we could set the number of bins to 20 instead of 30:</p>
 <div class="cell">
@@ -892,10 +911,15 @@ Tip
 <!-- 4. How do you interpret the graph you get? What do you learn here? -->
 
 
+
 </section>
 
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Solbakken2019" class="csl-entry" role="listitem">
+Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fagbokforlaget.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Others are the basic graphing tools that are built into <code>R</code> or the <code>lattice</code> package.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

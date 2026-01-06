@@ -3,6 +3,7 @@ title: "Tutorial 4: Data visualization with `ggplot2`"
 author: "Carlo Knotz"
 toc: true
 number-sections: true
+bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 format:
   html: default
   pdf: default
@@ -82,7 +83,7 @@ This tutorial will cover the following types of basic graphs:
 
 ## Scatterplots
 
-Scatterplots show the relationship between two *numeric* or *continuous* variables, and they are widely used in both academic research but also the "real world" (maybe you have seen Hans Rosling's famous "200 countries, 400 years, 4 minutes" presentation that featured a scatterplot?).^[See <https://youtu.be/jbkSRLYSojo>] Therefore, knowing how to make a scatterplot is obviously handy!
+Scatterplots show the relationship between two *numeric* or *continuous* variables [see also @Solbakken2019, chapter 4], and they are widely used in both academic research but also the "real world" (maybe you have seen Hans Rosling's famous "200 countries, 400 years, 4 minutes" presentation that featured a scatterplot?).^[See <https://youtu.be/jbkSRLYSojo>] Therefore, knowing how to make a scatterplot is obviously handy!
 
 Scatterplots are also a great way to show you the basic logic of `ggplot2`. For our scatterplot, you use two numeric variables from the small `ess` practice-dataset:
 
@@ -222,9 +223,7 @@ If you want to see what other themes you can choose from, visit <https://ggplot2
 
 A scatterplot like the one you just created is a great way to visualize the relationship between two numeric (or metric) variables. But there may be situations **where only one of your variables is numeric and the other is categorical or ordinal**. In that case, a scatterplot will not be helpful.
 
-But you can visualize the relationship between a categorical and a numeric variable with a *boxplot* (or *"box-whisker plot"*). You should remember that a boxplot is a type of graph that allows you to visualize the distribution of a numeric variable (see Kellstedt & Whitten 2018, 135). A boxplot shows you the median (or "middle value") but also the 1st and 3rd quartile and any outliers in the data.
-
-By drawing boxplots of a numeric variable (such as age) over the groups of a categorical variable (such as gender), you can visualize any relationships between these variables. 
+But you can visualize the relationship between a categorical and a numeric variable with a *boxplot* (or *"box-whisker plot"*). A boxplot shows you the median (or "middle value") but also the 1st and 3rd quartile and any outliers in the data. By drawing boxplots of a numeric variable (such as age) over the groups of a categorical variable (such as gender), you can visualize any relationships between these variables. 
 
 \newpage
 For example, let's assume you are interested in the relationship between gender (a categorical variable) and body height (a numeric variable): Are men typically taller than women? 
@@ -253,7 +252,7 @@ ggplot(data = ess,
     theme_bw()
 ```
 
-What do you learn from the graph about the differences in body height between men and women (see Kellstedt & Whitten 2018, 135 for how to read a boxplot)?
+What do you learn from the graph about the differences in body height between men and women?
 
 \newpage
 ## Plotting overlapping points with `geom_count()`
@@ -275,7 +274,7 @@ You can of course also create graphs that describe single variables: *univariate
 \newpage
 ### Drawing a histogram 
 
-A *histogram* is a type of graph that is very useful to visualize the distribution of a single continuous or metric variable.
+A *histogram* is a type of graph that is very useful to visualize the distribution of a single continuous or metric variable [see also @Solbakken2019, 59-60].
 
 Since you have seen earlier how a `ggplot`-graph is built, you should now be able to look at the code below and understand how you can produce a histogram:
 ```{r hist1, eval=T, echo=T, collapse=T, warning=F, message=F}
@@ -306,7 +305,7 @@ ggplot(data = ess,
 
 ### Changing the number of "bins"
 
-As you know from Kellstedt & Whitten (2018, 138--39), the number of "blocks" or "bins" into which we group the data is an important choice that can really affect our impression of the variable we look at. 
+One important choice when drawing a histogram is the the number of "blocks" or "bins" into which we group the data, because this can really affect our impression of the variable we look at. 
 
 By default, `geom_histogram()` uses 30 bins, but this might obviously not be ideal in all situations. Fortunately, you can change the number of bins easily with the `bins` option.^[Alternatively, you can also change how wide the bins are with the `binwidth` option.] 
 

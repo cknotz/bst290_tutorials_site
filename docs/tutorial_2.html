@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -546,7 +566,7 @@ Tip
 <section id="a-quick-summary-of-your-data-with-summary" class="level2" data-number="3.4">
 <h2 data-number="3.4" class="anchored" data-anchor-id="a-quick-summary-of-your-data-with-summary"><span class="header-section-number">3.4</span> A quick summary of your data with <code>summary()</code></h2>
 <p>With <code>View()</code>, <code>head()</code>, or <code>tail()</code>, you can look at the “raw” dataset. This can give you a first idea of what you are working with, but the problem is that you always only see a few data points at a time. Ideally, you would instead get a sense of how the entire dataset or single variables as a whole look like.</p>
-<p>This is where you would use summary statistics like the mean (“average”), the median, or others (as explained in Kellstedt &amp; Whitten).</p>
+<p>This is where you would use summary statistics like the mean (“average”), the median, or others <span class="citation" data-cites="Solbakken2019">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 3</a>)</span>.</p>
 <p>You can get some important summary statistics with the <code>summary()</code> function.</p>
 <p>This function is again easy to use: You just specify which object you want summarized within the parantheses. In this case, we use the function on the entire <code>ess</code> dataset:</p>
 <div class="cell">
@@ -560,7 +580,7 @@ Tip
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="do">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   16.00   33.50   46.00   47.91   62.00   90.00</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Here, <code>Min.</code> means “Minimum”, <code>1st Qu.</code> means “First Quartile”, <code>Median</code> and <code>Mean</code> are obvious, <code>3rd Qu.</code> means “Third Quartile”, and <code>Max.</code> means “Maximum”. If you read Kellstedt/Whitten (2018, Chapter 6), then you should know how to interpret these different statistics.</p>
+<p>Here, <code>Min.</code> means “Minimum”, <code>1st Qu.</code> means “First Quartile”, <code>Median</code> and <code>Mean</code> are obvious, <code>3rd Qu.</code> means “Third Quartile”, and <code>Max.</code> means “Maximum”. If you read Solbakken <span class="citation" data-cites="Solbakken2019">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019, chap. 3</a>)</span>, then you should know how to interpret these different statistics.</p>
 <div style="page-break-after: always;"></div>
 <!-- ### Getting the number of rows or columns of your dataset -->
 <!-- Sometimes it can be useful to get the exact number of rows --- the unique observations --- or columns --- the variables --- your dataset contains. -->
@@ -807,7 +827,7 @@ Tip
 </div>
 </div>
 <p>This table shows summary statistics for age (<code>agea</code>) and the respondent’s body height and weight.</p>
-<p>Can you interpret each of the statistics shown (again, see Kellstedt/Whitten 2018, Chapter 6).</p>
+<p>Can you interpret each of the statistics shown <span class="citation" data-cites="Solbakken3019">(as before, see <a href="#ref-Solbakken3019" role="doc-biblioref"><strong>Solbakken3019?</strong></a>)</span>.</p>
 <div style="page-break-after: always;"></div>
 </section>
 <section id="norwegian-language-support" class="level3" data-number="3.7.2">
@@ -1034,10 +1054,15 @@ Just in case
 </ol>
 
 
+
 </section>
 
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Solbakken2019" class="csl-entry" role="listitem">
+Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fagbokforlaget.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Did you miss that session? You can read about <em>Projects</em> and how you create them here: <a href="https://support.posit.co/hc/en-us/articles/200526207-Using-RStudio-Projects" class="uri">https://support.posit.co/hc/en-us/articles/200526207-Using-RStudio-Projects</a> or in <em>Lær deg R</em>, 4.1.1.3.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

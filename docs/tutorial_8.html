@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -527,11 +547,11 @@ Tip
 <p>Expressed as a formula, this would look like this: <span class="math display">\[\begin{align*}
   \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \epsilon
 \end{align*}\]</span></p>
-<p>As you know from the chapters on linear regression in Kellstedt &amp; Whitten (see alternatively Solbakken, <em>Statistikk for Nybeginnere</em>, Chapter 6):</p>
+<p>As you know from the chapters on linear regression in Solbakken [<span class="citation" data-cites="Solbakken2019">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019</a>)</span>, chapters 6-8 :</p>
 <ul>
 <li><span class="math inline">\(\alpha\)</span> is the intercept (<em>konstantleddet</em> in Norwegian)</li>
 <li><span class="math inline">\(\beta_1\)</span> is the regression coefficient (or <em>“slope”</em>, <em>“weight”</em>, <em>regresjonskoeffisient</em>, or <em>stigningstall</em>).</li>
-<li><span class="math inline">\(\epsilon\)</span> is the error term — this term captures the variation in the dependent variable that the model cannot explain (see also Solbakken, <em>Statistikk for Nybeginnere</em>, p.&nbsp;177).</li>
+<li><span class="math inline">\(\epsilon\)</span> is the error term — this term captures the variation in the dependent variable that the model cannot explain.</li>
 </ul>
 <div style="page-break-after: always;"></div>
 <p>In <code>R</code>, this formula looks much simpler:</p>
@@ -597,7 +617,7 @@ F-statistic: 28.93 on 1 and 1425 DF,  p-value: 8.779e-08</code></pre>
 <li>The asterisks are an alternative way to indicate <em>p</em>-values. Three asterisks correspond to a <em>p</em>-value of 0.001 or less. This is also explained in the legend (<code>Signif. codes</code>)</li>
 </ul></li>
 </ol>
-<p>Kellstedt &amp; Whitten (2018, Chapter 9) or Solbakken (<em>Statistikk for Nybeginnere</em>, Chapters 6 &amp; 8) explain how you make sense of these numbers (also: feel free to ask during class!).</p>
+<p>Solbakken <span class="citation" data-cites="Solbakken2019 Kellstedt2018">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019, chap. 6</a> &amp; 8; see also <a href="#ref-Kellstedt2018" role="doc-biblioref">Kellstedt and Whitten 2018, chap. 9</a>)</span> explains how you make sense of these numbers (also: feel free to ask during class!).</p>
 <!-- **Here is how you read the output:** -->
 <!-- * Start with the intercept, which has an *Estimate* value of around 4.23. This means: The model predicts that, when `eduyrs` is exactly equal to `0` --- when someone has zero years of education --- they have, on average, a score of 4.23 on the `trstplt_num` variable. In substantive terms, this means that someone who did not complete a single year of education has only a low-to-moderate level of trust in politicians. -->
 <!-- * The `eduyrs` coefficient is around 0.074. This means that when `eduyrs` *increases* by one, `trstplt_num` *increases* also by 0.074 points. In other words, for every additional year of education completed, a person's predicted level of trust in politicians increases by 0.074 points. Put even more simply, there is a *positive* relationship between education and trust in politicians --- the more education someone has, the higher their trust in politicians. Looking at the *p*-value and the significance stars, you can also see that the effect is *statistically significant*: We can therefore *reject the null hypothesis* and conclude that the positive effect of education on trust (likely) also exists in the wider Norwegian population and not only in the sample we are working with here. -->
@@ -691,10 +711,18 @@ F-statistic: 28.93 on 1 and 1425 DF,  p-value: 8.779e-08</code></pre>
 <!-- ## De-bugging exercises -->
 
 
+
 </section>
 
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Kellstedt2018" class="csl-entry" role="listitem">
+Kellstedt, Paul M, and Guy D Whitten. 2018. <em>The Fundamentals of Political Science Research</em>. Cambridge: Cambridge University Press.
+</div>
+<div id="ref-Solbakken2019" class="csl-entry" role="listitem">
+Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fagbokforlaget.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>See e.g., Bourdieu, P. (1985). The forms of capital. In Richardson, J. G., editor, <em>Handbook of Theory and Research for the Sociology of Education</em>, pages 241–258. Greenwood, New York; Brady, H. E., Verba, S., and Schlozman, K. L. (1995). Beyond SES: A resource model of political participation. <em>American Political Science Review</em>, 89(2):271–294.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>

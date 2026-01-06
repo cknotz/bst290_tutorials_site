@@ -150,7 +150,7 @@ You can do the same with the `tail()` function.
 
 With `View()`, `head()`, or `tail()`, you can look at the "raw" dataset. This can give you a first idea of what you are working with, but the problem is that you always only see a few data points at a time. Ideally, you would instead get a sense of how the entire dataset or single variables as a whole look like.
 
-This is where you would use summary statistics like the mean ("average"), the median, or others (as explained in Kellstedt & Whitten).
+This is where you would use summary statistics like the mean ("average"), the median, or others [see also @Solbakken2019, chapter 3].
 
 You can get some important summary statistics with the `summary()` function.
 
@@ -168,7 +168,7 @@ But, as before, the output is again a bit cluttered (which is also why it is not
 summary(ess$agea)
 ```
 
-Here, `Min.` means "Minimum", `1st Qu.` means "First Quartile", `Median` and `Mean` are obvious, `3rd Qu.` means "Third Quartile", and `Max.` means "Maximum". If you read Kellstedt/Whitten (2018, Chapter 6), then you should know how to interpret these different statistics.
+Here, `Min.` means "Minimum", `1st Qu.` means "First Quartile", `Median` and `Mean` are obvious, `3rd Qu.` means "Third Quartile", and `Max.` means "Maximum". If you read Solbakken [-@Solbakken2019, chapter 3], then you should know how to interpret these different statistics.
 
 \newpage 
 
@@ -393,7 +393,7 @@ oppsumtabell(dataset = ess, variables = c("agea","height","weight"))
 
 This table shows summary statistics for age (`agea`) and the respondent's body height and weight.
 
-Can you interpret each of the statistics shown (again, see Kellstedt/Whitten 2018, Chapter 6).
+Can you interpret each of the statistics shown [as before, see @Solbakken3019, chapter 3].
 
 \newpage
 ### Norwegian language support

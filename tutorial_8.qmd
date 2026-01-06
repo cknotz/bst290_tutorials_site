@@ -3,6 +3,7 @@ title: "Tutorial 8: Bivariate linear regression"
 author: "Carlo Knotz"
 toc: true
 number-sections: true
+bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 format:
   html: default
   pdf: default
@@ -239,11 +240,11 @@ Expressed as a formula, this would look like this:
   \texttt{trstplt\_num} = \alpha + \beta_1 \texttt{eduyrs} + \epsilon
 \end{align*}
 
-As you know from the chapters on linear regression in Kellstedt & Whitten (see alternatively Solbakken, *Statistikk for Nybeginnere*, Chapter 6):
+As you know from the chapters on linear regression in Solbakken [-@Solbakken2019, chapters 6-8 :
 
 * $\alpha$ is the intercept (*konstantleddet* in Norwegian)
 * $\beta_1$ is the regression coefficient (or *"slope"*, *"weight"*, *regresjonskoeffisient*, or *stigningstall*). 
-* $\epsilon$ is the error term --- this term captures the variation in the dependent variable that the model cannot explain (see also Solbakken, *Statistikk for Nybeginnere*, p. 177).
+* $\epsilon$ is the error term --- this term captures the variation in the dependent variable that the model cannot explain.
 
 \newpage
 In `R`, this formula looks much simpler:
@@ -295,7 +296,7 @@ The output is very `R`-typical: technical and condensed. Focus on the following:
     + `Pr(>|t|)` are the *p*-values.
     + The asterisks are an alternative way to indicate *p*-values. Three asterisks correspond to a *p*-value of 0.001 or less. This is also explained in the legend (`Signif. codes`)
 
-Kellstedt & Whitten (2018, Chapter 9) or Solbakken (*Statistikk for Nybeginnere*, Chapters 6 & 8) explain how you make sense of these numbers (also: feel free to ask during class!).
+Solbakken [-@Solbakken2019, chapters 6 & 8; see also @Kellstedt2018, chapter 9] explains how you make sense of these numbers (also: feel free to ask during class!).
 
 <!-- **Here is how you read the output:** -->
 

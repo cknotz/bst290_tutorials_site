@@ -1,6 +1,7 @@
 ---
 title: "Tutorial 9: Multivariate linear regression"
 author: "Carlo Knotz"
+bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 toc: true
 number-sections: true
 format:
@@ -171,9 +172,9 @@ model2 <- lm(trstplt_num ~ eduyrs + gndr + agea, data = ess7)
 summary(model2)
 ```
 
-You see that the output looks the same as before, just with more coefficients listed. Notice also that `R` has automatically figured out that `gndr` is a factor variable and included a *dummy* only for women (`gndrFemale`) into the model (as also explained in Kellstedt & Whitten, Chapter 11.2). 
+You see that the output looks the same as before, just with more coefficients listed. Notice also that `R` has automatically figured out that `gndr` is a factor variable and included a *dummy* only for women (`gndrFemale`) into the model [see also @Solbakken2019, chapter 8]. 
 
-Now it gets tricky: How do you make sense of these results? Kellstedt & Whitten (2018, Chapters 10 & 11) or Solbakken (*Statistikk for Nybeginnere*, Chapters 6 & 8) explain this.
+Now it gets tricky: How do you make sense of these results? Solbakken [-@Solbakken2019, chapters 6 & 8; see also @Kellstedt2018, chapters 10 & 11] explain this.
 
 <!-- With the additional control variables, the *interpretation of the results is a bit different from before*: -->
 

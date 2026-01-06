@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -543,8 +563,8 @@ Tip
 <span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>Multiple R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.02526</span>,   Adjusted R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.0232</span> </span>
 <span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>F<span class="sc">-</span>statistic<span class="sc">:</span> <span class="fl">12.29</span> on <span class="dv">3</span> and <span class="dv">1423</span> DF,  p<span class="sc">-</span>value<span class="sc">:</span> <span class="fl">6.121e-08</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>You see that the output looks the same as before, just with more coefficients listed. Notice also that <code>R</code> has automatically figured out that <code>gndr</code> is a factor variable and included a <em>dummy</em> only for women (<code>gndrFemale</code>) into the model (as also explained in Kellstedt &amp; Whitten, Chapter 11.2).</p>
-<p>Now it gets tricky: How do you make sense of these results? Kellstedt &amp; Whitten (2018, Chapters 10 &amp; 11) or Solbakken (<em>Statistikk for Nybeginnere</em>, Chapters 6 &amp; 8) explain this.</p>
+<p>You see that the output looks the same as before, just with more coefficients listed. Notice also that <code>R</code> has automatically figured out that <code>gndr</code> is a factor variable and included a <em>dummy</em> only for women (<code>gndrFemale</code>) into the model <span class="citation" data-cites="Solbakken2019">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 8</a>)</span>.</p>
+<p>Now it gets tricky: How do you make sense of these results? Solbakken <span class="citation" data-cites="Solbakken2019 Kellstedt2018">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019, chap. 6</a> &amp; 8; see also <a href="#ref-Kellstedt2018" role="doc-biblioref">Kellstedt and Whitten 2018, chap. 10</a> &amp; 11)</span> explain this.</p>
 <!-- With the additional control variables, the *interpretation of the results is a bit different from before*: -->
 <!-- * The intercept is still the predicted value of `trstplt_num` when *all other* variables are exactly `0`. But now the model includes several variables! This means, the intercept is now the predicted value for a person who has no education (`eduyrs` = 0), is a man (`gndrFemale` = 0), and was just born (`agea` = 0). This fictional person would then have a score of around 4.62. This is of course a silly prediction --- unless you think that uneducated male newborns can already have opinions about politicians. But this illustrates an important point: *The intercept of a regression model does not always have a good interpretation!* -->
 <!-- * The coefficient for `eduyrs` is still the effect of education --- but now when all other variables are held constant at their means (*"controlling for"* the other variables). You see that the effect is a bit lower than before: 0.069. This means that controlling for the other variables does indeed reduce the effect of education, but only by a very small amount (from 0.074 to 0.069). And the effect is still statistically significant. -->
@@ -753,9 +773,17 @@ Tip
 <!-- ``` -->
 
 
+
 </section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Kellstedt2018" class="csl-entry" role="listitem">
+Kellstedt, Paul M, and Guy D Whitten. 2018. <em>The Fundamentals of Political Science Research</em>. Cambridge: Cambridge University Press.
+</div>
+<div id="ref-Solbakken2019" class="csl-entry" role="listitem">
+Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fagbokforlaget.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
