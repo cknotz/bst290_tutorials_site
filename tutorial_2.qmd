@@ -393,7 +393,7 @@ oppsumtabell(dataset = ess, variables = c("agea","height","weight"))
 
 This table shows summary statistics for age (`agea`) and the respondent's body height and weight.
 
-Can you interpret each of the statistics shown [as before, see @Solbakken3019, chapter 3].
+Can you interpret each of the statistics shown [as before, see @Solbakken2019, chapter 3].
 
 \newpage
 ### Norwegian language support

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./tutorial_9.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-40e6375b29d217d81598add68a79f183.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-97afdd19a946a7800d02dd55b4e8b647.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -123,7 +124,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -149,6 +150,8 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">R Tutorials for BST290</span>
     </a>
@@ -176,6 +179,10 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -390,13 +397,13 @@ window.Quarto = {
 <h2 data-number="3.1" class="anchored" data-anchor-id="packages"><span class="header-section-number">3.1</span> Packages</h2>
 <p>As before, we use the <code>tidyverse</code> to help with data management and visualization and <code>texreg</code> to make neat-looking regression tables.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>But we now also need to load the <code>margins</code> package, which allows you to calculate marginal effect estimates. If you have not yet installed this package, you need to do so with <code>install.packages("margins")</code>. Once this is done, you load the package with <code>library()</code>. In addition, we will use the <code>prediction</code> package:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(margins)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prediction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(margins)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(prediction)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
@@ -450,15 +457,15 @@ window.Quarto = {
 <h2 data-number="4.2" class="anchored" data-anchor-id="model-specification-in-r"><span class="header-section-number">4.2</span> Model specification in <code>R</code></h2>
 <p>As you know, the formula for the multivariate model (with all control variables) would be written like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>There are now two ways to make the model interactive. The first option is to extend the previous equation with the interactive term that multiplies <code>agea</code> with <code>gndr</code> (for which you use the colon-symbol):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea <span class="sc">+</span> gndr<span class="sc">:</span>agea</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea <span class="sc">+</span> gndr<span class="sc">:</span>agea</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A simpler (but more indirect) way is to directly interact <code>gndr</code> with <code>agea</code> with the multiplication symbol. <code>R</code> will then automatically add individual terms for <code>agea</code> and <code>gndr</code> plus the interactive term when it runs the calculation:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr<span class="sc">*</span>agea</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr<span class="sc">*</span>agea</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
@@ -466,17 +473,17 @@ window.Quarto = {
 <h2 data-number="4.3" class="anchored" data-anchor-id="estimating-interactive-models-with-lm"><span class="header-section-number">4.3</span> Estimating interactive models with <code>lm()</code></h2>
 <p>To start, we quickly re-estimate the bi- and multivariate models from the previous tutorials so that we can compare these results to the interactive model’s results (and because you should anyways proceed in this stepwise fashion):<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bivariate model</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># bivariate model</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(trstplt_num <span class="sc">~</span> eduyrs, </span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> ess7)</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># multivariate model</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr <span class="sc">+</span> agea, </span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> ess7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> ess7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now that we have these models as a baseline comparison, we estimate the interactive model and print a quick summary of the results to the <em>Console</em>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># interactive model</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># interactive model</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(trstplt_num <span class="sc">~</span> eduyrs <span class="sc">+</span> gndr<span class="sc">*</span>agea, </span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> ess7)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model3)</span>
@@ -501,13 +508,13 @@ window.Quarto = {
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>Residual standard error<span class="sc">:</span> <span class="fl">1.927</span> on <span class="dv">1422</span> degrees of freedom</span>
 <span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  (<span class="dv">9</span> observations deleted due to missingness)</span>
 <span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>Multiple R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.02745</span>,   Adjusted R<span class="sc">-</span>squared<span class="sc">:</span>  <span class="fl">0.02471</span> </span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>F<span class="sc">-</span>statistic<span class="sc">:</span> <span class="fl">10.03</span> on <span class="dv">4</span> and <span class="dv">1422</span> DF,  p<span class="sc">-</span>value<span class="sc">:</span> <span class="fl">5.234e-08</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>F<span class="sc">-</span>statistic<span class="sc">:</span> <span class="fl">10.03</span> on <span class="dv">4</span> and <span class="dv">1422</span> DF,  p<span class="sc">-</span>value<span class="sc">:</span> <span class="fl">5.234e-08</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>When you look at the summary, you can directly see that <code>R</code> has automatically “populated” the model with the correct terms: An individual term for <code>eduyrs</code>, then a dummy for women using <code>gndr</code>, another term for <code>agea</code>, and finally the interaction term between <code>agea</code> and <code>gndrFemale</code> (<code>gndrFemale:agea</code>).</p>
 <p>You can see already here that the interaction term is at least significant at the 10% level (indicated by the single dot in the last line). So there might be something there. But to really know, we need to look at marginal effects.</p>
 <p>Before that, we first print all the results in a proper table:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screenreg</span>(<span class="fu">list</span>(model1,model2,model3),</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">screenreg</span>(<span class="fu">list</span>(model1,model2,model3),</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">custom.coef.names =</span> <span class="fu">c</span>(<span class="st">"Intercept"</span>,</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Years of educ. completed"</span>,</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Female"</span>,</span>
@@ -536,7 +543,7 @@ window.Quarto = {
 <span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>Adj. R<span class="sc">^</span><span class="dv">2</span>                     <span class="fl">0.02</span>       <span class="fl">0.02</span>          <span class="fl">0.02</span>    </span>
 <span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>Num. obs.                 <span class="dv">1427</span>       <span class="dv">1427</span>          <span class="dv">1427</span>       </span>
 <span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="sc">==</span><span class="er">============================================================</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="er">*</span> p <span class="sc">&lt;</span> <span class="fl">0.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="er">*</span> p <span class="sc">&lt;</span> <span class="fl">0.05</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
@@ -554,9 +561,9 @@ window.Quarto = {
 </ol>
 <p>Putting it all together, the complete <code>margins()</code> call would look like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins</span>(<span class="at">model =</span> model3,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins</span>(<span class="at">model =</span> model3,</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">variables =</span> <span class="st">"agea"</span>,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Female"</span>,<span class="st">"Male"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Female"</span>,<span class="st">"Male"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> at(gndr)      agea
      Male -0.012221
@@ -573,19 +580,19 @@ window.Quarto = {
 <p>The results we have so far are interesting, but they are only half of the story — we also need to account for the fact that these numbers are <em>estimates</em> based on <em>sample data</em> and that we cannot just take them at face value. We also need to look if they really are <em>statistically significant</em>, meaning if we can say with sufficient confidence that these effects also exist in the general population for which we want to make inferences. As you know, we look at <em>p</em>-values and confidence intervals to figure this out.</p>
 <p>To get these additional statistics, we use <code>margins()</code>’s sister-function, <code>margins_summary()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">variables =</span> <span class="st">"agea"</span>, </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>)))</span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a> factor   gndr     AME     SE       z      p   lower   upper</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>   agea <span class="fl">1.0000</span> <span class="sc">-</span><span class="fl">0.0122</span> <span class="fl">0.0038</span> <span class="sc">-</span><span class="fl">3.2186</span> <span class="fl">0.0013</span> <span class="sc">-</span><span class="fl">0.0197</span> <span class="sc">-</span><span class="fl">0.0048</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>   agea <span class="fl">2.0000</span> <span class="sc">-</span><span class="fl">0.0024</span> <span class="fl">0.0040</span> <span class="sc">-</span><span class="fl">0.6039</span> <span class="fl">0.5459</span> <span class="sc">-</span><span class="fl">0.0102</span>  <span class="fl">0.0054</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>   agea <span class="fl">2.0000</span> <span class="sc">-</span><span class="fl">0.0024</span> <span class="fl">0.0040</span> <span class="sc">-</span><span class="fl">0.6039</span> <span class="fl">0.5459</span> <span class="sc">-</span><span class="fl">0.0102</span>  <span class="fl">0.0054</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This result now tells us the complete story, only the values of the <code>gndr</code> variable are presented in a less informative way. But we can simply use <code>bst290::visfactor()</code> to figure out what 1 and 2 correspond to:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bst290<span class="sc">::</span><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"gndr"</span>, <span class="at">dataset =</span> ess7)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bst290<span class="sc">::</span><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"gndr"</span>, <span class="at">dataset =</span> ess7)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a> values labels</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span>   Male</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span> Female</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span> Female</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If we now look at the <code>margins_summary()</code> result and specifically at the <em>p</em>-values (under <code>p</code>), we see that only the marginal effect of age for men (see <code>AME</code>) is statistically significant (<em>p</em> = 0.0013 &lt; 0.05). The marginal effect of age for women, on the other hand, is not (<em>p</em> = 0.5459).</p>
 <p>This means: <em>There (probably) is a small negative effect of age on trust in politicians in the general Norwegian population — but this effect exists only among Norwegian men. In the case of women, we cannot say with sufficient confidence if the true effect is really different from 0 or not, and so we assume that age has no effect on political trust in the case of Norwegian women.</em></p>
@@ -597,12 +604,12 @@ window.Quarto = {
 <p>To make the interpretation of the results still more intuitive for yourself (and especially for your readers!), you can and should visualize the result. Luckily, the output you get from <code>margins_summary()</code> is a <code>data.frame</code>, which means you can directly “pipe” it into a <code>ggplot()</code> graph.</p>
 <p>A raw, unpolished graph (here a bar graph; <code>geom_point()</code> is an alternative) would look like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">variables =</span> <span class="st">"agea"</span>, </span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gndr, <span class="at">y =</span> AME, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper)) <span class="sc">+</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> <span class="co"># draws marginal effect estimates as bars</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_linerange</span>() <span class="co"># draws confidence intervals as lines</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_linerange</span>() <span class="co"># draws confidence intervals as lines</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -616,7 +623,7 @@ window.Quarto = {
 <div style="page-break-after: always;"></div>
 <p>To make the interpretation even easier, we would polish the graph a bit more by adding proper labels to the axes, using a better-looking scheme, and also by adding a horizontal reference line at the 0-point on the y-axis with <code>geom_hline()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">margins_summary</span>(<span class="at">model =</span> model3, </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">variables =</span> <span class="st">"agea"</span>, </span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> gndr, <span class="at">y =</span> AME, <span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper)) <span class="sc">+</span></span>
@@ -626,7 +633,7 @@ window.Quarto = {
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Gender"</span>,</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Effect of age on trust in politicians"</span>,</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"95% confidence intervals."</span>) <span class="sc">+</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -644,9 +651,9 @@ window.Quarto = {
 <p>A second way to interpret the results of an interactive regression model is to calculate and visualize <em>predicted</em> outcomes. In this case, it would be interesting to look at how trust in politicians changes as people get older, and how that differs between men and women.</p>
 <p>You may already have guessed that we will now use the <code>prediction</code> package. Specifically, we will use its <code>prediction_summary()</code> function to calculate predicted trust scores over values of <code>agea</code> and <code>gndr</code>. The logic of the code to do this is very similar to that used with <code>margins()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(<span class="at">model =</span> model3,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(<span class="at">model =</span> model3,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>),</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">agea =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">75</span>, <span class="at">by =</span> <span class="dv">5</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">agea =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">75</span>, <span class="at">by =</span> <span class="dv">5</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> at(gndr) at(agea) Prediction      SE     z          p lower upper
      Male       20      5.551 0.12148 45.69  0.000e+00 5.313 5.789
@@ -679,7 +686,7 @@ window.Quarto = {
 <div style="page-break-after: always;"></div>
 <p>The result contains lots and lots of numbers, and any patterns in it will be more easily visible when visualized:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(<span class="at">model =</span> model3,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(<span class="at">model =</span> model3,</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>),</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">agea =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">at(agea)</span><span class="st">`</span>, <span class="at">y =</span> Prediction, <span class="at">fill =</span> <span class="st">`</span><span class="at">at(gndr)</span><span class="st">`</span>,</span>
@@ -689,7 +696,7 @@ window.Quarto = {
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">4.5</span>, <span class="at">to =</span> <span class="dv">6</span>, <span class="at">by =</span> .<span class="dv">5</span>),</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">4.5</span>,<span class="dv">6</span>)) <span class="co"># this adjust the range and labels of the y-axis</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>                       <span class="at">limits =</span> <span class="fu">c</span>(<span class="fl">4.5</span>,<span class="dv">6</span>)) <span class="co"># this adjust the range and labels of the y-axis</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -703,7 +710,7 @@ window.Quarto = {
 <div style="page-break-after: always;"></div>
 <p>With some more polishing, we end up with a nice and informative graph about the conditional effect of age on political trust:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(<span class="at">model =</span> model3,</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prediction_summary</span>(<span class="at">model =</span> model3,</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">at =</span> <span class="fu">list</span>(<span class="at">gndr =</span> <span class="fu">c</span>(<span class="st">"Male"</span>,<span class="st">"Female"</span>),</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">agea =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">20</span>, <span class="at">to =</span> <span class="dv">80</span>, <span class="at">by =</span> <span class="dv">10</span>))) <span class="sc">%&gt;%</span> </span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">at(agea)</span><span class="st">`</span>, <span class="at">y =</span> Prediction,<span class="at">fill =</span> <span class="st">`</span><span class="at">at(gndr)</span><span class="st">`</span>,</span>
@@ -721,7 +728,7 @@ window.Quarto = {
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"95% confidence intervals"</span>) <span class="sc">+</span></span>
 <span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_classic</span>() <span class="sc">+</span></span>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>, <span class="co"># hide legend</span></span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="co"># remove legend title</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.title =</span> <span class="fu">element_blank</span>()) <span class="co"># remove legend title</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -806,13 +813,14 @@ window.Quarto = {
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -90,14 +90,15 @@ div.csl-indent {
 <link href="./tutorial_1.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-40e6375b29d217d81598add68a79f183.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-97afdd19a946a7800d02dd55b4e8b647.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -143,7 +144,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -169,6 +170,8 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">R Tutorials for BST290</span>
     </a>
@@ -196,6 +199,10 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -445,17 +452,17 @@ Tip
 <p>The practice dataset in the <code>bst290</code> package is a fragment of the <em>European Social Survey</em> data that were collected in Norway in 2014. In essence, this practice dataset is a mini-version of the full ESS dataset. Where the full ESS includes data for more than 1000 survey participants and hundreds of variables, the practice dataset includes only data for 143 Norwegian respondents and 22 variables.</p>
 <p>To access the data, you first need to load the <code>bst290</code> package with the <code>library()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bst290)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bst290)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Then you can open the dataset (which is called <code>ess</code>) with the <code>data()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(ess)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(ess)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If everything worked, then you should now see the <code>ess</code> dataset listed in the <em>Environment</em> panel (upper right of your screen). You will probably see <code>&lt;Promise&gt;</code> written where the dataset summary and the variables should appear — and you can take this literally: <code>R</code> promises you that the dataset will appear once you start using it. So, all you need to do is to call up the dataset in some way, for example by simply typing <code>ess</code> into the <em>Console</em>.</p>
 <p>Once the dataset is properly loaded, you should see in the <em>Environment</em> panel that the dataset includes 143 observations and 22 variables.</p>
 <p>You can also get the dataset directly with the “double-colon” method:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ess <span class="ot">&lt;-</span> bst290<span class="sc">::</span>ess</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ess <span class="ot">&lt;-</span> bst290<span class="sc">::</span>ess</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Translated into human language, this tells <code>R</code> to “get the <code>ess</code> dataset from the <code>bst290</code> package and save it under the name <code>ess</code> in the <em>Environment</em>”.</p>
 <div style="page-break-after: always;"></div>
@@ -477,7 +484,7 @@ Tip
 <h2 data-number="3.2" class="anchored" data-anchor-id="looking-at-the-data"><span class="header-section-number">3.2</span> Looking at the data</h2>
 <p>Let’s first get an idea of how the dataset really looks like, which you can do with the <code>View()</code> function. To do that, run the following in your <em>Console</em>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(ess)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(ess)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A new tab should now open and you should see the entire dataset. This should look a bit like Microsoft Excel, a large table with lots of neat and orderly but boring rows and columns of data.</p>
 <div style="page-break-after: always;"></div>
@@ -490,7 +497,7 @@ Tip
 <h3 data-number="3.3.1" class="anchored" data-anchor-id="default-usage"><span class="header-section-number">3.3.1</span> Default usage</h3>
 <p>Using them is simple, you just need to specify the name of your dataset within the function. For example, to display the <em>first</em> six observations in the <code>ess</code> dataset, you run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ess) <span class="co"># This shows you the first 6 observations</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ess) <span class="co"># This shows you the first 6 observations</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The result should look like this:</p>
 <div class="cell">
@@ -546,8 +553,8 @@ Tip
 <p>The general syntax here is: <code>dataset$variable</code>. For example, to select the age-variable <code>agea</code> from the <code>ess</code> dataset, you would type: <code>ess$agea</code></p>
 <p>You can use this with the <code>head()</code> function to let <code>R</code> show you the first six observations of only the <code>agea</code>-variable:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ess<span class="sc">$</span>agea)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 22 43 58 22 84 62</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ess<span class="sc">$</span>agea)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 22 43 58 22 84 62</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Of course, you can do this also with any of the other variables — and this works also with many other functions such as <code>tail()</code>, <code>mean()</code>, or <code>summarize()</code>. More follows!</p>
 <div style="page-break-after: always;"></div>
@@ -556,7 +563,7 @@ Tip
 <h3 data-number="3.3.3" class="anchored" data-anchor-id="definining-the-number-of-observations-rows"><span class="header-section-number">3.3.3</span> Definining the number of observations (“rows”)</h3>
 <p>You can also tell <code>R</code> to show you more or fewer observations when you use the <code>head()</code> function. For example, the code below will print out the first 10 observations of the <code>agea</code> variable:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ess<span class="sc">$</span>agea, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(ess<span class="sc">$</span>agea, <span class="at">n =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You can do the same with the <code>tail()</code> function.</p>
 <p>(A final note: As is often the case with <code>R</code>, there is more than one way to subset a dataset, and these allow you to select more than one variables at a time, or a specific set of observations. We will cover some of them in the next tutorial; for others see e.g.: <a href="https://www.statmethods.net/management/subset.html" class="uri">https://www.statmethods.net/management/subset.html</a>.)</p>
@@ -570,15 +577,15 @@ Tip
 <p>You can get some important summary statistics with the <code>summary()</code> function.</p>
 <p>This function is again easy to use: You just specify which object you want summarized within the parantheses. In this case, we use the function on the entire <code>ess</code> dataset:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ess)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ess)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If you run this, you should get a list of summary statistics for all the variables in the <code>ess</code> dataset. For variables that contain numbers (‘numeric’ variables, or <code>num</code>), you get the minimum, the 1st quartile (a.k.a., the 25th percentile), the median, the mean (‘average’), the 3rd quartile (or 75th percentile) and the maximum. Where variables have missing observations (<code>NA</code>’s), you get these, too.</p>
 <p>For non-numeric variables (like <code>cntry</code>, for example) you get their ‘length’ (how many observations they contain) and their type or ‘Class’.</p>
 <p>But, as before, the output is again a bit cluttered (which is also why it is not shown here). It is therefore more useful to get summary statistics for a single variable by using the <code>$</code> symbol. For example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ess<span class="sc">$</span>agea)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(ess<span class="sc">$</span>agea)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="do">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   16.00   33.50   46.00   47.91   62.00   90.00</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   16.00   33.50   46.00   47.91   62.00   90.00</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here, <code>Min.</code> means “Minimum”, <code>1st Qu.</code> means “First Quartile”, <code>Median</code> and <code>Mean</code> are obvious, <code>3rd Qu.</code> means “Third Quartile”, and <code>Max.</code> means “Maximum”. If you read Solbakken <span class="citation" data-cites="Solbakken2019">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019, chap. 3</a>)</span>, then you should know how to interpret these different statistics.</p>
 <div style="page-break-after: always;"></div>
@@ -609,19 +616,19 @@ Tip
 </ul>
 <p>Using these functions is straightforward — for example, to get the mean of the age-variable (<code>agea</code>) in the <code>ess</code> dataset, you just run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>agea)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 47.90909</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>agea)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 47.90909</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Getting the other summary statistics works the same way:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(ess<span class="sc">$</span>agea)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(ess<span class="sc">$</span>agea)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 46</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(ess<span class="sc">$</span>agea)</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 18.5658</span></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(ess<span class="sc">$</span>agea)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 344.6889</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 344.6889</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 <section id="when-you-have-missing-observations-nas" class="level3" data-number="3.5.1">
@@ -630,8 +637,8 @@ Tip
 <p><strong>Important</strong>: The <code>mean()</code>, <code>median()</code>, <code>sd()</code>, and <code>var()</code> functions (and many others) will not give you a proper result <em>if there is even a single <code>NA</code> in your variable!</em></p>
 <p>Fortunately, there is an easy solution: All four functions have an option to remove <code>NA</code>s from the data before calculating the respective summary statistic; this option is called <code>na.rm</code> (“<code>NA</code> remove”). You just have to set this option to <code>TRUE</code> (switch it on) to take care of missings, for example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>agea, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 47.90909</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>agea, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] 47.90909</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>(Make sure you always add a comma between different parts or “<code>arguments</code>” of a function!)</p>
 <!-- **Also important:** Calculating the mean, median, variance, or standard deviation obviously only makes sense for *single* numeric variables. Calculating the mean of an entire dataset or of a non-numeric variable will not work! -->
@@ -664,13 +671,13 @@ Tip
 <p>You can use the <code>class()</code> function to let <code>R</code> tell you which type or <em>class</em> a specific variable is saved as. You use this like the other functions above (<code>dataset$variable</code>).</p>
 <p>Let’s check if the gender-variable (<code>gndr</code>) is really saved as a factor, as it should be:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>gndr)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "factor"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>gndr)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "factor"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Now compare this to the age variable (<code>agea</code>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>agea)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "numeric"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>agea)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "numeric"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This is by nature a numeric variable, and it turns out that <code>R</code> has stored it properly.</p>
 <hr>
@@ -682,10 +689,10 @@ Tip
 <h3 data-number="3.6.3" class="anchored" data-anchor-id="getting-familiar-with-factor-variables"><span class="header-section-number">3.6.3</span> Getting familiar with factor variables</h3>
 <p>Once you have identified a factor variable, you will usually want to learn more about it. But getting familiar with <em>factors</em> can be a bit tricky at first. Many summary statistics will not work here. For example, if you try to calculate the mean of a factor variable, <code>R</code> will refuse to do so:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>gndr)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>gndr)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Warning in mean.default(ess$gndr): argument is not numeric or logical:</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="do">## returning NA</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This does make sense: Many summary statistics are only appropriate if you are dealing with proper numbers, but here you have only categories. But this also means that you have to use different ways to learn how a factor variable in your dataset looks like.</p>
 <div style="page-break-after: always;"></div>
@@ -694,8 +701,8 @@ Tip
 <h3 data-number="3.6.4" class="anchored" data-anchor-id="getting-the-structure-of-a-factor-type-variable"><span class="header-section-number">3.6.4</span> Getting the structure of a factor-type variable</h3>
 <p>A first option is to let <code>R</code> print out the structure of the variable using <code>str()</code> (“structure”):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(ess<span class="sc">$</span>gndr)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  Factor w/ 2 levels "Male","Female": 1 2 2 2 1 1 1 1 1 1 ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(ess<span class="sc">$</span>gndr)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  Factor w/ 2 levels "Male","Female": 1 2 2 2 1 1 1 1 1 1 ...</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This tells you that <code>gndr</code> has two categories (“Male” &amp; “Female”) and that these are encoded with the numbers <code>1</code> and <code>2</code> in the dataset.</p>
 <p>What is not fully clear from this output, however, is which number really corresponds to which label — are men now coded as <code>1</code> or as <code>2</code>? And this is also generally one of the things that can make working with factors daunting: it is a bit difficult to see ‘under the hood’ of a factor: how its text labels correspond to the numerical values underneath.</p>
@@ -707,10 +714,10 @@ Tip
 <p>The <code>visfactor()</code> function in the <code>bst290</code> package allows you to see which number corresponds with which label in a given factor-type variable.</p>
 <p>For example, to see the labels and numerical values of the <code>gndr</code> variable, you would run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"gndr"</span>, <span class="at">dataset =</span> ess)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"gndr"</span>, <span class="at">dataset =</span> ess)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  values labels</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="do">##       1   Male</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="do">##       2 Female</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="do">##       2 Female</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
@@ -720,15 +727,15 @@ Tip
 <p>The easiest way to see if there are empty categories in a factor variable is to let <code>R</code> show you how many observations you have for each of the categories of the variable. To do so, you use the <code>table()</code> function.</p>
 <p>This is how you would do this with the <code>gndr</code> variable:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess<span class="sc">$</span>gndr)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess<span class="sc">$</span>gndr)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="do">##   Male Female </span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="do">##     75     68</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="do">##     75     68</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You see that there are 75 men and 68 women in the dataset — and there are no empty categories.</p>
 <p>But now compare this to the case of the <code>mainact</code> variable, which tells you about the respondent’s main activity of the last seven days (whether they were working, unemployed, etc.):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess<span class="sc">$</span>mainact)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(ess<span class="sc">$</span>mainact)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="do">##                                 Paid work </span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="do">##                                        15 </span></span>
@@ -747,14 +754,14 @@ Tip
 <span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="do">## Housework, looking after children, others </span></span>
 <span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="do">##                                         3 </span></span>
 <span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="do">##                                     Other </span></span>
-<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="do">##                                         0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="do">##                                         0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>It turns out that there are indeed some empty categories: There are no unemployed respondents in the dataset, and none of them was doing military or community services.</p>
 <div style="page-break-after: always;"></div>
 <p>An alternative way to identify empty categories is to let <code>R</code> first print out which categories a factor variable can <em>theoretically</em> have and then compare that to what categories are <em>actually represented</em> in the dataset.</p>
 <p>To see which categories your factor-variable can <em>theoretically</em> have, you use the <code>levels()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(ess<span class="sc">$</span>mainact)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(ess<span class="sc">$</span>mainact)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "Paid work"                                </span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="do">## [2] "Education"                                </span></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [3] "Unemployed, looking for job"              </span></span>
@@ -763,19 +770,19 @@ Tip
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [6] "Retired"                                  </span></span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="do">## [7] "Community or military service"            </span></span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="do">## [8] "Housework, looking after children, others"</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [9] "Other"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="do">## [9] "Other"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You see that the <code>mainact</code> variable has, in theory, nine categories in total, ranging from “Paid work” to “Other”.</p>
 <p>Now, to see which of these categories are really present in the data, you can use the <code>unique()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(ess<span class="sc">$</span>mainact)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(ess<span class="sc">$</span>mainact)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] &lt;NA&gt;                                     </span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="do">## [2] Retired                                  </span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="do">## [3] Paid work                                </span></span>
 <span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="do">## [4] Education                                </span></span>
 <span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="do">## [5] Housework, looking after children, others</span></span>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="do">## [6] Permanently sick or disabled             </span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 9 Levels: Paid work Education ... Other</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="do">## 9 Levels: Paid work Education ... Other</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You see that only five (plus the <code>NA</code>s) of the nine categories are listed — and being unemployed is not one of them.</p>
 <div style="page-break-after: always;"></div>
@@ -796,7 +803,7 @@ Tip
 <p><code>oppsumtabell()</code> produces a table with the most important summary statistics of one or more <em>numeric</em> variables.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> All you need to do is specify the dataset that contains your variable(s) and the specific variables you want summary statistics for.</p>
 <p>For example, to get summary statistics for the <code>agea</code> variable you just run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsumtabell</span>(<span class="at">dataset =</span> ess, <span class="at">variables =</span> <span class="st">"agea"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsumtabell</span>(<span class="at">dataset =</span> ess, <span class="at">variables =</span> <span class="st">"agea"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> Variable        agea  
  Observations    143.00
@@ -812,7 +819,7 @@ Tip
 </div>
 <p>To do the same for more than one variable, you run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsumtabell</span>(<span class="at">dataset =</span> ess, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"agea"</span>,<span class="st">"height"</span>,<span class="st">"weight"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsumtabell</span>(<span class="at">dataset =</span> ess, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"agea"</span>,<span class="st">"height"</span>,<span class="st">"weight"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> Variable        agea   height weight
  Observations    143.00 142.00 138.00
@@ -827,16 +834,16 @@ Tip
 </div>
 </div>
 <p>This table shows summary statistics for age (<code>agea</code>) and the respondent’s body height and weight.</p>
-<p>Can you interpret each of the statistics shown <span class="citation" data-cites="Solbakken3019">(as before, see <a href="#ref-Solbakken3019" role="doc-biblioref"><strong>Solbakken3019?</strong></a>)</span>.</p>
+<p>Can you interpret each of the statistics shown <span class="citation" data-cites="Solbakken2019">(as before, see <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 3</a>)</span>.</p>
 <div style="page-break-after: always;"></div>
 </section>
 <section id="norwegian-language-support" class="level3" data-number="3.7.2">
 <h3 data-number="3.7.2" class="anchored" data-anchor-id="norwegian-language-support"><span class="header-section-number">3.7.2</span> Norwegian language support</h3>
 <p>You can choose to have the table labelled in Norwegian (NB), if you want. All you have to do is to activate the <code>norsk</code>-option of the <code>oppsumtabell()</code> function and set it to <code>TRUE</code> (or <code>T</code>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsumtabell</span>(<span class="at">dataset =</span> ess, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsumtabell</span>(<span class="at">dataset =</span> ess, </span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"agea"</span>,<span class="st">"height"</span>,<span class="st">"weight"</span>),</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">norsk =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">norsk =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> Variabel      agea   height weight
  Observasjoner 143.00 142.00 138.00
@@ -858,7 +865,7 @@ Tip
 <p><code>oppsumtabell()</code> also has an <em>export</em>-functionality: You can switch on the export-function to get a result that you can directly copy and paste into a Word document and then transform into a nice, publication-quality table.</p>
 <p>For example, to export the last table from above you simply add <code>export=TRUE</code> to your code:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsumtabell</span>(<span class="at">dataset =</span> ess, </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsumtabell</span>(<span class="at">dataset =</span> ess, </span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"agea"</span>,<span class="st">"height"</span>,<span class="st">"weight"</span>),</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">norsk =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">export =</span> <span class="cn">TRUE</span>)</span>
@@ -871,7 +878,7 @@ Tip
 <span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Standardavvik, 18.57,  8.78, 19.20</span></span>
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Minimum, 16.00,147.00, 50.00</span></span>
 <span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Maksimum, 90.00,196.00,182.00</span></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Manglende,  0.00,  1.00,  5.00</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Manglende,  0.00,  1.00,  5.00</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This result arguably looks even less presentable than the other one, but:</p>
 <ol type="1">
@@ -896,13 +903,13 @@ Tip
 <p>The <code>oppsum_grupp()</code> function produces a summary table that contains the same statistics as the ones you get from <code>oppsumtabell()</code>, but now broken down by categories of a second variable (which should ideally have only a few distinct categories!).</p>
 <p>To get summary statistics for body height for men and women separately (i.e., over the categories of <code>gndr</code>) you run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsum_grupp</span>(<span class="at">dataset =</span> ess, <span class="at">variable =</span> <span class="st">"height"</span>, <span class="at">by.var =</span> <span class="st">"gndr"</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oppsum_grupp</span>(<span class="at">dataset =</span> ess, <span class="at">variable =</span> <span class="st">"height"</span>, <span class="at">by.var =</span> <span class="st">"gndr"</span>)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  gndr   Observations Average Stand. Dev. 25th percentile Median 75th percentile</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="do">##  Female 67           167.87  6.66        164.00          168.00 173.00         </span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="do">##  Male   75           179.03  6.90        174.00          178.00 183.50         </span></span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="do">##  Minimum Maximum Missing</span></span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="do">##  147.00  180.00  1      </span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  165.00  196.00  0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="do">##  165.00  196.00  0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You can see that men are, on average, around 11 centimeters taller than women, and that the smallest woman is smaller than the smallest man (and the same for the tallest individuals in the sample).</p>
 <p>Like <code>oppsumtabell()</code>, <code>oppsum_grupp()</code> also has an export function (<code>export = TRUE</code>) and Norwegian language support (<code>norsk = TRUE</code>).</p>
@@ -975,7 +982,7 @@ Tip
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Just in case
+<span class="screen-reader-only">Note</span>Just in case
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -997,7 +1004,7 @@ Just in case
 <div style="page-break-after: always;"></div>
 <p>Putting all this together: To import the dataset file, you would use:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="ot">&lt;-</span> labelled<span class="sc">::</span><span class="fu">unlabelled</span>(haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">"ess7.dta"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ess7 <span class="ot">&lt;-</span> labelled<span class="sc">::</span><span class="fu">unlabelled</span>(haven<span class="sc">::</span><span class="fu">read_dta</span>(<span class="st">"ess7.dta"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here, <code>haven::read_dta()</code> uses the <code>read_dta()</code> function from <code>haven</code> to import the dataset – and then we directly convert it with <code>labelled::unlabelled()</code> and save the result as <code>ess7</code>.</p>
 <div style="page-break-after: always;"></div>
@@ -1007,7 +1014,7 @@ Just in case
 <p>Fortunately, there is a function to easily create a <em>data dictionary</em> or <em>codebook</em> that is included in <code>labelled</code>: the <code>generate_dictionary()</code> function.</p>
 <p>Using this function is easy — you just need to make sure to save the function’s output in a new object like <code>dict_ess7</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dict_ess7 <span class="ot">&lt;-</span> labelled<span class="sc">::</span><span class="fu">generate_dictionary</span>(ess7)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dict_ess7 <span class="ot">&lt;-</span> labelled<span class="sc">::</span><span class="fu">generate_dictionary</span>(ess7)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You will now see a new object in your <em>Environment</em> called <code>dict_ess7</code>.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> If you now run <code>View(dict_ess7)</code>, you get a neat table that shows you the name, label, and value labels of all the variables in your dataset.</p>
 <p>Now you know how you can get survey data for Norway and many other countries on a wide variety of topics from a highly trusted source! Take also a few minutes to explore the ESS website and their Data Portal to see which topics they cover and which variables they have in each survey round!</p>
@@ -1126,13 +1133,14 @@ Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fa
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

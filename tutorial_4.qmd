@@ -213,6 +213,58 @@ ggplot(data = ess,
         theme_bw()
 ```
 
+\newpage
+
+### Calculating and showing the Pearson correlation coefficient
+
+Just from looking at the graph, you can see that there is a positive relationship between body weight and body height in the data: The taller someone is, the heavier they are. 
+
+What the graph does not show is *exactly* how strong that relationship is. However, as you know, we can use the Pearson correlation coefficient $r$ (also known as the Greek letter "rho": $\rho$) to quantify the relationship between the two variables. You can use `R` to calculate this statistic and you can then directly add it to your graph.
+
+To calculate the correlation coefficient, we use the `cor()` function.^[See also `?cor()` for the help file.] This function takes two variables that we need to specify as `x` and `y` and calculates their degree of correlation --- but only if both variables are numeric! We also need to specify what we want to do with missing values (`NA`s) with the `use` option.
+
+In our case, the two variables we want to work with are `height` and `weight`. and they both belong to to the `ess` dataset. We also want to use only complete observations, meaning those observations where we have data for body weight and height; all others where one or both variables are missing are excluded from the calculation. We also save the result as `rho`.
+
+We specify this as follows:
+```{r}
+rho <- cor(x = ess$height,
+           y = ess$weight,
+           use = "complete.obs")
+
+```
+
+When we print out the saved result, we see the correlation coefficient:
+```{r}
+rho
+```
+
+There is a moderately strong and positive degree of correlation in the data.
+
+Now to add this to the graph. Here we use a very handy function that allows us to paste different things together and create a text label that we can add to the graph: `paste0()`. `paste0()`, simply put, takes different pieces of text or numbers and pastes them together to a single text string. We also use the `round()` function to make our correlation coefficient look a bit nicer.
+
+For example, let's construct a label that combines the text *"Pearson r = "* and our rounded correlation coefficient with `paste0()`. We save this as `rho_label` so that we can later use it in our graph:
+```{r}
+rho_label <- paste0("Pearson r = ",round(rho, digits = 2))
+```
+
+If we print this out, we see the formatted result:
+```{r}
+rho_label
+```
+
+And now that we have this saved label and add it to the graph as a caption:
+```{r}
+ggplot(data = ess,
+       aes(x = height, y = weight)) +
+        geom_point() +
+        labs(x = "Body height (cm)",
+             y = "Body weight (kg)",
+             caption = rho_label) +
+        theme_bw()
+```
+
+`paste0()` is very handy because you can use to add pretty much any statistic you want to show as part of a graph, be it a correlation coefficient or something else that is relevant. 
+
 And this is now a graph that you could include in a course paper, etc. Of course, there are many, many more ways to tweak this graph even further, but what you have is fine for now.
 
 If you want to see what other themes you can choose from, visit <https://ggplot2.tidyverse.org/reference/ggtheme.html>

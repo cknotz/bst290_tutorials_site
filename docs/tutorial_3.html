@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -70,14 +70,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="./tutorial_2.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-40e6375b29d217d81598add68a79f183.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-97afdd19a946a7800d02dd55b4e8b647.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -120,7 +121,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -146,6 +147,8 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">R Tutorials for BST290</span>
     </a>
@@ -173,6 +176,10 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      </a>
+      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -422,12 +429,12 @@ Tip
 <p>You need to use two packages, the <code>bst290</code> package and now also the <code>tidyverse</code> package (which you should have installed at the beginning of the course). The first step is therefore to load the two packages and then the practice dataset:</p>
 <p>The start of your script file should look like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loads packages</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loads packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bst290) </span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Loads dataset</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(ess)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(ess)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
@@ -448,7 +455,7 @@ Tip
 <h3 data-number="3.1.1" class="anchored" data-anchor-id="using-select"><span class="header-section-number">3.1.1</span> Using <code>select()</code></h3>
 <p>Here is how you keep specific variables with <code>select()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="at">.data =</span> ess, idno, agea, gndr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="at">.data =</span> ess, idno, agea, gndr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here you tell <code>R</code>:</p>
 <ol type="1">
@@ -462,7 +469,7 @@ Tip
 <p>If you only run the function, <code>R</code> will do the operation and then simply print the result out for you — and the result is then the “trimmed” dataset. This can be helpful if you just want to test if your code works, but you usually want to store the reduced dataset so you can use it in your analysis.</p>
 <p>You can save the resulting “trimmed” dataset as a new object using the good old assignment operator:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ess_selected <span class="ot">&lt;-</span> <span class="fu">select</span>(<span class="at">.data =</span> ess, idno, agea, gndr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ess_selected <span class="ot">&lt;-</span> <span class="fu">select</span>(<span class="at">.data =</span> ess, idno, agea, gndr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="removing-de-selecting-variables" class="level3" data-number="3.1.3">
@@ -470,7 +477,7 @@ Tip
 <p>Now you know how you can <em>keep</em> certain variables in a dataset and get rid of all others. But you can also use <code>select()</code> to <em>remove</em> specific variables but leave the rest of the dataset as it is. To do this, you simply add a minus symbol (<code>-</code>) before the variables you want to get rid off.</p>
 <p>For example, to <em>remove</em> the <code>agea</code> and <code>gndr</code> variables — and keep all the others — you would run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="at">.data =</span> ess,<span class="sc">-</span>agea,<span class="sc">-</span>gndr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="at">.data =</span> ess,<span class="sc">-</span>agea,<span class="sc">-</span>gndr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
@@ -480,7 +487,7 @@ Tip
 <p>Filtering observations works basically the same way, the only difference is that you have to specify <em>how</em> or by which criteria you want to select observations from the data.</p>
 <p>For example, let’s assume you wanted to remove all those observations from the <code>ess</code> dataset where respondents were younger than 40 years. This is how you would do this with <code>filter()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(<span class="at">.data =</span> ess,agea<span class="sc">&gt;=</span><span class="dv">40</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(<span class="at">.data =</span> ess,agea<span class="sc">&gt;=</span><span class="dv">40</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In human language:</p>
 <ol type="1">
@@ -499,7 +506,7 @@ Tip
 </ul>
 <p>You can also specify <em>multiple conditions</em> in <code>filter()</code>. For example, to limit the data to women who are older than 35 you would do the following:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(<span class="at">.data =</span> ess, agea<span class="sc">&gt;</span><span class="dv">35</span> <span class="sc">&amp;</span> gndr<span class="sc">==</span><span class="st">"Female"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(<span class="at">.data =</span> ess, agea<span class="sc">&gt;</span><span class="dv">35</span> <span class="sc">&amp;</span> gndr<span class="sc">==</span><span class="st">"Female"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In human language:</p>
 <ol type="1">
@@ -519,9 +526,9 @@ Tip
 <p>How this works will become clearer when you see the pipe in action. For example, let’s say you wanted to work with the <code>ess</code> practice dataset, but you first wanted to trim it down to only a few variables you really need <em>and</em> keep only female respondents who are older than 35.</p>
 <p>Here is how your code would look like:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(idno, agea, gndr) <span class="sc">%&gt;%</span> <span class="co"># 2.</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gndr<span class="sc">==</span><span class="st">"Female"</span> <span class="sc">&amp;</span> agea<span class="sc">&gt;</span><span class="dv">35</span>) <span class="co"># 3.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gndr<span class="sc">==</span><span class="st">"Female"</span> <span class="sc">&amp;</span> agea<span class="sc">&gt;</span><span class="dv">35</span>) <span class="co"># 3.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In human language: We tell <code>R</code> that it should…</p>
 <ol type="1">
@@ -536,15 +543,15 @@ Tip
 <p>As before, you can save the result of your “data cleaning pipeline” as a new dataset in your <em>Environment</em>. This is useful when you want to prepare a cleaned and trimmed version of the original “raw” dataset that you can then use in your statistical analysis.</p>
 <p>Alternative 1 is to use the standard assignment operator (<code>&lt;-</code>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ess_clean <span class="ot">&lt;-</span> ess <span class="sc">%&gt;%</span> <span class="co"># saves the "trimmed" dataset as 'ess_clean'</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ess_clean <span class="ot">&lt;-</span> ess <span class="sc">%&gt;%</span> <span class="co"># saves the "trimmed" dataset as 'ess_clean'</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(idno, agea, gndr) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gndr<span class="sc">==</span><span class="st">"Female"</span> <span class="sc">&amp;</span> agea<span class="sc">&gt;</span><span class="dv">35</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gndr<span class="sc">==</span><span class="st">"Female"</span> <span class="sc">&amp;</span> agea<span class="sc">&gt;</span><span class="dv">35</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>There is also a second alternative, in which you use the “reversed” assignment operator (<code>-&gt;</code>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(idno, agea, gndr) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gndr<span class="sc">==</span><span class="st">"Female"</span> <span class="sc">&amp;</span> agea<span class="sc">&gt;</span><span class="dv">35</span>) <span class="ot">-&gt;</span> ess_clean <span class="co"># as above, but now at the end of the pipeline</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gndr<span class="sc">==</span><span class="st">"Female"</span> <span class="sc">&amp;</span> agea<span class="sc">&gt;</span><span class="dv">35</span>) <span class="ot">-&gt;</span> ess_clean <span class="co"># as above, but now at the end of the pipeline</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Finally, and as with the regular assingment operator, it can be a good idea to create a keyboard shortcut for the pipe operator to make typing easier (in <code>RStudio</code>, go to “Options”, then “Code”, and then “Modify keyboard shortcuts”).</p>
 <div style="page-break-after: always;"></div>
@@ -580,8 +587,8 @@ Important
 <p>But you decide, for some reason, that you want that variable measured in meters, and not in centimeters. To get there, you have to divide the <code>height</code> variable by 100.</p>
 <p>Here is how you can do this with <code>mutate()</code> (plus again the pipe operator):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height_meters =</span> height<span class="sc">/</span><span class="dv">100</span>) <span class="co"># 2.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">height_meters =</span> height<span class="sc">/</span><span class="dv">100</span>) <span class="co"># 2.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Once more in human language:</p>
 <ol type="1">
@@ -601,10 +608,10 @@ Important
 <p>In other words, the task is to create a new variable that identifies older respondents. This new variable would have the value <code>1</code> whenever a respondent in the dataset is older than 65, and it would have the value <code>0</code> for all those respondents who are younger. You can create this variable on the basis of the <code>agea</code> variable with the handy <code>if_else()</code> function.</p>
 <p>In practice, the code to do this would look like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">older =</span> <span class="fu">if_else</span>(<span class="at">condition =</span> agea<span class="sc">&gt;</span><span class="dv">65</span>, <span class="co"># 2.</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">true =</span> <span class="dv">1</span>, <span class="co"># 3.</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">false =</span> <span class="dv">0</span>)) <span class="co"># 4.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">false =</span> <span class="dv">0</span>)) <span class="co"># 4.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <code>mutate</code>-call in human language:</p>
 <ol type="1">
@@ -638,21 +645,21 @@ Important
 <p>To show you how this works, we will use the <code>health</code> variable that is included in the <code>ess</code> practice dataset. This variable measures how respondents subjectively perceive their own health on an ordinal scale. The categories on that scale are “Very good”, “Good”, “Fair”, “Bad”, and “Very bad”.</p>
 <p>You can also see this when you use the <code>attributes()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(ess<span class="sc">$</span>health)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(ess<span class="sc">$</span>health)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>levels</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Very good"</span> <span class="st">"Good"</span>      <span class="st">"Fair"</span>      <span class="st">"Bad"</span>       <span class="st">"Very bad"</span> </span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="sc">$</span>class</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"factor"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"factor"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Under <code>$levels</code>, you see the different categories. Under <code>$class</code>, you see that it is stored as a <em>factor</em>-type variable (as it should be!).</p>
 <p>Assume now that we want to create a new variable that is based on <code>health</code>, and the new variable should identify those respondents in our dataset that perceive their own health to be at least “good”. In other words, we want to dummy-code the <code>health</code> variable into a new variable that identifies respondents who have a good or very good subjective health.</p>
 <p>Here again, we use <code>if_else()</code> within <code>mutate()</code>, but we now need to specify the condition a bit differently:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span>  <span class="co"># 1.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span>  <span class="co"># 1.</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">health_dummy =</span> <span class="fu">if_else</span>(<span class="at">condition =</span> health <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Very good"</span>,<span class="st">"Good"</span>), <span class="co"># 2. </span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">true =</span> <span class="st">"Good health"</span>, <span class="co"># 3.</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">false =</span> <span class="st">"Not good health"</span>)) <span class="co"># 4.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">false =</span> <span class="st">"Not good health"</span>)) <span class="co"># 4.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Translated into “human”, the code tells <code>R</code> to:</p>
 <ol type="1">
@@ -703,15 +710,15 @@ Tip
 <p>To start with a simple example, let’s say you are interested in the average body height of your respondents. In the <code>ess</code> dataset, this is measured via the <code>height</code> variable.</p>
 <p>You know, of course, that you can get the average of <code>height</code> with the <code>mean()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>height,<span class="at">na.rm =</span> T)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">173.7606</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>height,<span class="at">na.rm =</span> T)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">173.7606</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Here is how you would do it the <code>tidyverse</code>-way:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  mean_height</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>    <span class="fl">173.7606</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span>    <span class="fl">173.7606</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>What you do here is, in essence, the same as the above: You use the <code>mean()</code> function to calculate the average of the <code>height</code> variable. The only differences are that a) you save the result <em>temporarily</em> into a new variable (<code>mean_height</code>), and b) you do not have to use the <code>$</code> sign to tell <code>R</code> where to take the <code>height</code> variable from because you already do that in the very first step (<code>ess %&gt;%</code>).</p>
 <p>If you now think that the second option is really just a more complicated and cumbersome form of the first one: True, in principle.</p>
@@ -722,14 +729,14 @@ Tip
 <p>You can use the <code>group_by()</code> function to group your dataset by some other variable before you calculate any summary statistics.</p>
 <p>For example, let’s say you wanted to calculate the average body height for men and women separately. This is how you would do this with <code>group_by()</code> and <code>summarize()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gndr) <span class="sc">%&gt;%</span> <span class="co"># 2.</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_height =</span> <span class="fu">mean</span>(height, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="co"># 3.</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A tibble: 2 × 2</span></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  gndr   mean_height</span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>fct<span class="sc">&gt;</span>        <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> Male          <span class="fl">179.</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female        <span class="fl">168.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female        <span class="fl">168.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In human language:</p>
 <ol type="1">
@@ -746,25 +753,25 @@ Tip
 <p>The previous examples showed you how to calculate the mean value of a variable — but you can of course also calculate other summary statistics such as the variance, median, sum, or standard deviation.</p>
 <p>For example, to calculate the median age across genders you would run:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gndr) <span class="sc">%&gt;%</span> </span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">med_age =</span> <span class="fu">median</span>(agea, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) </span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A tibble: 2 × 2</span></span>
 <span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  gndr   med_age</span>
 <span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>fct<span class="sc">&gt;</span>    <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> Male      <span class="dv">51</span>  </span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female    <span class="fl">42.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female    <span class="fl">42.5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Similarly, if you wanted to know the number (<em>N</em>) of men and women in the sample you would use the following code:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gndr) <span class="sc">%&gt;%</span> </span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">obs =</span> <span class="fu">n</span>()) </span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A tibble: 2 × 2</span></span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  gndr     obs</span>
 <span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>fct<span class="sc">&gt;</span>  <span class="er">&lt;</span>int<span class="sc">&gt;</span></span>
 <span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> Male      <span class="dv">75</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female    <span class="dv">68</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female    <span class="dv">68</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>n()</code> simply calculates the number of observations.</p>
 </section>
@@ -772,7 +779,7 @@ Tip
 <h3 data-number="6.3.2" class="anchored" data-anchor-id="multiple-summary-statistics"><span class="header-section-number">6.3.2</span> Multiple summary statistics</h3>
 <p>You can also get multiple summary statistics at the same time. All you need to do is to add to the <code>summarize()</code> call:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(gndr) <span class="sc">%&gt;%</span> </span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">obs =</span> <span class="fu">n</span>(),</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">med_age =</span> <span class="fu">median</span>(agea, <span class="at">na.rm =</span> T),</span>
@@ -781,7 +788,7 @@ Tip
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  gndr     obs med_age mean_weight</span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">&lt;</span>fct<span class="sc">&gt;</span>  <span class="er">&lt;</span>int<span class="sc">&gt;</span>   <span class="er">&lt;</span>dbl<span class="sc">&gt;</span>       <span class="er">&lt;</span>dbl<span class="sc">&gt;</span></span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> Male      <span class="dv">75</span>    <span class="dv">51</span>          <span class="fl">86.8</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female    <span class="dv">68</span>    <span class="fl">42.5</span>        <span class="fl">68.9</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> Female    <span class="dv">68</span>    <span class="fl">42.5</span>        <span class="fl">68.9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Last but not least, a very useful way to extend these operations is to <em>directly visualize</em> the results in a graph using <code>ggplot2</code>. You will learn how to do this in the next tutorial.</p>
 <div style="page-break-after: always;"></div>
@@ -811,7 +818,7 @@ Tip
 <p>What this means in practice is again easiest to see by looking at an example. Let’s say that, because you are feeling silly today, you want the age variable (<code>agea</code>) not stored as numbers but as text. In other words, you want to convert this variable from type ‘numeric’ to type ‘character’.</p>
 <p>To do this, you would use the <code>as.character()</code> transformation function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.character</span>(ess<span class="sc">$</span>agea)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.character</span>(ess<span class="sc">$</span>agea)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  [<span class="dv">1</span>] <span class="st">"22"</span> <span class="st">"43"</span> <span class="st">"58"</span> <span class="st">"22"</span> <span class="st">"84"</span> <span class="st">"62"</span> <span class="st">"68"</span> <span class="st">"81"</span> <span class="st">"59"</span> <span class="st">"57"</span> <span class="st">"85"</span> <span class="st">"24"</span> <span class="st">"43"</span> <span class="st">"35"</span> <span class="st">"59"</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a> [<span class="dv">16</span>] <span class="st">"52"</span> <span class="st">"56"</span> <span class="st">"69"</span> <span class="st">"32"</span> <span class="st">"63"</span> <span class="st">"18"</span> <span class="st">"56"</span> <span class="st">"53"</span> <span class="st">"53"</span> <span class="st">"57"</span> <span class="st">"40"</span> <span class="st">"40"</span> <span class="st">"81"</span> <span class="st">"19"</span> <span class="st">"21"</span></span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a> [<span class="dv">31</span>] <span class="st">"43"</span> <span class="st">"67"</span> <span class="st">"66"</span> <span class="st">"43"</span> <span class="st">"26"</span> <span class="st">"56"</span> <span class="st">"82"</span> <span class="st">"18"</span> <span class="st">"35"</span> <span class="st">"73"</span> <span class="st">"29"</span> <span class="st">"56"</span> <span class="st">"65"</span> <span class="st">"56"</span> <span class="st">"17"</span></span>
@@ -821,29 +828,29 @@ Tip
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a> [<span class="dv">91</span>] <span class="st">"41"</span> <span class="st">"54"</span> <span class="st">"38"</span> <span class="st">"56"</span> <span class="st">"39"</span> <span class="st">"61"</span> <span class="st">"32"</span> <span class="st">"32"</span> <span class="st">"39"</span> <span class="st">"33"</span> <span class="st">"47"</span> <span class="st">"41"</span> <span class="st">"17"</span> <span class="st">"42"</span> <span class="st">"23"</span></span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>[<span class="dv">106</span>] <span class="st">"76"</span> <span class="st">"36"</span> <span class="st">"74"</span> <span class="st">"23"</span> <span class="st">"55"</span> <span class="st">"18"</span> <span class="st">"43"</span> <span class="st">"28"</span> <span class="st">"44"</span> <span class="st">"44"</span> <span class="st">"38"</span> <span class="st">"48"</span> <span class="st">"38"</span> <span class="st">"48"</span> <span class="st">"41"</span></span>
 <span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>[<span class="dv">121</span>] <span class="st">"75"</span> <span class="st">"78"</span> <span class="st">"19"</span> <span class="st">"24"</span> <span class="st">"24"</span> <span class="st">"40"</span> <span class="st">"75"</span> <span class="st">"50"</span> <span class="st">"72"</span> <span class="st">"40"</span> <span class="st">"70"</span> <span class="st">"34"</span> <span class="st">"59"</span> <span class="st">"67"</span> <span class="st">"17"</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">136</span>] <span class="st">"87"</span> <span class="st">"65"</span> <span class="st">"71"</span> <span class="st">"39"</span> <span class="st">"33"</span> <span class="st">"32"</span> <span class="st">"16"</span> <span class="st">"25"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">136</span>] <span class="st">"87"</span> <span class="st">"65"</span> <span class="st">"71"</span> <span class="st">"39"</span> <span class="st">"33"</span> <span class="st">"32"</span> <span class="st">"16"</span> <span class="st">"25"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You could of course also directly add this new variable to the <code>ess</code> dataset with the assignment operator:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>age_chr <span class="ot">&lt;-</span> <span class="fu">as.character</span>(ess<span class="sc">$</span>agea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>age_chr <span class="ot">&lt;-</span> <span class="fu">as.character</span>(ess<span class="sc">$</span>agea)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Take a look at the result above: Do you notice the quotation marks around all of the numbers that <code>R</code> printed out? This indicate that you transformed <code>agea</code> into a character variable: The numbers are still there — but they are now stored as text. <code>R</code> will now refuse to do any calculations with this variable.</p>
 <p>For example, if you try to calculate the mean of this new variable, you will get an error message:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>age_chr, <span class="at">na.rm =</span> T)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>age_chr, <span class="at">na.rm =</span> T)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>Warning <span class="cf">in</span> <span class="fu">mean.default</span>(ess<span class="sc">$</span>age_chr, <span class="at">na.rm =</span> T)<span class="sc">:</span> argument is not numeric or</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>logical<span class="sc">:</span> returning <span class="cn">NA</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="cn">NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 <p>Now you know what the problem often looks like — there is a variable that you know is supposed to be a numeric variable, but it somehow got stored as text. In that case, you have to tell <code>R</code> that it should treat this variable as a proper numeric variable. This works equivalently to the previous operation, but with a different function — <code>as.numeric()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the age_chr variable we just created into a new one and store in ess</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the age_chr variable we just created into a new one and store in ess</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>age_num <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(ess<span class="sc">$</span>age_chr) </span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a> </span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This should work now</span></span>
 <span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>age_num, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">47.90909</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">47.90909</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This might seem like much ado about nothing, but knowing this can really save you a lot of time and headaches. <strong>The important point:</strong> Be conscious of how your data are stored in <code>R</code>, and if how it is stored really makes sense. If it does not, convert your variables into an appropriate format.</p>
 <div style="page-break-after: always;"></div>
@@ -855,7 +862,7 @@ Tip
 <h3 data-number="7.3.1" class="anchored" data-anchor-id="factor-to-numeric"><span class="header-section-number">7.3.1</span> <em>Factor</em> to numeric</h3>
 <p>Assume you were interested in people’s level of satisfaction with life and you therefore wanted to do a statistical analysis with the <code>stflife</code> variable from the <code>ess</code> dataset, which measures exactly this. You also see that this variable has 11 categories — from 0 (“<em>Extremely dissatisfied</em>”) to 10 (“<em>Extremely satisified</em>”) — which are enough to be used as a numeric or “metric” variable:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"stflife"</span>, <span class="at">dataset =</span> ess)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"stflife"</span>, <span class="at">dataset =</span> ess)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a> values                 labels</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> Extremely dissatisfied</span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span>                      <span class="dv">1</span></span>
@@ -867,25 +874,25 @@ Tip
 <span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>      <span class="dv">8</span>                      <span class="dv">7</span></span>
 <span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>                      <span class="dv">8</span></span>
 <span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>     <span class="dv">10</span>                      <span class="dv">9</span></span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>     <span class="dv">11</span>    Extremely satisfied</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>     <span class="dv">11</span>    Extremely satisfied</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>But: <code>R</code> will not do any math with the variable in this form. If you would try to calculate the average level of life satisfaction you get an error message:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>stflife, <span class="at">na.rm =</span> T)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>stflife, <span class="at">na.rm =</span> T)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>Warning <span class="cf">in</span> <span class="fu">mean.default</span>(ess<span class="sc">$</span>stflife, <span class="at">na.rm =</span> T)<span class="sc">:</span> argument is not numeric or</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>logical<span class="sc">:</span> returning <span class="cn">NA</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="cn">NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="cn">NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The problem: <code>stflife</code> is stored as a factor, which you can see when you you check how <code>R</code> stored it:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>stflife)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"factor"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>stflife)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"factor"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 <p>Fortunately, you can – in principle – directly extract the numerical scores from a factor-type variable like <code>sftlife</code> into a new numeric variable with <code>as.numeric()</code>.</p>
 <p><strong>But there is one thing you need to be careful about:</strong> Take another look at how the labels and underlying numbers of <code>stflife</code> correspond:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"stflife"</span>, <span class="at">dataset =</span> ess)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visfactor</span>(<span class="at">variable =</span> <span class="st">"stflife"</span>, <span class="at">dataset =</span> ess)</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a> values                 labels</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>      <span class="dv">1</span> Extremely dissatisfied</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>      <span class="dv">2</span>                      <span class="dv">1</span></span>
@@ -897,23 +904,23 @@ Tip
 <span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>      <span class="dv">8</span>                      <span class="dv">7</span></span>
 <span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>      <span class="dv">9</span>                      <span class="dv">8</span></span>
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>     <span class="dv">10</span>                      <span class="dv">9</span></span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>     <span class="dv">11</span>    Extremely satisfied</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>     <span class="dv">11</span>    Extremely satisfied</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If you take a careful look at the result here you should notice that the <strong>values and labels are off by 1</strong>: “<em>Extremely dissatisfied</em>” – which corresponds to <code>0</code> – has the underlying value of 1, the label “<em>1</em>” has the underlying value of <code>2</code>, and so on. In other words, the <code>values</code> are wrong.</p>
 <p>This is a problem because when you use <code>as.numeric()</code>, <code>R</code> will extract the <code>values</code> from <code>stflife</code> – and because the <code>values</code> are wrong, <strong>all results based on them will also be wrong.</strong></p>
 <p><strong>But: there is an easy way to fix this:</strong> You just subtract <code>1</code> from the result of <code>as.numeric()</code> and then save the result of this as a new variable:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>stflife_num <span class="ot">&lt;-</span> (<span class="fu">as.numeric</span>(ess<span class="sc">$</span>stflife) <span class="sc">-</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>stflife_num <span class="ot">&lt;-</span> (<span class="fu">as.numeric</span>(ess<span class="sc">$</span>stflife) <span class="sc">-</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If this worked, then the new numeric version of <code>stflife</code> should have a maximum value of 10 – corresponding to the 0-10 scale that the respondents saw when they participated in the survey. And that is now indeed the case:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(ess<span class="sc">$</span>stflife_num)</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(ess<span class="sc">$</span>stflife_num)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">10</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This also means that this numeric version of <code>stflife</code> will give you correct results, for example the average value:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>stflife_num, <span class="at">na.rm =</span> T)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">7.86014</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(ess<span class="sc">$</span>stflife_num, <span class="at">na.rm =</span> T)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">7.86014</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 <p><strong>The lesson to be learned:</strong> You need to really pay attention when you convert factor-type variables to numeric ones! In general: <strong>Never run on autopilot, always remain aware of what you are doing to your data!</strong></p>
@@ -930,16 +937,16 @@ Tip
 <p>A related problem you might have is that you want not the numerical scores but the text labels of a factor variable. For example, say you wanted to extract the labels for the different educational degrees in Norway from the <code>edlvdno</code> variable into a new pure character variable.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
 <p>To create a new variable that contains only the text labels from <code>edlvdno</code>, you use the <code>as.character()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>edlv_chr <span class="ot">&lt;-</span> <span class="fu">as.character</span>(ess<span class="sc">$</span>edlvdno)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ess<span class="sc">$</span>edlv_chr <span class="ot">&lt;-</span> <span class="fu">as.character</span>(ess<span class="sc">$</span>edlvdno)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You can verify that the new variable really is a character variable with:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>edlv_chr)</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"character"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(ess<span class="sc">$</span>edlv_chr)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"character"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>And you can see the different levels with <code>unique()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(ess<span class="sc">$</span>edlv_chr)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(ess<span class="sc">$</span>edlv_chr)</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] <span class="st">"Fullført 3-4 årig utdanning fra høgskole (Bachelor-, cand.mag., lærerhøgsko"</span>    </span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a> [<span class="dv">2</span>] <span class="st">"Fullført 5-6 årig utdanning fra høgskole (master, hovedfag)"</span>                    </span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a> [<span class="dv">3</span>] <span class="st">"Universitet/høgskole, mindre enn 3 år, men minst 2 år (høgskolekandidat, 2-"</span>    </span>
@@ -951,7 +958,7 @@ Tip
 <span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a> [<span class="dv">9</span>] <span class="st">"Forkurs til universitet/høgskole som ikke gir studiepoeng"</span>                      </span>
 <span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">10</span>] <span class="st">"Videregående avsluttende utdanning, allmennfaglige studieretninger/studieforber"</span></span>
 <span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>[<span class="dv">11</span>] <span class="st">"Barneskole (første del av obligatorisk utdanning)"</span>                              </span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>[<span class="dv">12</span>] <span class="st">"Vitnemål fra folkehøgskole"</span>                                                     </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>[<span class="dv">12</span>] <span class="st">"Vitnemål fra folkehøgskole"</span>                                                     </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
@@ -1065,13 +1072,14 @@ Tip
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
