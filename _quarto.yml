@@ -32,6 +32,7 @@ website:
       - section: "Other"
         contents:
         - href: codereport.qmd
+        - href: surveysim.qmd
 
 
 format:
