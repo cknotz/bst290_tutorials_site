@@ -15,18 +15,17 @@ editor_options:
 
 ## Introduction
 
-This document shows you how you can simulate many, many different iterations of a fictional survey study -- and how the different results are, collectively, distributed. In other words, it shows you the main idea behind the *Central Limit Theorem* and how it is used in applied social research to learn about a population based on small random samples.
+This tutorial shows how you can simulate many, many different iterations of a fictional survey study -- and how the different results are, collectively, distributed. In other words, it shows you the main idea behind the *Central Limit Theorem* and how it is used in applied social research to learn about a population based on small random samples.
 
 **Important:** Some of these simulations take a few minutes to run. Be patient.
 
 \newpage
 ### Setup
 
-These are the packages you'll need (use `install.packages()` to install anything that is missing):
+These are the packages you'll need (use `install.packages()` to install anything that is missing, which is likely `ggpubr`):
 ```{r, warning=F}
 library(tidyverse)
 theme_set(theme_classic())
-library(bst290)
 library(ggpubr)
 
 ```
@@ -34,7 +33,11 @@ library(ggpubr)
 \newpage
 ### Simulating our fictional population
 
-First, we simulate a fictional population: 5.5 mio. individuals and their levels of happiness on a 0-10 scale. 
+Imagine that we want to figure out the average level of happiness in a country similar to Norway, with a population of 5.5 million people. We measure happiness on a 0-10 scale.
+
+In `R`, we can create or simulate a such a population of 5.5 million individuals and their levels of happiness with a few lines of code, as shown below. The main tool we use here is the `sample()` function, which -- as the same suggests -- samples randomly from a pre-specified set of numbers.^[See also `?sample` for details.] In our case, we want to sample from the numbers 0 to 10, which we specify as `seq(0,10,1)` ("from 0 to 10, in steps of 1"), we want to do that 5.5. million times (`size = 5.5*10^6`), and we want the different numbers to have certain probabilities to be chosen (which all need to add up to 1, or 100%). 
+
+We run the `sample()` function within a function to create a `data.frame` and save the result as the variable `happy`. We also create another variable called `idno`, which is just a unique ID for each of the 5.5 million "individuals". The resulting `data.frame` -- our "population" -- gets saved as `pop`.
 
 Note that we also set a "seed" number so that we can always exactly reproduce the same results later; otherwise there will be small random variations in the results. You always need to run the `set.seed()` function together with the code immediately below for results to stay the same every time you run the analysis:
 ```{r}
@@ -48,7 +51,7 @@ pop <- data.frame(idno = seq(1,5.5*10^6,1),
 
 The "population" will now appear as `pop` in your *Environment* tab.
 
-We can now calculate the "true" average level of happiness in our population. This is the "target" value we are after. In a real social scientific study, this is the value that we do not know (because we very rarely have data for an entire population) but want to measure with a social survey:
+We can then calculate the "true" average level of happiness in our population. This is the "target" value we are after. In a real social scientific study, this is the value that we do not know (because we very rarely have data for an entire population) but want to measure with a social survey:
 ```{r}
 popmean <- mean(pop$happy)
 ```
@@ -168,25 +171,28 @@ So far, we took only two random samples with 1000 observations ("respondents") p
 
 Within this simulation, however, we can use `R` to take many, many samples from our "population" (almost) simultaneously and then see how the main statistic we are interested in, the sample average, varies between the different samples.
 
-To do this, we first create a `data.frame` in which we later save the different simulation results: a dataset of results. We call this `sampdist`:
+To do this, we first create a `data.frame` in which we later save the different simulation results: **a dataset of results**. We call this `sampdist`:
 ```{r}
 sampdist <- data.frame(sample = seq(1,1000,1),
                        result = c(c(sam1mean,sam2mean),rep(NA,998)))
 
 ```
 
-This dataset includes two variables, one is `sample` which simply tells us the number of each sample from 1 to 1000. The other variable called `result` stores the average happiness value from each sample. We start here the first two sample means and then add 998 `NA` values to get a total of 1000.
+This dataset includes two variables, one is `sample` which simply tells us the number of each sample from 1 to 1000. The other variable (called `result`) stores the average happiness value from each sample. To create the `results` variable, we start with the first two sample means and then add 998 `NA` values to get a total of 1000.
 
 \newpage
 Next, we use a **loop** to simulate 1000 samples. A loop is a fundamental concept in programming (also outside of `R`). It is, very simply put, an instruction to the computer to repeat a certain operation a certain number of times, one after the other. 
 
 In `R`, you can specify loops with the `for()` function, as shown below. What we are tell `R` with this code is, translated to human language:
-  1. For all numbers between 3 and 1000, which we call `k`...
-  2. ...go the `pop` dataset and draw a random sample from it...
-  3. ...calculate the sample mean...
+
+  1. For all values of `k`, which we define to be the numbers between 3 and 1000...
+  2. ...go the `pop` dataset, draw a random sample from it, and store that sample as `loopsam`...
+  3. ...calculate the mean of the `happy` variable in that sample...
   4. ...and then write the result, the mean of sample `k`, into the `k`-th row and the second column of our results dataset.
   
-We start at 3 because we already have values for the first two rows of the results dataset. Be aware: Loops are not very efficient and this calulation can take a few moments.
+Notice that we put the code after the `for()` function within curly braces (`{}`) to show `R` that this all fits together and belows to the loop. We start at 3 because we already have values for the first two rows of the results dataset. 
+
+Be aware: Loops are not very efficient and this calculation can take a few moments.
 
 ```{r}
 for(k in 3:1000) {

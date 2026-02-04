@@ -364,12 +364,12 @@ window.Quarto = {
 
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>This document shows you how you can simulate many, many different iterations of a fictional survey study – and how the different results are, collectively, distributed. In other words, it shows you the main idea behind the <em>Central Limit Theorem</em> and how it is used in applied social research to learn about a population based on small random samples.</p>
+<p>This tutorial shows how you can simulate many, many different iterations of a fictional survey study – and how the different results are, collectively, distributed. In other words, it shows you the main idea behind the <em>Central Limit Theorem</em> and how it is used in applied social research to learn about a population based on small random samples.</p>
 <p><strong>Important:</strong> Some of these simulations take a few minutes to run. Be patient.</p>
 <div style="page-break-after: always;"></div>
 <section id="setup" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="setup"><span class="header-section-number">1.1</span> Setup</h3>
-<p>These are the packages you’ll need (use <code>install.packages()</code> to install anything that is missing):</p>
+<p>These are the packages you’ll need (use <code>install.packages()</code> to install anything that is missing, which is likely <code>ggpubr</code>):</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
@@ -385,14 +385,15 @@ window.Quarto = {
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bst290)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
 <section id="simulating-our-fictional-population" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="simulating-our-fictional-population"><span class="header-section-number">1.2</span> Simulating our fictional population</h3>
-<p>First, we simulate a fictional population: 5.5 mio. individuals and their levels of happiness on a 0-10 scale.</p>
+<p>Imagine that we want to figure out the average level of happiness in a country similar to Norway, with a population of 5.5 million people. We measure happiness on a 0-10 scale.</p>
+<p>In <code>R</code>, we can create or simulate a such a population of 5.5 million individuals and their levels of happiness with a few lines of code, as shown below. The main tool we use here is the <code>sample()</code> function, which – as the same suggests – samples randomly from a pre-specified set of numbers.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> In our case, we want to sample from the numbers 0 to 10, which we specify as <code>seq(0,10,1)</code> (“from 0 to 10, in steps of 1”), we want to do that 5.5. million times (<code>size = 5.5*10^6</code>), and we want the different numbers to have certain probabilities to be chosen (which all need to add up to 1, or 100%).</p>
+<p>We run the <code>sample()</code> function within a function to create a <code>data.frame</code> and save the result as the variable <code>happy</code>. We also create another variable called <code>idno</code>, which is just a unique ID for each of the 5.5 million “individuals”. The resulting <code>data.frame</code> – our “population” – gets saved as <code>pop</code>.</p>
 <p>Note that we also set a “seed” number so that we can always exactly reproduce the same results later; otherwise there will be small random variations in the results. You always need to run the <code>set.seed()</code> function together with the code immediately below for results to stay the same every time you run the analysis:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
@@ -403,7 +404,7 @@ window.Quarto = {
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.01</span>,.<span class="dv">01</span>,.<span class="dv">02</span>,.<span class="dv">03</span>,.<span class="dv">04</span>,.<span class="dv">09</span>,.<span class="dv">10</span>,.<span class="dv">13</span>,.<span class="dv">20</span>,.<span class="dv">29</span>,<span class="fl">0.05</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The “population” will now appear as <code>pop</code> in your <em>Environment</em> tab.</p>
-<p>We can now calculate the “true” average level of happiness in our population. This is the “target” value we are after. In a real social scientific study, this is the value that we do not know (because we very rarely have data for an entire population) but want to measure with a social survey:</p>
+<p>We can then calculate the “true” average level of happiness in our population. This is the “target” value we are after. In a real social scientific study, this is the value that we do not know (because we very rarely have data for an entire population) but want to measure with a social survey:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>popmean <span class="ot">&lt;-</span> <span class="fu">mean</span>(pop<span class="sc">$</span>happy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -544,16 +545,23 @@ window.Quarto = {
 <h3 data-number="1.6" class="anchored" data-anchor-id="scaling-it-up-to-1000-samples"><span class="header-section-number">1.6</span> Scaling it up to 1000 samples</h3>
 <p>So far, we took only two random samples with 1000 observations (“respondents”) per sample. In a real-life scenario, this is about as much as we could realistically do.</p>
 <p>Within this simulation, however, we can use <code>R</code> to take many, many samples from our “population” (almost) simultaneously and then see how the main statistic we are interested in, the sample average, varies between the different samples.</p>
-<p>To do this, we first create a <code>data.frame</code> in which we later save the different simulation results: a dataset of results. We call this <code>sampdist</code>:</p>
+<p>To do this, we first create a <code>data.frame</code> in which we later save the different simulation results: <strong>a dataset of results</strong>. We call this <code>sampdist</code>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sampdist <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sample =</span> <span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">1000</span>,<span class="dv">1</span>),</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">result =</span> <span class="fu">c</span>(<span class="fu">c</span>(sam1mean,sam2mean),<span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">998</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>This dataset includes two variables, one is <code>sample</code> which simply tells us the number of each sample from 1 to 1000. The other variable called <code>result</code> stores the average happiness value from each sample. We start here the first two sample means and then add 998 <code>NA</code> values to get a total of 1000.</p>
+<p>This dataset includes two variables, one is <code>sample</code> which simply tells us the number of each sample from 1 to 1000. The other variable (called <code>result</code>) stores the average happiness value from each sample. To create the <code>results</code> variable, we start with the first two sample means and then add 998 <code>NA</code> values to get a total of 1000.</p>
 <div style="page-break-after: always;"></div>
 <p>Next, we use a <strong>loop</strong> to simulate 1000 samples. A loop is a fundamental concept in programming (also outside of <code>R</code>). It is, very simply put, an instruction to the computer to repeat a certain operation a certain number of times, one after the other.</p>
-<p>In <code>R</code>, you can specify loops with the <code>for()</code> function, as shown below. What we are tell <code>R</code> with this code is, translated to human language: 1. For all numbers between 3 and 1000, which we call <code>k</code>… 2. …go the <code>pop</code> dataset and draw a random sample from it… 3. …calculate the sample mean… 4. …and then write the result, the mean of sample <code>k</code>, into the <code>k</code>-th row and the second column of our results dataset.</p>
-<p>We start at 3 because we already have values for the first two rows of the results dataset. Be aware: Loops are not very efficient and this calulation can take a few moments.</p>
+<p>In <code>R</code>, you can specify loops with the <code>for()</code> function, as shown below. What we are tell <code>R</code> with this code is, translated to human language:</p>
+<ol type="1">
+<li>For all values of <code>k</code>, which we define to be the numbers between 3 and 1000…</li>
+<li>…go the <code>pop</code> dataset, draw a random sample from it, and store that sample as <code>loopsam</code>…</li>
+<li>…calculate the mean of the <code>happy</code> variable in that sample…</li>
+<li>…and then write the result, the mean of sample <code>k</code>, into the <code>k</code>-th row and the second column of our results dataset.</li>
+</ol>
+<p>Notice that we put the code after the <code>for()</code> function within curly braces (<code>{}</code>) to show <code>R</code> that this all fits together and belows to the loop. We start at 3 because we already have values for the first two rows of the results dataset.</p>
+<p>Be aware: Loops are not very efficient and this calculation can take a few moments.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">1000</span>) {</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -819,7 +827,13 @@ window.Quarto = {
 </section>
 </section>
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>See also <code>?sample</code> for details.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
