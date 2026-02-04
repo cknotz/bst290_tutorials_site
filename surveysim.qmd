@@ -15,7 +15,7 @@ editor_options:
 
 ## Introduction
 
-This document shows you how you can simulate many, many different iterations of a fictional survey study -- and how the different results are, collectively, normally distributed.
+This document shows you how you can simulate many, many different iterations of a fictional survey study -- and how the different results are, collectively, distributed. In other words, it shows you the main idea behind the *Central Limit Theorem* and how it is used in applied social research to learn about a population based on small random samples.
 
 **Important:** Some of these simulations take a few minutes to run. Be patient.
 
@@ -23,7 +23,7 @@ This document shows you how you can simulate many, many different iterations of 
 ### Setup
 
 These are the packages you'll need (use `install.packages()` to install anything that is missing):
-```{r}
+```{r, warning=F}
 library(tidyverse)
 theme_set(theme_classic())
 library(bst290)
@@ -31,27 +31,30 @@ library(ggpubr)
 
 ```
 
-Next, we also record the start time with `Sys.time()` so that we can later check how long the entire simulation took:
-```{r}
-start <- Sys.time()
-```
-
 \newpage
 ### Simulating our fictional population
 
-Next, we simulate our fictional population: 5.5 mio. individuals and their levels of happiness on a 0-10 scale:
+First, we simulate a fictional population: 5.5 mio. individuals and their levels of happiness on a 0-10 scale. 
+
+Note that we also set a "seed" number so that we can always exactly reproduce the same results later; otherwise there will be small random variations in the results. You always need to run the `set.seed()` function together with the code immediately below for results to stay the same every time you run the analysis:
 ```{r}
 set.seed(42)
-
-
 pop <- data.frame(idno = seq(1,5.5*10^6,1),
                   happy = sample(seq(0,10,1),
                                  size = 5.5*10^6,
                                  replace = T,
                                  prob = c(0.01,.01,.02,.03,.04,.09,.10,.13,.20,.29,0.05)))
+```
 
+The "population" will now appear as `pop` in your *Environment* tab.
+
+We can now calculate the "true" average level of happiness in our population. This is the "target" value we are after. In a real social scientific study, this is the value that we do not know (because we very rarely have data for an entire population) but want to measure with a social survey:
+```{r}
 popmean <- mean(pop$happy)
+```
 
+We can also visualize the distribution of happiness in the population plus the average value as a vertical line:
+```{r}
 pop |> 
   group_by(happy) |> 
   summarize(obs = n()) |> 
@@ -71,17 +74,22 @@ popvis
 
 ```
 
-Note that we set a "seed" number so that we can always exactly reproduce the same results later.
-
 \newpage
 ### Taking a first sample
 
-We pretend that we are doing a social science survey by taking a random sample from the population with `slice_sample()` and calculate the sample mean:
+Now we pretend that we are doing a social science survey by taking a random sample of 1000 "respondents" from the population with `slice_sample()`. Here again, we set a seed number so that we get the same results every time.
 ```{r}
+
 set.seed(42)
 sam1 <- pop |> 
   slice_sample(n = 1000)
 
+```
+
+If you take a look at your *Environment* tab, you see the sample data as `sam1`: 1000 random picks from the "population" (`pop`) and their levels of happiness.
+
+Then we also calculate the average level of happiness in the sample and visualize the sample data:
+```{r}
 sam1mean <- mean(sam1$happy)
 
 sam1 |> 
@@ -99,19 +107,29 @@ sam1 |>
        title = "Sample 1 (N = 1000; randomly selected)",
        caption = paste0("Mean in sample ('estimate') = ",round(sam1mean, digits = 2))) -> sam1vis
 
+sam1vis
+```
+
+We can also use `ggarrange()` from the `ggpubr` package to directly compare the sample and population data:
+```{r}
 ggpubr::ggarrange(popvis,sam1vis, nrow = 2)
 
 ```
 
+If you take a careful look, you see that the overall pattern is the same, but there are small variations in the percentages and in the average value.
+
 \newpage
 ### Taking a second sample
 
-Then we take a second sample:
+Let's now take a second sample. Here, we specicy a different seed number so that we don't get the same result again (but so that the entire analysis is still reproducible):
 ```{r}
 set.seed(17)
 sam2 <- pop |> 
   slice_sample(n = 1000)
+```
 
+Then we again calculate the sample mean in the second sample and visualize the new sample data next to the original population data:
+```{r}
 sam2mean <- mean(sam2$happy)
 
 sam2 |> 
@@ -133,9 +151,12 @@ ggpubr::ggarrange(popvis,sam2vis, nrow = 2)
 
 ```
 
+You should see again that there are small differences between the sample and the population, but the overall patterns are very similar.
+
 \newpage
 ### Comparing the samples
 
+You can see these small differences also when we compare the two samples directly with each other:
 ```{r}
 ggpubr::ggarrange(sam1vis,sam2vis, nrow = 2)
 ```
@@ -143,11 +164,31 @@ ggpubr::ggarrange(sam1vis,sam2vis, nrow = 2)
 \newpage
 ### Scaling it up to 1000 samples
 
-We collect 998 new samples so that we get to 1'000 in total:
+So far, we took only two random samples with 1000 observations ("respondents") per sample. In a real-life scenario, this is about as much as we could realistically do. 
+
+Within this simulation, however, we can use `R` to take many, many samples from our "population" (almost) simultaneously and then see how the main statistic we are interested in, the sample average, varies between the different samples.
+
+To do this, we first create a `data.frame` in which we later save the different simulation results: a dataset of results. We call this `sampdist`:
 ```{r}
 sampdist <- data.frame(sample = seq(1,1000,1),
                        result = c(c(sam1mean,sam2mean),rep(NA,998)))
 
+```
+
+This dataset includes two variables, one is `sample` which simply tells us the number of each sample from 1 to 1000. The other variable called `result` stores the average happiness value from each sample. We start here the first two sample means and then add 998 `NA` values to get a total of 1000.
+
+\newpage
+Next, we use a **loop** to simulate 1000 samples. A loop is a fundamental concept in programming (also outside of `R`). It is, very simply put, an instruction to the computer to repeat a certain operation a certain number of times, one after the other. 
+
+In `R`, you can specify loops with the `for()` function, as shown below. What we are tell `R` with this code is, translated to human language:
+  1. For all numbers between 3 and 1000, which we call `k`...
+  2. ...go the `pop` dataset and draw a random sample from it...
+  3. ...calculate the sample mean...
+  4. ...and then write the result, the mean of sample `k`, into the `k`-th row and the second column of our results dataset.
+  
+We start at 3 because we already have values for the first two rows of the results dataset. Be aware: Loops are not very efficient and this calulation can take a few moments.
+
+```{r}
 for(k in 3:1000) {
   
   loopsam <- pop |> 
@@ -156,8 +197,27 @@ for(k in 3:1000) {
   sampdist[k,2] <- mean(loopsam$happy)
 }
 
-sampdistmean <- mean(sampdist$result)
+```
 
+Let's have a look at the first few observations in our results dataset:
+```{r}
+head(sampdist)
+```
+
+What you see here is the first 6 samples and their sample means. The first two are the same as above, and the other four were generated by the loop. You also see, and this is important, that the sample means vary *slightly*, but they are typically somewhere around 7.2.
+
+\newpage
+Let's now calculate the average over all of these averages -- the "average result" -- and compare that to the "true" population mean from earlier:
+```{r}
+sampdistmean <- mean(sampdist$result)
+sampdistmean
+popmean
+```
+
+The average result -- the "mean of all means" -- is 7.18.
+
+Then we can also visualize the distribution of all our different test results together with the "true" population mean from earlier and the average result:
+```{r}
 sampdist |> 
   ggplot(aes(x = result)) +
   geom_histogram(color = "white") +
@@ -169,15 +229,20 @@ sampdist |>
                         "\n Mean over all results ('mean of means'; blue, dashed) = ",round(sampdistmean, digits = 2)))
 ```
 
+Do you notice something here? What does this distribution remind you of, and why do you think do we get this shape (especially since the original distribution does not at all look like that? If you can answer this question, you have understood the main idea behind the *Central Limit Theorem*).
+
 \newpage
 ### Then we do 10'000 surveys
 
-We're scaling it up once more to 10'000 surveys overall:
+1000 simulated results are nice, but we *can* also go higher, let's say to 10'000. To do that, we create a new results `data.frame` (which we save under the same name as before), but now with 10'000 rows instead of 1000:
 ```{r}
 set.seed(42)
 sampdist <- data.frame(sample = seq(1,10000,1),
                        result = c(c(sam1mean,sam2mean),rep(NA,9998)))
+```
 
+Once we have that, we again run a loop, but from numbers 3 to 10'000. Caution, this now takes a bit longer still:
+```{r}
 for(k in 3:10000) {
   
   loopsam <- pop |> 
@@ -186,8 +251,20 @@ for(k in 3:10000) {
   sampdist[k,2] <- mean(loopsam$happy)
 }
 
-sampdistmean <- mean(sampdist$result)
+```
 
+Let's have a look at new "mean of means" of the 10'000 new samples and compare it to the overall population mean:
+```{r}
+sampdistmean <- mean(sampdist$result)
+sampdistmean
+popmean
+```
+
+Notice how they are very close to each other, but still not exactly identical?
+
+\newpage
+Then we also visualize the new distribution of all 10'000 sample means:
+```{r}
 sampdist |> 
   ggplot(aes(x = result)) +
   geom_histogram(color = "white") +
@@ -199,16 +276,21 @@ sampdist |>
                         "\n Mean over all results ('mean of means'; blue, dashed) = ",round(sampdistmean, digits = 2))) 
 ```
 
+Do you notice what changed compared to the 1000 results earlier? Why would that be?
+
 \newpage
 ### The results in context
 
-To see how much "wiggling" there really is due to random sampling variation:
+You might now get the impression that there is quite a bit of variation between the different samples, that the result "jumps" quite a bit between different repetitions of our fictional survey. However, notice also that the scale of the above graph only covers a small part of the entire scale of our original happiness variable, which goes from 0 to 10.
+
+To show the "sampling variation", the random differences between our 10'000 samples, in context, we expand the scale of our x-axis to the true scale of the original variable with the `limits` option in the code below:
 ```{r}
 
 sampdist |> 
   ggplot(aes(x = result)) +
   geom_histogram(color = "white", binwidth = 0.05) +
-  scale_x_continuous(limits = c(0,10), breaks = seq(0,10,1)) +
+  scale_x_continuous(limits = c(0,10), 
+                     breaks = seq(0,10,1)) +
   labs(x = "Sample means", y = "Samples",
        title = "Distribution of results ('sampling distribution')")
 
@@ -217,6 +299,7 @@ sampdist |>
 \newpage
 ### Comparing our results distribution ("sampling distribution") to the Normal distribution
 
+You might (should) have already noticed what how our different "survey" results are distributed, but just to make sure: Here is a comparison of our sampling distribution to the normal distribution:
 ```{r}
 sampdist |> 
   ggplot(aes(x = result)) +
@@ -241,7 +324,9 @@ ggpubr::ggarrange(samdist10k,p1, ncol = 2)
 \newpage
 ### Now 10'000 new samples, but with a smaller sample size (200 instead of 1'000)
 
-We reduce the sample size to 200 and take 10'000 new samples:
+In the previous simulations, we always worked with a sample size of 1000. First, we took 1000 samples of 1000 "respondents" each, then we took 10'000 samples of 1000 respondents. 
+
+Let's see what happens when we take 10'000 new samples, but now with a size of 200 "respondents" per sample:
 ```{r}
 sampdist_200 <- data.frame(sample = seq(1,10000,1),
                            result = rep(NA,10000))
@@ -256,7 +341,14 @@ for(k in 1:10000) {
 }
 
 sampdist_200mean <- mean(sampdist_200$result)
+sampdist_200mean
+popmean
+```
 
+The new "mean of means", now based on 200 "respondents" per sample, is still very close to the "true" population mean.
+
+To see what changes when we use smaller samples, we show both sampling distributions, the one for the samples with $N = 1000$ and the new one for the samples with $N = 200$, in the same graph. We also calculate the standard deviation of each of the distributions:
+```{r}
 sampdist_SD <- sd(sampdist$result)
 sampdist_200_SD <- sd(sampdist_200$result)
 
@@ -282,13 +374,7 @@ sampdist |>
   theme(legend.position = "bottom")
 ```
 
-\newpage
-###... and taking time
+Do you notice where the main difference is between the sampling distribution based on $N = 1000$ and the one based on $N = 200$?
 
-How long did all of this take (on my rickety old Intel-based MacBook Pro):
-```{r}
-# Taking time  
-end <- Sys.time()
-duration <- end - start
-duration
-```
+If you had to design a social survey to measure happiness (or something else) in the Norwegian population, how could you use the results of this simulation to guide your study design?
+
