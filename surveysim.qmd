@@ -35,7 +35,7 @@ library(ggpubr)
 
 Imagine that we want to figure out the average level of happiness in a country similar to Norway, with a population of 5.5 million people. We measure happiness on a 0-10 scale.
 
-In `R`, we can create or simulate a such a population of 5.5 million individuals and their levels of happiness with a few lines of code, as shown below. The main tool we use here is the `sample()` function, which -- as the same suggests -- samples randomly from a pre-specified set of numbers.^[See also `?sample` for details.] In our case, we want to sample from the numbers 0 to 10, which we specify as `seq(0,10,1)` ("from 0 to 10, in steps of 1"), we want to do that 5.5. million times (`size = 5.5*10^6`), and we want the different numbers to have certain probabilities to be chosen (which all need to add up to 1, or 100%). 
+In `R`, we can create or simulate a such a population of 5.5 million individuals and their levels of happiness with a few lines of code, as shown below. The main tool we use here is the `sample()` function, which -- as the same suggests -- samples randomly from a pre-specified set of numbers.^[See also `?sample` for details.] In our case, we want to sample from the numbers 0 to 10, which we specify as `seq(0,10,1)` ("from 0 to 10, in steps of 1"), we want to do that 5.5 million times (`size = 5.5*10^6`), and we want the different numbers to have certain probabilities to be chosen (which all need to add up to 1, or 100%). 
 
 We run the `sample()` function within a function to create a `data.frame` and save the result as the variable `happy`. We also create another variable called `idno`, which is just a unique ID for each of the 5.5 million "individuals". The resulting `data.frame` -- our "population" -- gets saved as `pop`.
 
