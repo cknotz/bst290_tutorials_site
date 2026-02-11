@@ -392,7 +392,7 @@ If you had to design a social survey to measure happiness (or something else) in
 
 ## How can we use this to say something about how *confident* we can be about our sample data?
 
-The previous simulations illustrated two main things about taking random samples from a population:
+The previous simulations illustrated a few important things about taking random samples from a population:
 
 1. If you repeatedly take many, many random samples from a population and calculate the average value of some variable in each sample, then each sample will give you a different result. 
 2. All taken together, however, the different sample means are distributed normally around the true population mean: Some sample means are a little bit lower than the true population mean, some are a bit higher, but there are about as many higher ones than lower ones (the distribution is symmetric).
