@@ -1,5 +1,5 @@
 ---
-title: "Simulating survey studies"
+title: "Simulating survey studies & calculating confidence intervals"
 author: "Carlo Knotz"
 bibliography: /Users/carloknotz/Documents/BibDesk_library/library.bib
 toc: true
@@ -31,6 +31,9 @@ library(ggpubr)
 ```
 
 \newpage
+
+## Simulating a population and drawing many samples from it
+
 ### Simulating our fictional population
 
 Imagine that we want to figure out the average level of happiness in a country similar to Norway, with a population of 5.5 million people. We measure happiness on a 0-10 scale.
@@ -355,6 +358,9 @@ The new "mean of means", now based on 200 "respondents" per sample, is still ver
 
 To see what changes when we use smaller samples, we show both sampling distributions, the one for the samples with $N = 1000$ and the new one for the samples with $N = 200$, in the same graph. We also calculate the standard deviation of each of the distributions:
 ```{r}
+#| fig-cap: "The variability of results when using different sample sizes"
+#| label: fig-sizecomp
+
 sampdist_SD <- sd(sampdist$result)
 sampdist_200_SD <- sd(sampdist_200$result)
 
@@ -383,4 +389,279 @@ sampdist |>
 Do you notice where the main difference is between the sampling distribution based on $N = 1000$ and the one based on $N = 200$?
 
 If you had to design a social survey to measure happiness (or something else) in the Norwegian population, how could you use the results of this simulation to guide your study design?
+
+## How can we use this to say something about how *confident* we can be about our sample data?
+
+The previous simulations illustrated two main things about taking random samples from a population:
+
+1. If you repeatedly take many, many random samples from a population and calculate the average value of some variable in each sample, then each sample will give you a different result. 
+2. All taken together, however, the different sample means are distributed normally around the true population mean: Some sample means are a little bit lower than the true population mean, some are a bit higher, but there are about as many higher ones than lower ones (the distribution is symmetric).
+3. The average result --- the average over all sample means --- will be very close to the true population mean. If you would take an infinite number of samples, the average result would be identical to the true mean.
+4. Sample means are most likely to be close to the true mean. It *can* happen that individual samples are far off target, but this is rare.
+5. The larger the individual samples, the closer the individual sample means are to the true mean (see also @fig-sizecomp). Smaller samples are more "wiggly", meaning that the individual means vary more strongly around the true population mean.
+
+
+In a real-life survey study, we only ever work with a single sample, but we can use what we learned to say something about the results we get from that single sample. That is the foundation of *inferential statistics*.
+
+### Quantifying the variation between samples
+
+In @fig-sizecomp, we used the standard deviation (SD) to quantify the spread or variability in our results. The main result was that there is less variability in results based on larger compared to smaller samples.
+
+Just to reiterate what we did there, we calculate the standard deviations again:
+```{r}
+# SD for sample means based on N=1000
+sd(sampdist$result)
+
+# SD f or sample means based on N=200
+sd(sampdist_200$result)
+```
+
+This means that the "typical" result based on a sample size of $N=1000$ is on average ca. 0.7 units away from the true population mean, while the typical result based on a sample size of $N=200$ is on average ca. 0.15 units away from the true population mean. In other words, larger samples are less "wiggly" than smaller samples. In yet other words, increasing the sample size from 200 to 1000 cuts the "wiggliness" of our results in half.
+
+These standard deviations of our sample means are also called *standard errors*. They quantify the extent to which our sample results vary by random chance across different repetitions of our survey. Again: Smaller sample size = more random variation, larger sample size = less random variation. 
+
+### Calculating the standard error based on a single sample
+
+In a real-life scenario, we cannot take repeated samples from a population --- but we can still figure out what the standard error or the random variation in results would *hypothetically* be *if* we could draw many repeated samples using a simple formula.
+
+As explained in Solbakken [-@Solbakken2019, chapter 5.7], the formula to calculate the standard error of a sample mean is:
+
+$$ SE = \frac{SD}{\sqrt{N}}$$
+In human language, we calculate the sample standard deviation (SD) of whatever variable we are interested in, and then divide that by the square root of the sample size ($N$).
+
+Let's see if this works in our case. We go back to our very first sample (`sam1`), which included 1000 randomly drawn observations from the overall population.
+
+We first calculate the standard deviation of the `happy` variable (the variable we are interested in):
+```{r}
+sd_1000 <- sd(sam1$happy)
+```
+
+Then we divide the result by the square root of the sample size (1000):
+```{r}
+se_1000 <- sd_1000/sqrt(1000)
+se_1000
+```
+
+The result is almost the same as the standard error we got based on the simulation above.
+
+Let's see what happens if we instead use a sample size of $N=200$. To do that, we draw a single random sample of 200 observations from the population and repeat the calculation:
+```{r}
+set.seed(21)
+pop |> 
+  slice_sample(n = 200) -> singsam_200
+
+sd_200 <- sd(singsam_200$happy)
+se_200 <- sd_200/sqrt(200)
+se_200
+```
+
+Again, we are very close to the value that we got from our simulation.
+
+### Margins of errors
+
+The standard error basically tells us how far away the average or "typical" result is from the true population mean based on a given sample size. 
+
+That is useful, but we often want to be more certain or "confident". We want to be able to confidently say that most results, say, 90 or 95% of all possible results, are within a certain range. 
+
+We can also do that. To do that, we use the fact that all sampling distributions --- the distributions of many different sample results --- based on random samples are approximately normal or "bell-shaped", and that (thanks to Carl Gauss) we can exactly quantify how many observations of any normal distribution fall within a given range. 
+
+Specifically, and as visualized in @fig-stnorm:
+
+ - 90% of all observations fall within a range of $+1.645 \times SD$ and $-1.645 \times SD$ around the mean
+ - 95% of all observations fall within a range of $+1.96 \times SD$ and $-1.96 \times SD$ around the mean
+ - 99% of all observations fall within a range of $+2.576 \times SD$ and $-2.576 \times SD$ around the mean
+
+```{r}
+#| fig-cap: "Standard normal distribution with critical values indicated"
+#| label: fig-stnorm
+#| echo: false
+
+zlev1 <- 0.05
+zlev2 <- 0.025
+zlev3 <- 0.005
+
+ggplot(NULL, aes(c(-3,3))) + 
+  geom_area(stat = "function", fun = dnorm, fill = "#a63603", xlim = c(-3, qnorm(zlev1))) +
+  geom_area(stat = "function", fun = dnorm, fill = "#f16913", xlim = c(-3, qnorm(zlev2))) +
+  geom_area(stat = "function", fun = dnorm, fill = "#fdae6b", xlim = c(-3, qnorm(zlev3))) +
+  geom_area(stat = "function", fun = dnorm, fill = "#f0f0f0", xlim = c(qnorm(zlev1), qnorm(1-zlev1))) +
+  geom_area(stat = "function", fun = dnorm, fill = "#a63603", xlim = c(qnorm(1-zlev1), 3)) +
+  geom_area(stat = "function", fun = dnorm, fill = "#f16913", xlim = c(qnorm(1-zlev2),3)) +
+  geom_area(stat = "function", fun = dnorm, fill = "#fdae6b", xlim = c(qnorm(1-zlev3),3)) +
+  annotate("segment", x = qnorm(zlev1), xend = qnorm(1-zlev1), y = dnorm(qnorm(zlev1)), yend = dnorm(-qnorm(zlev1)), arrow = arrow(ends='both'),
+           linewidth = 1, color = "#a63603") +
+  annotate("text", x=0, y=dnorm(qnorm(zlev1))+.015,label = paste0(100*(1-2*zlev1),"% of data"), color="#a63603", fontface = "bold") +
+  labs(y = "Density", x = "") +
+  annotate("segment", x = qnorm(zlev2), xend = qnorm(1-zlev2), y = dnorm(qnorm(zlev2)), yend = dnorm(-qnorm(zlev2)), arrow = arrow(ends='both'),
+           linewidth = 1, color = "#f16913") +
+  annotate("text", x=0, y=dnorm(qnorm(zlev2))+.015,label = paste0(100*(1-2*zlev2),"% of data"), color="#f16913", fontface = "bold") +
+  labs(y = "Density", x = "") +
+  annotate("segment", x = qnorm(zlev3), xend = qnorm(1-zlev3), y = dnorm(qnorm(zlev3)), yend = dnorm(-qnorm(zlev3)), arrow = arrow(ends='both'),
+           linewidth = 1, color = "#fdae6b") +
+  annotate("text", x=0, y=dnorm(qnorm(zlev3))+.015,label = paste0(100*(1-2*zlev3),"% of data"), color="#fdae6b", fontface = "bold") +
+  labs(y = "Density", x = "") +
+  scale_x_continuous(breaks = seq(-3,3,1)) +
+  theme_classic() +
+  theme(axis.text = element_text(size=12),
+        plot.title = element_text(face = "bold"))
+
+```
+
+If we now combine this with the results of our calculation and simulation above, then we can construct so called *margins of errors*: They tell us, simply put, how certain or uncertain our result is.
+
+Let's illustrate this with the first sample of 1000 observations. We know based on the calculation and simulation above that the *standard error* (the SD of our sampling distribution) for a sample size of $N=1000$ is roughly 0.07. We also know that, if we would repeat our survey many times over, 95% of all those hypothetical surveys will fall within +1.96 and -1.96 times this standard deviation of 0.07.
+
+This means that the 95% margin of error for our first sample is therefore:
+```{r}
+1.96*se_1000
+```
+ 
+In detail, this means that if we would repeat our survey 100 times, then 95 of those surveys would produce a sample average that is within [+0.13;-0.13] from the true population mean.
+ 
+We can use the same procedure to calculate the 95% margin of error for the smaller sample with $N=200$:
+```{r}
+1.96*se_200
+```
+ 
+You see that the margin of error for the smaller sample is a bit more than twice that of the one for the larger sample. This means that if we would re-do our smaller survey with an $N$ of 200, then 95% of all sample means would be in a range of [0.3;-0.3] from the true population mean. Clearly, larger samples are more accurate, and with *margins of errors* we can quantify exactly how (in-)accurate a sample of a given size is.
+
+### Confidence intervals
+
+We can then extend this logic further to construct an *interval* that (most likely) contains the true population value. To do that, we simply take the sample mean and then add and subtract the margin of error. For example, for a 95% confidence interval, we use the values of the standard normal distribution that include 95% of that distribution ($\pm1.96$), multiply these with the standard *error*, and combine that with the sample mean ($\bar{X}$):
+$$
+CI_{95} = \bar{X} \pm 1.96 \times SE
+$$
+
+For our large sample, this calculation looks as follows:
+```{r}
+sam1mean <- mean(sam1$happy)
+lower_1000 <- sam1mean - 1.96 * se_1000
+lower_1000
+upper_1000 <- sam1mean + 1.96 * se_1000
+upper_1000
+```
+
+Just to make sure, we compare our calculation with the one we can get with `t.test()`:
+```{r}
+t.test(sam1$happy)
+```
+
+The results are almost identical.^[The slight difference is because `R` uses a different type of distribution, the *t* distribution, which takes into account how many observations we really have in each of the two samples. The procedure we use here, which is based on the standard normal distribution, simply assumes that we have a "large" sample. In applied research, we usually (but not always) use the *t*-distribution.]
+
+Equivalently, for the smaller sample we get:
+```{r}
+sam200_mean <- mean(singsam_200$happy)
+sam200_mean
+lower_200 <- sam200_mean - 1.96 * se_200
+lower_200
+upper_200 <- sam200_mean + 1.96 * se_200
+upper_200
+```
+
+```{r}
+t.test(singsam_200$happy)
+```
+
+Once, again, the results are almost identical.
+
+The differences between the larger and smaller sample are easier to see if we visualize the two results together:
+```{r}
+data.frame(sample = c("1000","200"),
+           means = c(sam1mean,sam200_mean),
+           lower = c(lower_1000,lower_200),
+           upper = c(upper_1000,upper_200)) |> 
+  ggplot(aes(x = means, xmin = lower, xmax = upper, y = sample)) +
+    geom_point() +
+    geom_linerange() +
+    geom_vline(xintercept = popmean, linetype = "dashed") +
+    labs(x = "Mean value", y = "Sample size",
+         caption = "95% confidence intervals",
+         title = paste0("True population mean = ",round(popmean, digits = 2)))
+```
+ 
+In this case, both of our confidence intervals include the true population mean and you see again how the larger sample has a smaller confidence interval.
+ 
+### How to read a confidence interval
+
+If after all this simulating and math-ing your head is spinning wildly, you are definitely not alone or the first to experience this. Confidence intervals and margins of error are tricky and even "senior" researchers misunderstand how they work and what they really indicate [see e.g., @Greenlandetal2016; @Beliaetal2005; @Austin2002; @Schenker2001].
+
+We can, however, again use simulations to clarify how to read a confidence interval. We start again from our original population and then draw 100 random samples of $N=1000$ observations per sample. For each of the samples, we calculate the sample mean of the `happy` variable and a 95% confidence interval around it. Then we visualize all results together with the true population mean.
+
+First, we create an empty `data.frame` to store the different results into:
+```{r}
+cidata <- data.frame(sample_id = seq(1,100,1),
+                     sample_means = rep(NA,100),
+                     sample_lower = rep(NA,100),
+                     sample_upper = rep(NA,100))
+head(cidata)
+
+```
+
+Then we run a loop, as above, and calculate both the sample means and the confidence intervals from each sample and add them to the results `data.frame`:
+```{r}
+set.seed(20)
+for(k in 1:100){
+  pop |> 
+    slice_sample(n = 1000) -> loopsam
+
+cidata[k,2] <- mean(loopsam$happy) # store the sample mean into the second column
+
+# Calculate CI
+loopci <- t.test(loopsam$happy)
+
+cidata[k,3] <- loopci$conf.int[1] # lower value
+cidata[k,4] <- loopci$conf.int[2] # upper value
+  
+}
+```
+ 
+Let's have a quick peek at our results:
+```{r}
+head(cidata)
+```
+ 
+As a last step, we also create a "dummy" variable that indicates if a given confidence interval overlaps with the true population mean or not:
+```{r}
+cidata |> 
+  mutate(overlap = case_when(
+    popmean < sample_lower | popmean > sample_upper ~ "Miss",
+    popmean >= sample_lower | popmean <= sample_upper  ~ "Hit")) -> cidata
+```
+ 
+Now we visualize the results, highlighting the confidence intervals that that were "misses" in red:
+```{r}
+cidata |> 
+  ggplot(aes(x = sample_means, xmin = sample_lower,
+             xmax = sample_upper, color = overlap,
+             y = sample_id)) +
+    geom_point() +
+    geom_linerange() +
+    geom_vline(xintercept = popmean, linetype = "dashed") +
+    scale_color_manual(values = c("grey40","tomato")) +
+    labs(x = "Sample means & 95% confidence intervals",
+         y = "Sample ID", color = "",
+         caption = "Vertical dashed line indicates true population mean") +
+    theme(legend.position = "bottom")
+```
+
+You see that in 95 out of the 100 "studies" we did, the 95% confidence interval "hit" the mark and overlaps with the true population mean. In five cases, however, we were unlucky and "missed": The confidence intervals do not overlap with the true population mean.
+
+And this leads to *one* correct interpretation of a confidence interval: *If we were to re-do our study many, many times, then in 95% of these studies, the 95% confidence interval would overlap with the true population mean.*
+
+This interpretation, however, is a bit clunky and not that helpful in practice. To get to a second and perhaps more helpful interpretation, we go back to the confidence interval for the very first sample we took from the population:
+```{r}
+t.test(sam1$happy)
+```
+
+This is also what a real-life result would look like: We have one single sample, one single sample mean, and one single confidence interval. In this case, this interval ranges from `{r} round(t.test(sam1$happy)$conf.int[1], digits = 2)` to `{r} round(t.test(sam1$happy)$conf.int[2], digits = 2)`. 
+
+But we also know now that this one confidence interval is one of *many different possible* confidence intervals that we *could have gotten* --- and we know that each of these infinite hypothetical intervals has a 95% chance of including the true population mean. This means that our confidence interval from `{r} round(t.test(sam1$happy)$conf.int[1], digits = 2)` to `{r} round(t.test(sam1$happy)$conf.int[2], digits = 2)` has a 95% chance of including the true population mean. A less precise interpretation is that we are 95% confident that we have "captured" the true population mean with our confidence interval [see @Kellstedt2018, 153].
+
+
+
+
+
+
+
+
 

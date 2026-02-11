@@ -8,7 +8,7 @@
 
 <meta name="author" content="Carlo Knotz">
 
-<title>Simulating survey studies – R Tutorials for BST290</title>
+<title>Simulating survey studies &amp; calculating confidence intervals – R Tutorials for BST290</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -56,7 +56,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -165,7 +185,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./codereport.html">Other</a></li><li class="breadcrumb-item"><a href="./surveysim.html">Simulating survey studies</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./codereport.html">Other</a></li><li class="breadcrumb-item"><a href="./surveysim.html">Simulating survey studies &amp; calculating confidence intervals</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -303,7 +323,7 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./surveysim.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Simulating survey studies</span></a>
+ <span class="menu-text">Simulating survey studies &amp; calculating confidence intervals</span></a>
   </div>
 </li>
       </ul>
@@ -321,15 +341,26 @@ window.Quarto = {
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
   <ul class="collapse">
   <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">1.1</span> Setup</a></li>
-  <li><a href="#simulating-our-fictional-population" id="toc-simulating-our-fictional-population" class="nav-link" data-scroll-target="#simulating-our-fictional-population"><span class="header-section-number">1.2</span> Simulating our fictional population</a></li>
-  <li><a href="#taking-a-first-sample" id="toc-taking-a-first-sample" class="nav-link" data-scroll-target="#taking-a-first-sample"><span class="header-section-number">1.3</span> Taking a first sample</a></li>
-  <li><a href="#taking-a-second-sample" id="toc-taking-a-second-sample" class="nav-link" data-scroll-target="#taking-a-second-sample"><span class="header-section-number">1.4</span> Taking a second sample</a></li>
-  <li><a href="#comparing-the-samples" id="toc-comparing-the-samples" class="nav-link" data-scroll-target="#comparing-the-samples"><span class="header-section-number">1.5</span> Comparing the samples</a></li>
-  <li><a href="#scaling-it-up-to-1000-samples" id="toc-scaling-it-up-to-1000-samples" class="nav-link" data-scroll-target="#scaling-it-up-to-1000-samples"><span class="header-section-number">1.6</span> Scaling it up to 1000 samples</a></li>
-  <li><a href="#then-we-do-10000-surveys" id="toc-then-we-do-10000-surveys" class="nav-link" data-scroll-target="#then-we-do-10000-surveys"><span class="header-section-number">1.7</span> Then we do 10’000 surveys</a></li>
-  <li><a href="#the-results-in-context" id="toc-the-results-in-context" class="nav-link" data-scroll-target="#the-results-in-context"><span class="header-section-number">1.8</span> The results in context</a></li>
-  <li><a href="#comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution" id="toc-comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution" class="nav-link" data-scroll-target="#comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution"><span class="header-section-number">1.9</span> Comparing our results distribution (“sampling distribution”) to the Normal distribution</a></li>
-  <li><a href="#now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000" id="toc-now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000" class="nav-link" data-scroll-target="#now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000"><span class="header-section-number">1.10</span> Now 10’000 new samples, but with a smaller sample size (200 instead of 1’000)</a></li>
+  </ul></li>
+  <li><a href="#simulating-a-population-and-drawing-many-samples-from-it" id="toc-simulating-a-population-and-drawing-many-samples-from-it" class="nav-link" data-scroll-target="#simulating-a-population-and-drawing-many-samples-from-it"><span class="header-section-number">2</span> Simulating a population and drawing many samples from it</a>
+  <ul class="collapse">
+  <li><a href="#simulating-our-fictional-population" id="toc-simulating-our-fictional-population" class="nav-link" data-scroll-target="#simulating-our-fictional-population"><span class="header-section-number">2.1</span> Simulating our fictional population</a></li>
+  <li><a href="#taking-a-first-sample" id="toc-taking-a-first-sample" class="nav-link" data-scroll-target="#taking-a-first-sample"><span class="header-section-number">2.2</span> Taking a first sample</a></li>
+  <li><a href="#taking-a-second-sample" id="toc-taking-a-second-sample" class="nav-link" data-scroll-target="#taking-a-second-sample"><span class="header-section-number">2.3</span> Taking a second sample</a></li>
+  <li><a href="#comparing-the-samples" id="toc-comparing-the-samples" class="nav-link" data-scroll-target="#comparing-the-samples"><span class="header-section-number">2.4</span> Comparing the samples</a></li>
+  <li><a href="#scaling-it-up-to-1000-samples" id="toc-scaling-it-up-to-1000-samples" class="nav-link" data-scroll-target="#scaling-it-up-to-1000-samples"><span class="header-section-number">2.5</span> Scaling it up to 1000 samples</a></li>
+  <li><a href="#then-we-do-10000-surveys" id="toc-then-we-do-10000-surveys" class="nav-link" data-scroll-target="#then-we-do-10000-surveys"><span class="header-section-number">2.6</span> Then we do 10’000 surveys</a></li>
+  <li><a href="#the-results-in-context" id="toc-the-results-in-context" class="nav-link" data-scroll-target="#the-results-in-context"><span class="header-section-number">2.7</span> The results in context</a></li>
+  <li><a href="#comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution" id="toc-comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution" class="nav-link" data-scroll-target="#comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution"><span class="header-section-number">2.8</span> Comparing our results distribution (“sampling distribution”) to the Normal distribution</a></li>
+  <li><a href="#now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000" id="toc-now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000" class="nav-link" data-scroll-target="#now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000"><span class="header-section-number">2.9</span> Now 10’000 new samples, but with a smaller sample size (200 instead of 1’000)</a></li>
+  </ul></li>
+  <li><a href="#how-can-we-use-this-to-say-something-about-how-confident-we-can-be-about-our-sample-data" id="toc-how-can-we-use-this-to-say-something-about-how-confident-we-can-be-about-our-sample-data" class="nav-link" data-scroll-target="#how-can-we-use-this-to-say-something-about-how-confident-we-can-be-about-our-sample-data"><span class="header-section-number">3</span> How can we use this to say something about how <em>confident</em> we can be about our sample data?</a>
+  <ul class="collapse">
+  <li><a href="#quantifying-the-variation-between-samples" id="toc-quantifying-the-variation-between-samples" class="nav-link" data-scroll-target="#quantifying-the-variation-between-samples"><span class="header-section-number">3.1</span> Quantifying the variation between samples</a></li>
+  <li><a href="#calculating-the-standard-error-based-on-a-single-sample" id="toc-calculating-the-standard-error-based-on-a-single-sample" class="nav-link" data-scroll-target="#calculating-the-standard-error-based-on-a-single-sample"><span class="header-section-number">3.2</span> Calculating the standard error based on a single sample</a></li>
+  <li><a href="#margins-of-errors" id="toc-margins-of-errors" class="nav-link" data-scroll-target="#margins-of-errors"><span class="header-section-number">3.3</span> Margins of errors</a></li>
+  <li><a href="#confidence-intervals" id="toc-confidence-intervals" class="nav-link" data-scroll-target="#confidence-intervals"><span class="header-section-number">3.4</span> Confidence intervals</a></li>
+  <li><a href="#how-to-read-a-confidence-interval" id="toc-how-to-read-a-confidence-interval" class="nav-link" data-scroll-target="#how-to-read-a-confidence-interval"><span class="header-section-number">3.5</span> How to read a confidence interval</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="surveysim.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -337,9 +368,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./codereport.html">Other</a></li><li class="breadcrumb-item"><a href="./surveysim.html">Simulating survey studies</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./codereport.html">Other</a></li><li class="breadcrumb-item"><a href="./surveysim.html">Simulating survey studies &amp; calculating confidence intervals</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Simulating survey studies</h1>
+<h1 class="title">Simulating survey studies &amp; calculating confidence intervals</h1>
 </div>
 
 
@@ -389,8 +420,11 @@ window.Quarto = {
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="simulating-our-fictional-population" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="simulating-our-fictional-population"><span class="header-section-number">1.2</span> Simulating our fictional population</h3>
+</section>
+<section id="simulating-a-population-and-drawing-many-samples-from-it" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="simulating-a-population-and-drawing-many-samples-from-it"><span class="header-section-number">2</span> Simulating a population and drawing many samples from it</h2>
+<section id="simulating-our-fictional-population" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="simulating-our-fictional-population"><span class="header-section-number">2.1</span> Simulating our fictional population</h3>
 <p>Imagine that we want to figure out the average level of happiness in a country similar to Norway, with a population of 5.5 million people. We measure happiness on a 0-10 scale.</p>
 <p>In <code>R</code>, we can create or simulate a such a population of 5.5 million individuals and their levels of happiness with a few lines of code, as shown below. The main tool we use here is the <code>sample()</code> function, which – as the same suggests – samples randomly from a pre-specified set of numbers.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> In our case, we want to sample from the numbers 0 to 10, which we specify as <code>seq(0,10,1)</code> (“from 0 to 10, in steps of 1”), we want to do that 5.5 million times (<code>size = 5.5*10^6</code>), and we want the different numbers to have certain probabilities to be chosen (which all need to add up to 1, or 100%).</p>
 <p>We run the <code>sample()</code> function within a function to create a <code>data.frame</code> and save the result as the variable <code>happy</code>. We also create another variable called <code>idno</code>, which is just a unique ID for each of the 5.5 million “individuals”. The resulting <code>data.frame</code> – our “population” – gets saved as <code>pop</code>.</p>
@@ -436,8 +470,8 @@ window.Quarto = {
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="taking-a-first-sample" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="taking-a-first-sample"><span class="header-section-number">1.3</span> Taking a first sample</h3>
+<section id="taking-a-first-sample" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="taking-a-first-sample"><span class="header-section-number">2.2</span> Taking a first sample</h3>
 <p>Now we pretend that we are doing a social science survey by taking a random sample of 1000 “respondents” from the population with <code>slice_sample()</code>. Here again, we set a seed number so that we get the same results every time.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
@@ -487,8 +521,8 @@ window.Quarto = {
 <p>If you take a careful look, you see that the overall pattern is the same, but there are small variations in the percentages and in the average value.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="taking-a-second-sample" class="level3" data-number="1.4">
-<h3 data-number="1.4" class="anchored" data-anchor-id="taking-a-second-sample"><span class="header-section-number">1.4</span> Taking a second sample</h3>
+<section id="taking-a-second-sample" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="taking-a-second-sample"><span class="header-section-number">2.3</span> Taking a second sample</h3>
 <p>Let’s now take a second sample. Here, we specicy a different seed number so that we don’t get the same result again (but so that the entire analysis is still reproducible):</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">17</span>)</span>
@@ -526,8 +560,8 @@ window.Quarto = {
 <p>You should see again that there are small differences between the sample and the population, but the overall patterns are very similar.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="comparing-the-samples" class="level3" data-number="1.5">
-<h3 data-number="1.5" class="anchored" data-anchor-id="comparing-the-samples"><span class="header-section-number">1.5</span> Comparing the samples</h3>
+<section id="comparing-the-samples" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="comparing-the-samples"><span class="header-section-number">2.4</span> Comparing the samples</h3>
 <p>You can see these small differences also when we compare the two samples directly with each other:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ggpubr<span class="sc">::</span><span class="fu">ggarrange</span>(sam1vis,sam2vis, <span class="at">nrow =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -541,8 +575,8 @@ window.Quarto = {
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="scaling-it-up-to-1000-samples" class="level3" data-number="1.6">
-<h3 data-number="1.6" class="anchored" data-anchor-id="scaling-it-up-to-1000-samples"><span class="header-section-number">1.6</span> Scaling it up to 1000 samples</h3>
+<section id="scaling-it-up-to-1000-samples" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="scaling-it-up-to-1000-samples"><span class="header-section-number">2.5</span> Scaling it up to 1000 samples</h3>
 <p>So far, we took only two random samples with 1000 observations (“respondents”) per sample. In a real-life scenario, this is about as much as we could realistically do.</p>
 <p>Within this simulation, however, we can use <code>R</code> to take many, many samples from our “population” (almost) simultaneously and then see how the main statistic we are interested in, the sample average, varies between the different samples.</p>
 <p>To do this, we first create a <code>data.frame</code> in which we later save the different simulation results: <strong>a dataset of results</strong>. We call this <code>sampdist</code>:</p>
@@ -624,8 +658,8 @@ window.Quarto = {
 <p>Do you notice something here? What does this distribution remind you of, and why do you think do we get this shape (especially since the original distribution does not at all look like that? If you can answer this question, you have understood the main idea behind the <em>Central Limit Theorem</em>).</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="then-we-do-10000-surveys" class="level3" data-number="1.7">
-<h3 data-number="1.7" class="anchored" data-anchor-id="then-we-do-10000-surveys"><span class="header-section-number">1.7</span> Then we do 10’000 surveys</h3>
+<section id="then-we-do-10000-surveys" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="then-we-do-10000-surveys"><span class="header-section-number">2.6</span> Then we do 10’000 surveys</h3>
 <p>1000 simulated results are nice, but we <em>can</em> also go higher, let’s say to 10’000. To do that, we create a new results <code>data.frame</code> (which we save under the same name as before), but now with 10’000 rows instead of 1000:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
@@ -681,8 +715,8 @@ window.Quarto = {
 <p>Do you notice what changed compared to the 1000 results earlier? Why would that be?</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="the-results-in-context" class="level3" data-number="1.8">
-<h3 data-number="1.8" class="anchored" data-anchor-id="the-results-in-context"><span class="header-section-number">1.8</span> The results in context</h3>
+<section id="the-results-in-context" class="level3" data-number="2.7">
+<h3 data-number="2.7" class="anchored" data-anchor-id="the-results-in-context"><span class="header-section-number">2.7</span> The results in context</h3>
 <p>You might now get the impression that there is quite a bit of variation between the different samples, that the result “jumps” quite a bit between different repetitions of our fictional survey. However, notice also that the scale of the above graph only covers a small part of the entire scale of our original happiness variable, which goes from 0 to 10.</p>
 <p>To show the “sampling variation”, the random differences between our 10’000 samples, in context, we expand the scale of our x-axis to the true scale of the original variable with the <code>limits</code> option in the code below:</p>
 <div class="cell">
@@ -707,8 +741,8 @@ window.Quarto = {
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution" class="level3" data-number="1.9">
-<h3 data-number="1.9" class="anchored" data-anchor-id="comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution"><span class="header-section-number">1.9</span> Comparing our results distribution (“sampling distribution”) to the Normal distribution</h3>
+<section id="comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution" class="level3" data-number="2.8">
+<h3 data-number="2.8" class="anchored" data-anchor-id="comparing-our-results-distribution-sampling-distribution-to-the-normal-distribution"><span class="header-section-number">2.8</span> Comparing our results distribution (“sampling distribution”) to the Normal distribution</h3>
 <p>You might (should) have already noticed what how our different “survey” results are distributed, but just to make sure: Here is a comparison of our sampling distribution to the normal distribution:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>sampdist <span class="sc">|&gt;</span> </span>
@@ -756,8 +790,8 @@ window.Quarto = {
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000" class="level3" data-number="1.10">
-<h3 data-number="1.10" class="anchored" data-anchor-id="now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000"><span class="header-section-number">1.10</span> Now 10’000 new samples, but with a smaller sample size (200 instead of 1’000)</h3>
+<section id="now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000" class="level3" data-number="2.9">
+<h3 data-number="2.9" class="anchored" data-anchor-id="now-10000-new-samples-but-with-a-smaller-sample-size-200-instead-of-1000"><span class="header-section-number">2.9</span> Now 10’000 new samples, but with a smaller sample size (200 instead of 1’000)</h3>
 <p>In the previous simulations, we always worked with a sample size of 1000. First, we took 1000 samples of 1000 “respondents” each, then we took 10’000 samples of 1000 respondents.</p>
 <p>Let’s see what happens when we take 10’000 new samples, but now with a size of 200 “respondents” per sample:</p>
 <div class="cell">
@@ -813,25 +847,357 @@ window.Quarto = {
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value `binwidth`.</code></pre>
 </div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><a href="surveysim_files/figure-html/unnamed-chunk-23-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="surveysim_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></a></p>
+<div id="fig-sizecomp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sizecomp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="surveysim_files/figure-html/fig-sizecomp-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="Figure&nbsp;1: The variability of results when using different sample sizes"><img src="surveysim_files/figure-html/fig-sizecomp-1.png" class="img-fluid figure-img" width="672"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sizecomp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The variability of results when using different sample sizes
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>Do you notice where the main difference is between the sampling distribution based on <span class="math inline">\(N = 1000\)</span> and the one based on <span class="math inline">\(N = 200\)</span>?</p>
 <p>If you had to design a social survey to measure happiness (or something else) in the Norwegian population, how could you use the results of this simulation to guide your study design?</p>
+</section>
+</section>
+<section id="how-can-we-use-this-to-say-something-about-how-confident-we-can-be-about-our-sample-data" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="how-can-we-use-this-to-say-something-about-how-confident-we-can-be-about-our-sample-data"><span class="header-section-number">3</span> How can we use this to say something about how <em>confident</em> we can be about our sample data?</h2>
+<p>The previous simulations illustrated two main things about taking random samples from a population:</p>
+<ol type="1">
+<li>If you repeatedly take many, many random samples from a population and calculate the average value of some variable in each sample, then each sample will give you a different result.</li>
+<li>All taken together, however, the different sample means are distributed normally around the true population mean: Some sample means are a little bit lower than the true population mean, some are a bit higher, but there are about as many higher ones than lower ones (the distribution is symmetric).</li>
+<li>The average result — the average over all sample means — will be very close to the true population mean. If you would take an infinite number of samples, the average result would be identical to the true mean.</li>
+<li>Sample means are most likely to be close to the true mean. It <em>can</em> happen that individual samples are far off target, but this is rare.</li>
+<li>The larger the individual samples, the closer the individual sample means are to the true mean (see also <a href="#fig-sizecomp" class="quarto-xref">Figure&nbsp;1</a>). Smaller samples are more “wiggly”, meaning that the individual means vary more strongly around the true population mean.</li>
+</ol>
+<p>In a real-life survey study, we only ever work with a single sample, but we can use what we learned to say something about the results we get from that single sample. That is the foundation of <em>inferential statistics</em>.</p>
+<section id="quantifying-the-variation-between-samples" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="quantifying-the-variation-between-samples"><span class="header-section-number">3.1</span> Quantifying the variation between samples</h3>
+<p>In <a href="#fig-sizecomp" class="quarto-xref">Figure&nbsp;1</a>, we used the standard deviation (SD) to quantify the spread or variability in our results. The main result was that there is less variability in results based on larger compared to smaller samples.</p>
+<p>Just to reiterate what we did there, we calculate the standard deviations again:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SD for sample means based on N=1000</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(sampdist<span class="sc">$</span>result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.06754951</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SD f or sample means based on N=200</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(sampdist_200<span class="sc">$</span>result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1522054</code></pre>
+</div>
+</div>
+<p>This means that the “typical” result based on a sample size of <span class="math inline">\(N=1000\)</span> is on average ca. 0.7 units away from the true population mean, while the typical result based on a sample size of <span class="math inline">\(N=200\)</span> is on average ca. 0.15 units away from the true population mean. In other words, larger samples are less “wiggly” than smaller samples. In yet other words, increasing the sample size from 200 to 1000 cuts the “wiggliness” of our results in half.</p>
+<p>These standard deviations of our sample means are also called <em>standard errors</em>. They quantify the extent to which our sample results vary by random chance across different repetitions of our survey. Again: Smaller sample size = more random variation, larger sample size = less random variation.</p>
+</section>
+<section id="calculating-the-standard-error-based-on-a-single-sample" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="calculating-the-standard-error-based-on-a-single-sample"><span class="header-section-number">3.2</span> Calculating the standard error based on a single sample</h3>
+<p>In a real-life scenario, we cannot take repeated samples from a population — but we can still figure out what the standard error or the random variation in results would <em>hypothetically</em> be <em>if</em> we could draw many repeated samples using a simple formula.</p>
+<p>As explained in Solbakken <span class="citation" data-cites="Solbakken2019">(<a href="#ref-Solbakken2019" role="doc-biblioref">2019, chap. 5.7</a>)</span>, the formula to calculate the standard error of a sample mean is:</p>
+<p><span class="math display">\[ SE = \frac{SD}{\sqrt{N}}\]</span> In human language, we calculate the sample standard deviation (SD) of whatever variable we are interested in, and then divide that by the square root of the sample size (<span class="math inline">\(N\)</span>).</p>
+<p>Let’s see if this works in our case. We go back to our very first sample (<code>sam1</code>), which included 1000 randomly drawn observations from the overall population.</p>
+<p>We first calculate the standard deviation of the <code>happy</code> variable (the variable we are interested in):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>sd_1000 <span class="ot">&lt;-</span> <span class="fu">sd</span>(sam1<span class="sc">$</span>happy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Then we divide the result by the square root of the sample size (1000):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>se_1000 <span class="ot">&lt;-</span> sd_1000<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">1000</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>se_1000</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.06707764</code></pre>
+</div>
+</div>
+<p>The result is almost the same as the standard error we got based on the simulation above.</p>
+<p>Let’s see what happens if we instead use a sample size of <span class="math inline">\(N=200\)</span>. To do that, we draw a single random sample of 200 observations from the population and repeat the calculation:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">200</span>) <span class="ot">-&gt;</span> singsam_200</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>sd_200 <span class="ot">&lt;-</span> <span class="fu">sd</span>(singsam_200<span class="sc">$</span>happy)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>se_200 <span class="ot">&lt;-</span> sd_200<span class="sc">/</span><span class="fu">sqrt</span>(<span class="dv">200</span>)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>se_200</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1512361</code></pre>
+</div>
+</div>
+<p>Again, we are very close to the value that we got from our simulation.</p>
+</section>
+<section id="margins-of-errors" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="margins-of-errors"><span class="header-section-number">3.3</span> Margins of errors</h3>
+<p>The standard error basically tells us how far away the average or “typical” result is from the true population mean based on a given sample size.</p>
+<p>That is useful, but we often want to be more certain or “confident”. We want to be able to confidently say that most results, say, 90 or 95% of all possible results, are within a certain range.</p>
+<p>We can also do that. To do that, we use the fact that all sampling distributions — the distributions of many different sample results — based on random samples are approximately normal or “bell-shaped”, and that (thanks to Carl Gauss) we can exactly quantify how many observations of any normal distribution fall within a given range.</p>
+<p>Specifically, and as visualized in <a href="#fig-stnorm" class="quarto-xref">Figure&nbsp;2</a>:</p>
+<ul>
+<li>90% of all observations fall within a range of <span class="math inline">\(+1.645 \times SD\)</span> and <span class="math inline">\(-1.645 \times SD\)</span> around the mean</li>
+<li>95% of all observations fall within a range of <span class="math inline">\(+1.96 \times SD\)</span> and <span class="math inline">\(-1.96 \times SD\)</span> around the mean</li>
+<li>99% of all observations fall within a range of <span class="math inline">\(+2.576 \times SD\)</span> and <span class="math inline">\(-2.576 \times SD\)</span> around the mean</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-stnorm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-stnorm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<a href="surveysim_files/figure-html/fig-stnorm-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="Figure&nbsp;2: Standard normal distribution with critical values indicated"><img src="surveysim_files/figure-html/fig-stnorm-1.png" class="img-fluid figure-img" width="672"></a>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-stnorm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Standard normal distribution with critical values indicated
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>If we now combine this with the results of our calculation and simulation above, then we can construct so called <em>margins of errors</em>: They tell us, simply put, how certain or uncertain our result is.</p>
+<p>Let’s illustrate this with the first sample of 1000 observations. We know based on the calculation and simulation above that the <em>standard error</em> (the SD of our sampling distribution) for a sample size of <span class="math inline">\(N=1000\)</span> is roughly 0.07. We also know that, if we would repeat our survey many times over, 95% of all those hypothetical surveys will fall within +1.96 and -1.96 times this standard deviation of 0.07.</p>
+<p>This means that the 95% margin of error for our first sample is therefore:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.96</span><span class="sc">*</span>se_1000</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1314722</code></pre>
+</div>
+</div>
+<p>In detail, this means that if we would repeat our survey 100 times, then 95 of those surveys would produce a sample average that is within [+0.13;-0.13] from the true population mean.</p>
+<p>We can use the same procedure to calculate the 95% margin of error for the smaller sample with <span class="math inline">\(N=200\)</span>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.96</span><span class="sc">*</span>se_200</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2964228</code></pre>
+</div>
+</div>
+<p>You see that the margin of error for the smaller sample is a bit more than twice that of the one for the larger sample. This means that if we would re-do our smaller survey with an <span class="math inline">\(N\)</span> of 200, then 95% of all sample means would be in a range of [0.3;-0.3] from the true population mean. Clearly, larger samples are more accurate, and with <em>margins of errors</em> we can quantify exactly how (in-)accurate a sample of a given size is.</p>
+</section>
+<section id="confidence-intervals" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="confidence-intervals"><span class="header-section-number">3.4</span> Confidence intervals</h3>
+<p>We can then extend this logic further to construct an <em>interval</em> that (most likely) contains the true population value. To do that, we simply take the sample mean and then add and subtract the margin of error. For example, for a 95% confidence interval, we use the values of the standard normal distribution that include 95% of that distribution (<span class="math inline">\(\pm1.96\)</span>), multiply these with the standard <em>error</em>, and combine that with the sample mean (<span class="math inline">\(\bar{X}\)</span>): <span class="math display">\[
+CI_{95} = \bar{X} \pm 1.96 \times SE
+\]</span></p>
+<p>For our large sample, this calculation looks as follows:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>sam1mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(sam1<span class="sc">$</span>happy)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>lower_1000 <span class="ot">&lt;-</span> sam1mean <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se_1000</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>lower_1000</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.151528</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>upper_1000 <span class="ot">&lt;-</span> sam1mean <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se_1000</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>upper_1000</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.414472</code></pre>
+</div>
+</div>
+<p>Just to make sure, we compare our calculation with the one we can get with <code>t.test()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(sam1<span class="sc">$</span>happy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  sam1$happy
+t = 108.58, df = 999, p-value &lt; 2.2e-16
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 7.151371 7.414629
+sample estimates:
+mean of x 
+    7.283 </code></pre>
+</div>
+</div>
+<p>The results are almost identical.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Equivalently, for the smaller sample we get:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>sam200_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(singsam_200<span class="sc">$</span>happy)</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>sam200_mean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.28</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>lower_200 <span class="ot">&lt;-</span> sam200_mean <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se_200</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>lower_200</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.983577</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>upper_200 <span class="ot">&lt;-</span> sam200_mean <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se_200</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>upper_200</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.576423</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(singsam_200<span class="sc">$</span>happy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  singsam_200$happy
+t = 48.137, df = 199, p-value &lt; 2.2e-16
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 6.981769 7.578231
+sample estimates:
+mean of x 
+     7.28 </code></pre>
+</div>
+</div>
+<p>Once, again, the results are almost identical.</p>
+<p>The differences between the larger and smaller sample are easier to see if we visualize the two results together:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">sample =</span> <span class="fu">c</span>(<span class="st">"1000"</span>,<span class="st">"200"</span>),</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">means =</span> <span class="fu">c</span>(sam1mean,sam200_mean),</span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">lower =</span> <span class="fu">c</span>(lower_1000,lower_200),</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">upper =</span> <span class="fu">c</span>(upper_1000,upper_200)) <span class="sc">|&gt;</span> </span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> means, <span class="at">xmin =</span> lower, <span class="at">xmax =</span> upper, <span class="at">y =</span> sample)) <span class="sc">+</span></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_linerange</span>() <span class="sc">+</span></span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> popmean, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Mean value"</span>, <span class="at">y =</span> <span class="st">"Sample size"</span>,</span>
+<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"95% confidence intervals"</span>,</span>
+<span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"True population mean = "</span>,<span class="fu">round</span>(popmean, <span class="at">digits =</span> <span class="dv">2</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="surveysim_files/figure-html/unnamed-chunk-33-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="surveysim_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this case, both of our confidence intervals include the true population mean and you see again how the larger sample has a smaller confidence interval.</p>
+</section>
+<section id="how-to-read-a-confidence-interval" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="how-to-read-a-confidence-interval"><span class="header-section-number">3.5</span> How to read a confidence interval</h3>
+<p>If after all this simulating and math-ing your head is spinning wildly, you are definitely not alone or the first to experience this. Confidence intervals and margins of error are tricky and even “senior” researchers misunderstand how they work and what they really indicate <span class="citation" data-cites="Greenlandetal2016 Beliaetal2005 Austin2002 Schenker2001">(see e.g., <a href="#ref-Greenlandetal2016" role="doc-biblioref">Greenland et al. 2016</a>; <a href="#ref-Beliaetal2005" role="doc-biblioref">Belia et al. 2005</a>; <a href="#ref-Austin2002" role="doc-biblioref">Austin and Hux 2002</a>; <a href="#ref-Schenker2001" role="doc-biblioref">Schenker and Gentleman 2001</a>)</span>.</p>
+<p>We can, however, again use simulations to clarify how to read a confidence interval. We start again from our original population and then draw 100 random samples of <span class="math inline">\(N=1000\)</span> observations per sample. For each of the samples, we calculate the sample mean of the <code>happy</code> variable and a 95% confidence interval around it. Then we visualize all results together with the true population mean.</p>
+<p>First, we create an empty <code>data.frame</code> to store the different results into:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>cidata <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">sample_id =</span> <span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">100</span>,<span class="dv">1</span>),</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sample_means =</span> <span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">100</span>),</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sample_lower =</span> <span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">100</span>),</span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sample_upper =</span> <span class="fu">rep</span>(<span class="cn">NA</span>,<span class="dv">100</span>))</span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cidata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sample_id sample_means sample_lower sample_upper
+1         1           NA           NA           NA
+2         2           NA           NA           NA
+3         3           NA           NA           NA
+4         4           NA           NA           NA
+5         5           NA           NA           NA
+6         6           NA           NA           NA</code></pre>
+</div>
+</div>
+<p>Then we run a loop, as above, and calculate both the sample means and the confidence intervals from each sample and add them to the results <code>data.frame</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20</span>)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>){</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  pop <span class="sc">|&gt;</span> </span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">1000</span>) <span class="ot">-&gt;</span> loopsam</span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>cidata[k,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">mean</span>(loopsam<span class="sc">$</span>happy) <span class="co"># store the sample mean into the second column</span></span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate CI</span></span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>loopci <span class="ot">&lt;-</span> <span class="fu">t.test</span>(loopsam<span class="sc">$</span>happy)</span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a>cidata[k,<span class="dv">3</span>] <span class="ot">&lt;-</span> loopci<span class="sc">$</span>conf.int[<span class="dv">1</span>] <span class="co"># lower value</span></span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a>cidata[k,<span class="dv">4</span>] <span class="ot">&lt;-</span> loopci<span class="sc">$</span>conf.int[<span class="dv">2</span>] <span class="co"># upper value</span></span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Let’s have a quick peek at our results:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cidata)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  sample_id sample_means sample_lower sample_upper
+1         1        7.194     7.057717     7.330283
+2         2        7.211     7.083211     7.338789
+3         3        7.218     7.087524     7.348476
+4         4        7.224     7.091715     7.356285
+5         5        7.151     7.018535     7.283465
+6         6        7.149     7.014419     7.283581</code></pre>
+</div>
+</div>
+<p>As a last step, we also create a “dummy” variable that indicates if a given confidence interval overlaps with the true population mean or not:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>cidata <span class="sc">|&gt;</span> </span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">overlap =</span> <span class="fu">case_when</span>(</span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>    popmean <span class="sc">&lt;</span> sample_lower <span class="sc">|</span> popmean <span class="sc">&gt;</span> sample_upper <span class="sc">~</span> <span class="st">"Miss"</span>,</span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>    popmean <span class="sc">&gt;=</span> sample_lower <span class="sc">|</span> popmean <span class="sc">&lt;=</span> sample_upper  <span class="sc">~</span> <span class="st">"Hit"</span>)) <span class="ot">-&gt;</span> cidata</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we visualize the results, highlighting the confidence intervals that that were “misses” in red:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>cidata <span class="sc">|&gt;</span> </span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sample_means, <span class="at">xmin =</span> sample_lower,</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">xmax =</span> sample_upper, <span class="at">color =</span> overlap,</span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> sample_id)) <span class="sc">+</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_linerange</span>() <span class="sc">+</span></span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> popmean, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"grey40"</span>,<span class="st">"tomato"</span>)) <span class="sc">+</span></span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Sample means &amp; 95% confidence intervals"</span>,</span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Sample ID"</span>, <span class="at">color =</span> <span class="st">""</span>,</span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">"Vertical dashed line indicates true population mean"</span>) <span class="sc">+</span></span>
+<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"bottom"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><a href="surveysim_files/figure-html/unnamed-chunk-38-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="surveysim_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>You see that in 95 out of the 100 “studies” we did, the 95% confidence interval “hit” the mark and overlaps with the true population mean. In five cases, however, we were unlucky and “missed”: The confidence intervals do not overlap with the true population mean.</p>
+<p>And this leads to <em>one</em> correct interpretation of a confidence interval: <em>If we were to re-do our study many, many times, then in 95% of these studies, the 95% confidence interval would overlap with the true population mean.</em></p>
+<p>This interpretation, however, is a bit clunky and not that helpful in practice. To get to a second and perhaps more helpful interpretation, we go back to the confidence interval for the very first sample we took from the population:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(sam1<span class="sc">$</span>happy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  sam1$happy
+t = 108.58, df = 999, p-value &lt; 2.2e-16
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 7.151371 7.414629
+sample estimates:
+mean of x 
+    7.283 </code></pre>
+</div>
+</div>
+<p>This is also what a real-life result would look like: We have one single sample, one single sample mean, and one single confidence interval. In this case, this interval ranges from 7.15 to 7.41.</p>
+<p>But we also know now that this one confidence interval is one of <em>many different possible</em> confidence intervals that we <em>could have gotten</em> — and we know that each of these infinite hypothetical intervals has a 95% chance of including the true population mean. This means that our confidence interval from 7.15 to 7.41 has a 95% chance of including the true population mean. A less precise interpretation is that we are 95% confident that we have “captured” the true population mean with our confidence interval <span class="citation" data-cites="Kellstedt2018">(see <a href="#ref-Kellstedt2018" role="doc-biblioref">Kellstedt and Whitten 2018, 153</a>)</span>.</p>
+
 
 
 </section>
 </section>
 
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Austin2002" class="csl-entry" role="listitem">
+Austin, Peter C., and Janet E. Hux. 2002. <span>“A Brief Note on Overlapping Confidence Intervals.”</span> <em>Journal of Vascular Surgery</em> 36 (1): 194–95.
+</div>
+<div id="ref-Beliaetal2005" class="csl-entry" role="listitem">
+Belia, Sarah, Fiona Fidler, Jennifer Williams, and Geoff Cumming. 2005. <span>“Researchers Misunderstand Confidence Intervals and Standard Error Bars.”</span> <em>Psychological Methods</em> 10 (4): 389–96.
+</div>
+<div id="ref-Greenlandetal2016" class="csl-entry" role="listitem">
+Greenland, Sander, Stephen J Senn, Kenneth J Rothman, John B Carlin, Charles Poole, Steven N Goodman, and Douglas G Altman. 2016. <span>“Statistical Tests, <span>P</span> Values, Confidence Intervals, and Power: A Guide to Misinterpretations.”</span> <em>European Journal of Epidemiology</em> 31 (4): 337–50.
+</div>
+<div id="ref-Kellstedt2018" class="csl-entry" role="listitem">
+Kellstedt, Paul M, and Guy D Whitten. 2018. <em>The Fundamentals of Political Science Research</em>. Cambridge: Cambridge University Press.
+</div>
+<div id="ref-Schenker2001" class="csl-entry" role="listitem">
+Schenker, Nathaniel, and Jane F Gentleman. 2001. <span>“On Judging the Significance of Differences by Examining the Overlap Between Confidence Intervals.”</span> <em>The American Statistician</em> 55 (3): 182–86.
+</div>
+<div id="ref-Solbakken2019" class="csl-entry" role="listitem">
+Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fagbokforlaget.
+</div>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>See also <code>?sample</code> for details.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The slight difference is because <code>R</code> uses a different type of distribution, the <em>t</em> distribution, which takes into account how many observations we really have in each of the two samples. The procedure we use here, which is based on the standard normal distribution, simply assumes that we have a “large” sample. In applied research, we usually (but not always) use the <em>t</em>-distribution.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
