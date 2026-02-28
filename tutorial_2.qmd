@@ -627,9 +627,12 @@ Now you know how you can get survey data for Norway and many other countries on 
 
 The final part of this tutorial (and the next three) are interactive de-bugging challenges. You will get a set of code 'chunks' that have some problem in them --- and your job is to fix these problems.
 
-1. In `RStudio`, navigate to the *Tutorial* tab (upper-right corner of your screen, where the *Environment* tab is). 
-2. Start the interactive exercise for this tutorial (*"De-bugging exercises: Getting to know your data"*), pop out the window (the little button between the house and red stop button) and maximize, and follow the instructions there.^[If there are no tutorials called *"De-bugging exercises:..."* shown, just restart `R` by clicking on "Session" in the menu at the top of your screen, and there on "Restart R". You may also have to install the `learnr` package --- in that case, `RStudio` will let you know and you only have to do this once.]
+1. In `RStudio`, navigate to the *Tutorial* tab in the upper-right corner of your screen (see the screenshot below).^[If there are no tutorials called *"De-bugging exercises:..."* shown, just restart `R` by clicking on "Session" in the menu at the top of your screen, and there on "Restart R". You may also have to install the `learnr` package --- in that case, `RStudio` will let you know and you only have to do this once.] 
+2. Start the interactive exercise for this tutorial (*"De-bugging exercises: Getting to know your data"*). 
+3. To make the window larger, use the little button next to the house button; see again the screenshot below.
+4. Follow the instructions.
 
+![Finding the de-bugging tutorials](debugex_screen.jpg)
 
 
 
