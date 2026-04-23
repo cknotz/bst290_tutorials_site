@@ -56,6 +56,22 @@ For a more thorough introduction to data visualization with `R` see <https://ggp
 
 \newpage
 
+# Before we start
+
+You are most likely using *Microsoft Word* or a similar software to write your texts (home exams, thesis papers) and present graphs or images (whether or not you make them with `R`) in your text.
+
+Obviously, you want those graphs to look their best. What you do not want is grainy, low-resolution images that are difficult to read.
+
+To make sure that your graphs do indeed look good, you have to make sure that your software does not compress them when you save the document you are working on. *Microsoft Word* does that sometimes, and it can really muck up otherwise nice graphs.
+
+Therefore, if you use *Microsoft Word*, go into the settings for Word and check the box that says *"Do not compress images in file"* (see also the screenshot below).^[See also <https://support.microsoft.com/en-us/office/reduce-the-file-size-of-a-picture-in-microsoft-office-8db7211c-d958-457c-babd-194109eb9535>] Ideally, set the default image resolution to 330 ppi and apply this to all documents.
+
+![Settings in Word](word_reduce.png){width=50%}
+
+*Google Docs* or *Apple Pages* do not do this (as far as I know), but you should check to make sure that whatever graph or picture you show in your text really does look the way you want it to.
+
+\newpage
+
 # Setup
 
 In this tutorial you will again work with the practice `ess` dataset that is included in the `bst290` package. To make everything available, go ahead and load the package and the dataset. In addition, you have to load the `ggplot2` package to be able to use it. Since `ggplot2` is included in the `tidyverse` collection, we just load the entire `tidyverse` (this will also be handy later on, when we use the `select()` and `filter()` functions and the `%>%` operator you learned about in the previous tutorial).

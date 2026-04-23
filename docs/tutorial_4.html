@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,6 +10,9 @@
 
 <title>Tutorial 4: Data visualization with ggplot2 – R Tutorials for BST290</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -60,7 +63,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -90,15 +92,14 @@ div.csl-indent {
 <link href="./tutorial_3.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-97afdd19a946a7800d02dd55b4e8b647.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-bc72b9c4434ca3f2c9d2a8852911492f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -131,7 +132,7 @@ div.csl-indent {
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -170,8 +171,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="./index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">R Tutorials for BST290</span>
     </a>
@@ -199,10 +198,6 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
-      </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
@@ -340,37 +335,38 @@ window.Quarto = {
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">2</span> Setup</a></li>
-  <li><a href="#visualizing-data" id="toc-visualizing-data" class="nav-link" data-scroll-target="#visualizing-data"><span class="header-section-number">3</span> Visualizing data</a>
+  <li><a href="#before-we-start" id="toc-before-we-start" class="nav-link" data-scroll-target="#before-we-start"><span class="header-section-number">2</span> Before we start</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup"><span class="header-section-number">3</span> Setup</a></li>
+  <li><a href="#visualizing-data" id="toc-visualizing-data" class="nav-link" data-scroll-target="#visualizing-data"><span class="header-section-number">4</span> Visualizing data</a>
   <ul class="collapse">
-  <li><a href="#scatterplots" id="toc-scatterplots" class="nav-link" data-scroll-target="#scatterplots"><span class="header-section-number">3.1</span> Scatterplots</a>
+  <li><a href="#scatterplots" id="toc-scatterplots" class="nav-link" data-scroll-target="#scatterplots"><span class="header-section-number">4.1</span> Scatterplots</a>
   <ul class="collapse">
-  <li><a href="#the-graph-window" id="toc-the-graph-window" class="nav-link" data-scroll-target="#the-graph-window"><span class="header-section-number">3.1.1</span> The graph window</a></li>
-  <li><a href="#defining-the-dataset" id="toc-defining-the-dataset" class="nav-link" data-scroll-target="#defining-the-dataset"><span class="header-section-number">3.1.2</span> Defining the dataset</a></li>
-  <li><a href="#defining-the-variables-and-their-roles-aesthetics" id="toc-defining-the-variables-and-their-roles-aesthetics" class="nav-link" data-scroll-target="#defining-the-variables-and-their-roles-aesthetics"><span class="header-section-number">3.1.3</span> Defining the variables and their roles (‘aesthetics’)</a></li>
-  <li><a href="#defining-the-contents-geometric-objects" id="toc-defining-the-contents-geometric-objects" class="nav-link" data-scroll-target="#defining-the-contents-geometric-objects"><span class="header-section-number">3.1.4</span> Defining the contents (‘geometric objects’)</a></li>
-  <li><a href="#informative-labels" id="toc-informative-labels" class="nav-link" data-scroll-target="#informative-labels"><span class="header-section-number">3.1.5</span> Informative labels</a></li>
-  <li><a href="#changing-the-overall-look-of-the-graph-theme" id="toc-changing-the-overall-look-of-the-graph-theme" class="nav-link" data-scroll-target="#changing-the-overall-look-of-the-graph-theme"><span class="header-section-number">3.1.6</span> Changing the overall look of the graph (‘theme’)</a></li>
-  <li><a href="#calculating-and-showing-the-pearson-correlation-coefficient" id="toc-calculating-and-showing-the-pearson-correlation-coefficient" class="nav-link" data-scroll-target="#calculating-and-showing-the-pearson-correlation-coefficient"><span class="header-section-number">3.1.7</span> Calculating and showing the Pearson correlation coefficient</a></li>
+  <li><a href="#the-graph-window" id="toc-the-graph-window" class="nav-link" data-scroll-target="#the-graph-window"><span class="header-section-number">4.1.1</span> The graph window</a></li>
+  <li><a href="#defining-the-dataset" id="toc-defining-the-dataset" class="nav-link" data-scroll-target="#defining-the-dataset"><span class="header-section-number">4.1.2</span> Defining the dataset</a></li>
+  <li><a href="#defining-the-variables-and-their-roles-aesthetics" id="toc-defining-the-variables-and-their-roles-aesthetics" class="nav-link" data-scroll-target="#defining-the-variables-and-their-roles-aesthetics"><span class="header-section-number">4.1.3</span> Defining the variables and their roles (‘aesthetics’)</a></li>
+  <li><a href="#defining-the-contents-geometric-objects" id="toc-defining-the-contents-geometric-objects" class="nav-link" data-scroll-target="#defining-the-contents-geometric-objects"><span class="header-section-number">4.1.4</span> Defining the contents (‘geometric objects’)</a></li>
+  <li><a href="#informative-labels" id="toc-informative-labels" class="nav-link" data-scroll-target="#informative-labels"><span class="header-section-number">4.1.5</span> Informative labels</a></li>
+  <li><a href="#changing-the-overall-look-of-the-graph-theme" id="toc-changing-the-overall-look-of-the-graph-theme" class="nav-link" data-scroll-target="#changing-the-overall-look-of-the-graph-theme"><span class="header-section-number">4.1.6</span> Changing the overall look of the graph (‘theme’)</a></li>
+  <li><a href="#calculating-and-showing-the-pearson-correlation-coefficient" id="toc-calculating-and-showing-the-pearson-correlation-coefficient" class="nav-link" data-scroll-target="#calculating-and-showing-the-pearson-correlation-coefficient"><span class="header-section-number">4.1.7</span> Calculating and showing the Pearson correlation coefficient</a></li>
   </ul></li>
-  <li><a href="#bivariate-boxplots" id="toc-bivariate-boxplots" class="nav-link" data-scroll-target="#bivariate-boxplots"><span class="header-section-number">3.2</span> Bivariate boxplots</a></li>
-  <li><a href="#plotting-overlapping-points-with-geom_count" id="toc-plotting-overlapping-points-with-geom_count" class="nav-link" data-scroll-target="#plotting-overlapping-points-with-geom_count"><span class="header-section-number">3.3</span> Plotting overlapping points with <code>geom_count()</code></a></li>
-  <li><a href="#univariate-graphs-histograms" id="toc-univariate-graphs-histograms" class="nav-link" data-scroll-target="#univariate-graphs-histograms"><span class="header-section-number">3.4</span> Univariate graphs: Histograms</a>
+  <li><a href="#bivariate-boxplots" id="toc-bivariate-boxplots" class="nav-link" data-scroll-target="#bivariate-boxplots"><span class="header-section-number">4.2</span> Bivariate boxplots</a></li>
+  <li><a href="#plotting-overlapping-points-with-geom_count" id="toc-plotting-overlapping-points-with-geom_count" class="nav-link" data-scroll-target="#plotting-overlapping-points-with-geom_count"><span class="header-section-number">4.3</span> Plotting overlapping points with <code>geom_count()</code></a></li>
+  <li><a href="#univariate-graphs-histograms" id="toc-univariate-graphs-histograms" class="nav-link" data-scroll-target="#univariate-graphs-histograms"><span class="header-section-number">4.4</span> Univariate graphs: Histograms</a>
   <ul class="collapse">
-  <li><a href="#drawing-a-histogram" id="toc-drawing-a-histogram" class="nav-link" data-scroll-target="#drawing-a-histogram"><span class="header-section-number">3.4.1</span> Drawing a histogram</a></li>
-  <li><a href="#improving-appearance" id="toc-improving-appearance" class="nav-link" data-scroll-target="#improving-appearance"><span class="header-section-number">3.4.2</span> Improving appearance</a></li>
-  <li><a href="#changing-the-number-of-bins" id="toc-changing-the-number-of-bins" class="nav-link" data-scroll-target="#changing-the-number-of-bins"><span class="header-section-number">3.4.3</span> Changing the number of “bins”</a></li>
-  <li><a href="#final-polishing" id="toc-final-polishing" class="nav-link" data-scroll-target="#final-polishing"><span class="header-section-number">3.4.4</span> Final polishing</a></li>
+  <li><a href="#drawing-a-histogram" id="toc-drawing-a-histogram" class="nav-link" data-scroll-target="#drawing-a-histogram"><span class="header-section-number">4.4.1</span> Drawing a histogram</a></li>
+  <li><a href="#improving-appearance" id="toc-improving-appearance" class="nav-link" data-scroll-target="#improving-appearance"><span class="header-section-number">4.4.2</span> Improving appearance</a></li>
+  <li><a href="#changing-the-number-of-bins" id="toc-changing-the-number-of-bins" class="nav-link" data-scroll-target="#changing-the-number-of-bins"><span class="header-section-number">4.4.3</span> Changing the number of “bins”</a></li>
+  <li><a href="#final-polishing" id="toc-final-polishing" class="nav-link" data-scroll-target="#final-polishing"><span class="header-section-number">4.4.4</span> Final polishing</a></li>
   </ul></li>
-  <li><a href="#univariate-graphs-bar-graphs" id="toc-univariate-graphs-bar-graphs" class="nav-link" data-scroll-target="#univariate-graphs-bar-graphs"><span class="header-section-number">3.5</span> Univariate graphs: Bar graphs</a></li>
+  <li><a href="#univariate-graphs-bar-graphs" id="toc-univariate-graphs-bar-graphs" class="nav-link" data-scroll-target="#univariate-graphs-bar-graphs"><span class="header-section-number">4.5</span> Univariate graphs: Bar graphs</a></li>
   </ul></li>
-  <li><a href="#linking-data-management-and-visualization" id="toc-linking-data-management-and-visualization" class="nav-link" data-scroll-target="#linking-data-management-and-visualization"><span class="header-section-number">4</span> Linking data management and visualization</a>
+  <li><a href="#linking-data-management-and-visualization" id="toc-linking-data-management-and-visualization" class="nav-link" data-scroll-target="#linking-data-management-and-visualization"><span class="header-section-number">5</span> Linking data management and visualization</a>
   <ul class="collapse">
-  <li><a href="#calculating-summary-statistics" id="toc-calculating-summary-statistics" class="nav-link" data-scroll-target="#calculating-summary-statistics"><span class="header-section-number">4.1</span> Calculating summary statistics</a></li>
-  <li><a href="#visualizing-the-result" id="toc-visualizing-the-result" class="nav-link" data-scroll-target="#visualizing-the-result"><span class="header-section-number">4.2</span> Visualizing the result</a></li>
+  <li><a href="#calculating-summary-statistics" id="toc-calculating-summary-statistics" class="nav-link" data-scroll-target="#calculating-summary-statistics"><span class="header-section-number">5.1</span> Calculating summary statistics</a></li>
+  <li><a href="#visualizing-the-result" id="toc-visualizing-the-result" class="nav-link" data-scroll-target="#visualizing-the-result"><span class="header-section-number">5.2</span> Visualizing the result</a></li>
   </ul></li>
-  <li><a href="#exporting-graphs-with-ggsave" id="toc-exporting-graphs-with-ggsave" class="nav-link" data-scroll-target="#exporting-graphs-with-ggsave"><span class="header-section-number">5</span> Exporting graphs with <code>ggsave()</code></a></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">6</span> Conclusion</a></li>
+  <li><a href="#exporting-graphs-with-ggsave" id="toc-exporting-graphs-with-ggsave" class="nav-link" data-scroll-target="#exporting-graphs-with-ggsave"><span class="header-section-number">6</span> Exporting graphs with <code>ggsave()</code></a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">7</span> Conclusion</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="tutorial_4.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -436,8 +432,23 @@ Tip
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="setup" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Setup</h1>
+<section id="before-we-start" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Before we start</h1>
+<p>You are most likely using <em>Microsoft Word</em> or a similar software to write your texts (home exams, thesis papers) and present graphs or images (whether or not you make them with <code>R</code>) in your text.</p>
+<p>Obviously, you want those graphs to look their best. What you do not want is grainy, low-resolution images that are difficult to read.</p>
+<p>To make sure that your graphs do indeed look good, you have to make sure that your software does not compress them when you save the document you are working on. <em>Microsoft Word</em> does that sometimes, and it can really muck up otherwise nice graphs.</p>
+<p>Therefore, if you use <em>Microsoft Word</em>, go into the settings for Word and check the box that says <em>“Do not compress images in file”</em> (see also the screenshot below).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Ideally, set the default image resolution to 330 ppi and apply this to all documents.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="word_reduce.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Settings in Word"><img src="word_reduce.png" class="img-fluid figure-img" style="width:50.0%" alt="Settings in Word"></a></p>
+<figcaption>Settings in Word</figcaption>
+</figure>
+</div>
+<p><em>Google Docs</em> or <em>Apple Pages</em> do not do this (as far as I know), but you should check to make sure that whatever graph or picture you show in your text really does look the way you want it to.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="setup" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Setup</h1>
 <p>In this tutorial you will again work with the practice <code>ess</code> dataset that is included in the <code>bst290</code> package. To make everything available, go ahead and load the package and the dataset. In addition, you have to load the <code>ggplot2</code> package to be able to use it. Since <code>ggplot2</code> is included in the <code>tidyverse</code> collection, we just load the entire <code>tidyverse</code> (this will also be handy later on, when we use the <code>select()</code> and <code>filter()</code> functions and the <code>%&gt;%</code> operator you learned about in the previous tutorial).</p>
 <p>The start of your scriptfile should therefore look like this:</p>
 <div class="cell">
@@ -449,8 +460,8 @@ Tip
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(ess)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="visualizing-data" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Visualizing data</h1>
+<section id="visualizing-data" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Visualizing data</h1>
 <p>This tutorial will cover the following types of basic graphs:</p>
 <ul>
 <li>Scatterplots</li>
@@ -459,9 +470,9 @@ Tip
 <li>Bar graphs</li>
 </ul>
 <div style="page-break-after: always;"></div>
-<section id="scatterplots" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="scatterplots"><span class="header-section-number">3.1</span> Scatterplots</h2>
-<p>Scatterplots show the relationship between two <em>numeric</em> or <em>continuous</em> variables <span class="citation" data-cites="Solbakken2019">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 4</a>)</span>, and they are widely used in both academic research but also the “real world” (maybe you have seen Hans Rosling’s famous “200 countries, 400 years, 4 minutes” presentation that featured a scatterplot?).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Therefore, knowing how to make a scatterplot is obviously handy!</p>
+<section id="scatterplots" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="scatterplots"><span class="header-section-number">4.1</span> Scatterplots</h2>
+<p>Scatterplots show the relationship between two <em>numeric</em> or <em>continuous</em> variables <span class="citation" data-cites="Solbakken2019">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, chap. 4</a>)</span>, and they are widely used in both academic research but also the “real world” (maybe you have seen Hans Rosling’s famous “200 countries, 400 years, 4 minutes” presentation that featured a scatterplot?).<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Therefore, knowing how to make a scatterplot is obviously handy!</p>
 <p>Scatterplots are also a great way to show you the basic logic of <code>ggplot2</code>. For our scatterplot, you use two numeric variables from the small <code>ess</code> practice-dataset:</p>
 <ol type="1">
 <li><code>height</code>: The respondent’s height in cm;</li>
@@ -477,7 +488,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/scatter1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="tutorial_4_files/figure-html/scatter1-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/scatter1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="tutorial_4_files/figure-html/scatter1-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -502,21 +513,21 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/scatter1-explot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="tutorial_4_files/figure-html/scatter1-explot-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/scatter1-explot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="tutorial_4_files/figure-html/scatter1-explot-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>If this was a bit much, it might help to see what happens when you construct the graph one step at a time, which comes on the next page. </p>
-<section id="the-graph-window" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="the-graph-window"><span class="header-section-number">3.1.1</span> The graph window</h3>
+<section id="the-graph-window" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="the-graph-window"><span class="header-section-number">4.1.1</span> The graph window</h3>
 <p>Consider what happens when you only run the <code>ggplot()</code> function without anything else added:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/gg1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="tutorial_4_files/figure-html/gg1-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/gg1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="tutorial_4_files/figure-html/gg1-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -524,15 +535,15 @@ Tip
 <p>All that happens is that you get an empty graph window with nothing in it — which is obvious because you have not told <code>R</code> what exactly you want to put into your graph.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="defining-the-dataset" class="level3" data-number="3.1.2">
-<h3 data-number="3.1.2" class="anchored" data-anchor-id="defining-the-dataset"><span class="header-section-number">3.1.2</span> Defining the dataset</h3>
+<section id="defining-the-dataset" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="defining-the-dataset"><span class="header-section-number">4.1.2</span> Defining the dataset</h3>
 <p>Next, you add information about which dataset you want to use:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ess)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/gg2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="tutorial_4_files/figure-html/gg2-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/gg2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="tutorial_4_files/figure-html/gg2-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -540,8 +551,8 @@ Tip
 <p>No real improvement — but, then again, what is <code>R</code> supposed to do if all it knows is which dataset it should work with, but not the variables and where in the graph they go?</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="defining-the-variables-and-their-roles-aesthetics" class="level3" data-number="3.1.3">
-<h3 data-number="3.1.3" class="anchored" data-anchor-id="defining-the-variables-and-their-roles-aesthetics"><span class="header-section-number">3.1.3</span> Defining the variables and their roles (‘aesthetics’)</h3>
+<section id="defining-the-variables-and-their-roles-aesthetics" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="defining-the-variables-and-their-roles-aesthetics"><span class="header-section-number">4.1.3</span> Defining the variables and their roles (‘aesthetics’)</h3>
 <p>Now you add information about the main dimensions or ‘aesthetics’ of the graph. In this case, the relevant bits of information are which variables you want to graph and what roles they play in your graph:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ess,</span>
@@ -549,7 +560,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/gg3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="tutorial_4_files/figure-html/gg3-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/gg3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="tutorial_4_files/figure-html/gg3-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -558,8 +569,8 @@ Tip
 <p>But still: No contents! Where are the data points the graph is supposed to show?</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="defining-the-contents-geometric-objects" class="level3" data-number="3.1.4">
-<h3 data-number="3.1.4" class="anchored" data-anchor-id="defining-the-contents-geometric-objects"><span class="header-section-number">3.1.4</span> Defining the contents (‘geometric objects’)</h3>
+<section id="defining-the-contents-geometric-objects" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="defining-the-contents-geometric-objects"><span class="header-section-number">4.1.4</span> Defining the contents (‘geometric objects’)</h3>
 <p>In <code>ggplot2</code>, you add the actual contents of your graph — the points in a scatterplot, the lines in a line graph, or the bars in a bar graph — as additional layers of ‘geometric objects’ or ‘geoms’ (which makes sense: points, lines, and bars are geometric objects).</p>
 <p>In the current case, you add a layer of points with <code>geom_point()</code>:</p>
 <div class="cell">
@@ -569,7 +580,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/gg4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="tutorial_4_files/figure-html/gg4-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/gg4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="tutorial_4_files/figure-html/gg4-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -579,8 +590,8 @@ Tip
 <p>You will see that functionality clearer when we add more layers like nice labels, which comes now.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="informative-labels" class="level3" data-number="3.1.5">
-<h3 data-number="3.1.5" class="anchored" data-anchor-id="informative-labels"><span class="header-section-number">3.1.5</span> Informative labels</h3>
+<section id="informative-labels" class="level3" data-number="4.1.5">
+<h3 data-number="4.1.5" class="anchored" data-anchor-id="informative-labels"><span class="header-section-number">4.1.5</span> Informative labels</h3>
 <p>The scatterplot you have now is acceptable if you would only like to visualize the data for yourself, as a part of getting to know your data. But the graph is not in a shape in which you could include it in a course paper, thesis, or report — it is not a “<em>publication quality</em>” graph.</p>
 <p>One thing that is missing are informative labels for the two axes. You can add these as additional layers to your graph with <code>labs()</code>:</p>
 <div class="cell">
@@ -594,7 +605,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/gg5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img src="tutorial_4_files/figure-html/gg5-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/gg5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="tutorial_4_files/figure-html/gg5-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -603,9 +614,9 @@ Tip
 <p>If you want, you can also add other labels such as a title, a subtitle, or a note (“caption”). See <code>?ggplot2::labs()</code> for details.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="changing-the-overall-look-of-the-graph-theme" class="level3" data-number="3.1.6">
-<h3 data-number="3.1.6" class="anchored" data-anchor-id="changing-the-overall-look-of-the-graph-theme"><span class="header-section-number">3.1.6</span> Changing the overall look of the graph (‘theme’)</h3>
-<p>Almost there — but the gray background makes the graph look a bit dull.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<section id="changing-the-overall-look-of-the-graph-theme" class="level3" data-number="4.1.6">
+<h3 data-number="4.1.6" class="anchored" data-anchor-id="changing-the-overall-look-of-the-graph-theme"><span class="header-section-number">4.1.6</span> Changing the overall look of the graph (‘theme’)</h3>
+<p>Almost there — but the gray background makes the graph look a bit dull.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>In <code>ggplot2</code>, you can overwrite the default theme by adding a theme layer. For example, to use a simple black and white theme, you would add <code>theme_bw()</code>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ess,</span>
@@ -617,18 +628,18 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/gg6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img src="tutorial_4_files/figure-html/gg6-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/gg6-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="tutorial_4_files/figure-html/gg6-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="calculating-and-showing-the-pearson-correlation-coefficient" class="level3" data-number="3.1.7">
-<h3 data-number="3.1.7" class="anchored" data-anchor-id="calculating-and-showing-the-pearson-correlation-coefficient"><span class="header-section-number">3.1.7</span> Calculating and showing the Pearson correlation coefficient</h3>
+<section id="calculating-and-showing-the-pearson-correlation-coefficient" class="level3" data-number="4.1.7">
+<h3 data-number="4.1.7" class="anchored" data-anchor-id="calculating-and-showing-the-pearson-correlation-coefficient"><span class="header-section-number">4.1.7</span> Calculating and showing the Pearson correlation coefficient</h3>
 <p>Just from looking at the graph, you can see that there is a positive relationship between body weight and body height in the data: The taller someone is, the heavier they are.</p>
 <p>What the graph does not show is <em>exactly</em> how strong that relationship is. However, as you know, we can use the Pearson correlation coefficient <span class="math inline">\(r\)</span> (also known as the Greek letter “rho”: <span class="math inline">\(\rho\)</span>) to quantify the relationship between the two variables. You can use <code>R</code> to calculate this statistic and you can then directly add it to your graph.</p>
-<p>To calculate the correlation coefficient, we use the <code>cor()</code> function.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> This function takes two variables that we need to specify as <code>x</code> and <code>y</code> and calculates their degree of correlation — but only if both variables are numeric! We also need to specify what we want to do with missing values (<code>NA</code>s) with the <code>use</code> option.</p>
+<p>To calculate the correlation coefficient, we use the <code>cor()</code> function.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> This function takes two variables that we need to specify as <code>x</code> and <code>y</code> and calculates their degree of correlation — but only if both variables are numeric! We also need to specify what we want to do with missing values (<code>NA</code>s) with the <code>use</code> option.</p>
 <p>In our case, the two variables we want to work with are <code>height</code> and <code>weight</code>. and they both belong to to the <code>ess</code> dataset. We also want to use only complete observations, meaning those observations where we have data for body weight and height; all others where one or both variables are missing are excluded from the calculation. We also save the result as <code>rho</code>.</p>
 <p>We specify this as follows:</p>
 <div class="cell">
@@ -672,7 +683,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img src="tutorial_4_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/unnamed-chunk-5-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="tutorial_4_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -683,8 +694,8 @@ Tip
 <div style="page-break-after: always;"></div>
 </section>
 </section>
-<section id="bivariate-boxplots" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="bivariate-boxplots"><span class="header-section-number">3.2</span> Bivariate boxplots</h2>
+<section id="bivariate-boxplots" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="bivariate-boxplots"><span class="header-section-number">4.2</span> Bivariate boxplots</h2>
 <p>A scatterplot like the one you just created is a great way to visualize the relationship between two numeric (or metric) variables. But there may be situations <strong>where only one of your variables is numeric and the other is categorical or ordinal</strong>. In that case, a scatterplot will not be helpful.</p>
 <p>But you can visualize the relationship between a categorical and a numeric variable with a <em>boxplot</em> (or <em>“box-whisker plot”</em>). A boxplot shows you the median (or “middle value”) but also the 1st and 3rd quartile and any outliers in the data. By drawing boxplots of a numeric variable (such as age) over the groups of a categorical variable (such as gender), you can visualize any relationships between these variables.</p>
 <div style="page-break-after: always;"></div>
@@ -697,7 +708,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/box-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img src="tutorial_4_files/figure-html/box-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/box-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="tutorial_4_files/figure-html/box-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -719,7 +730,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/box2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img src="tutorial_4_files/figure-html/box2-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/box2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="tutorial_4_files/figure-html/box2-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -727,20 +738,20 @@ Tip
 <p>What do you learn from the graph about the differences in body height between men and women?</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="plotting-overlapping-points-with-geom_count" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="plotting-overlapping-points-with-geom_count"><span class="header-section-number">3.3</span> Plotting overlapping points with <code>geom_count()</code></h2>
+<section id="plotting-overlapping-points-with-geom_count" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="plotting-overlapping-points-with-geom_count"><span class="header-section-number">4.3</span> Plotting overlapping points with <code>geom_count()</code></h2>
 <p>When you work with survey data, you often deal with quasi-numerical scales like the 0-10 left-right political ideology scale, 0-10 scales of trust in political institutions, or 0-10 happiness scales. Technically, these variables are ordinal – but they have enough categories to allow us to treat them as numeric.</p>
 <p>Visualizing relationships between two of such 0-10 or 1-7 scale variables can be difficult. In principle, you can use <code>geom_point()</code> to create a scatterplot, but this will often not be very informative because the individual observations will overlap and any patterns in the data will be difficult to see.</p>
 <p>Luckily, there is an alternative: <code>geom_count()</code>, and two BSTAT students at UiS, Rosa Ottestad and Norman Sunde, have written a mini-tutorial on how to use this function to plot associations between two quasi-numeric 0-10 scale variables. You can read the tutorial <a href="https://kodehjornet.github.io/posts/geom_count/" class="external" target="_blank">here</a>.</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="univariate-graphs-histograms" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="univariate-graphs-histograms"><span class="header-section-number">3.4</span> Univariate graphs: Histograms</h2>
+<section id="univariate-graphs-histograms" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="univariate-graphs-histograms"><span class="header-section-number">4.4</span> Univariate graphs: Histograms</h2>
 <p>The graphs you created so far were types of <em>bivariate</em> graphs: They show the relationship between two different variables.</p>
 <p>You can of course also create graphs that describe single variables: <em>univariate</em> graphs such as histograms or bar graphs.</p>
 <div style="page-break-after: always;"></div>
-<section id="drawing-a-histogram" class="level3" data-number="3.4.1">
-<h3 data-number="3.4.1" class="anchored" data-anchor-id="drawing-a-histogram"><span class="header-section-number">3.4.1</span> Drawing a histogram</h3>
+<section id="drawing-a-histogram" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="drawing-a-histogram"><span class="header-section-number">4.4.1</span> Drawing a histogram</h3>
 <p>A <em>histogram</em> is a type of graph that is very useful to visualize the distribution of a single continuous or metric variable <span class="citation" data-cites="Solbakken2019">(see also <a href="#ref-Solbakken2019" role="doc-biblioref">Solbakken 2019, 59–60</a>)</span>.</p>
 <p>Since you have seen earlier how a <code>ggplot</code>-graph is built, you should now be able to look at the code below and understand how you can produce a histogram:</p>
 <div class="cell">
@@ -750,7 +761,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/hist1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img src="tutorial_4_files/figure-html/hist1-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/hist1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="tutorial_4_files/figure-html/hist1-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -762,8 +773,8 @@ Tip
 </ol>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="improving-appearance" class="level3" data-number="3.4.2">
-<h3 data-number="3.4.2" class="anchored" data-anchor-id="improving-appearance"><span class="header-section-number">3.4.2</span> Improving appearance</h3>
+<section id="improving-appearance" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="improving-appearance"><span class="header-section-number">4.4.2</span> Improving appearance</h3>
 <p>The graph on the previous page is quite dull and, more importantly, the individual “bins” are difficult to distinguish from each other. This is easy to fix, however.</p>
 <p>All we need to do is to change the color of the bins’ outlines with the <code>color</code> argument (“option”). White is a good option here since it contrasts with the dark gray bins but does not add extra complexity to the graph:</p>
 <div class="cell">
@@ -773,17 +784,17 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/hist2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img src="tutorial_4_files/figure-html/hist2-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/hist2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="tutorial_4_files/figure-html/hist2-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="changing-the-number-of-bins" class="level3" data-number="3.4.3">
-<h3 data-number="3.4.3" class="anchored" data-anchor-id="changing-the-number-of-bins"><span class="header-section-number">3.4.3</span> Changing the number of “bins”</h3>
+<section id="changing-the-number-of-bins" class="level3" data-number="4.4.3">
+<h3 data-number="4.4.3" class="anchored" data-anchor-id="changing-the-number-of-bins"><span class="header-section-number">4.4.3</span> Changing the number of “bins”</h3>
 <p>One important choice when drawing a histogram is the the number of “blocks” or “bins” into which we group the data, because this can really affect our impression of the variable we look at.</p>
-<p>By default, <code>geom_histogram()</code> uses 30 bins, but this might obviously not be ideal in all situations. Fortunately, you can change the number of bins easily with the <code>bins</code> option.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<p>By default, <code>geom_histogram()</code> uses 30 bins, but this might obviously not be ideal in all situations. Fortunately, you can change the number of bins easily with the <code>bins</code> option.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
 <p>For example, we could set the number of bins to 20 instead of 30:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ess,</span>
@@ -792,7 +803,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/hist3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img src="tutorial_4_files/figure-html/hist3-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/hist3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="tutorial_4_files/figure-html/hist3-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -800,8 +811,8 @@ Tip
 <p>Feel free to play around with different numbers and see how the graph changes!</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="final-polishing" class="level3" data-number="3.4.4">
-<h3 data-number="3.4.4" class="anchored" data-anchor-id="final-polishing"><span class="header-section-number">3.4.4</span> Final polishing</h3>
+<section id="final-polishing" class="level3" data-number="4.4.4">
+<h3 data-number="4.4.4" class="anchored" data-anchor-id="final-polishing"><span class="header-section-number">4.4.4</span> Final polishing</h3>
 <p>Finally, the histogram can also still be improved by changing the background theme and by adding axis labels:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ess,</span>
@@ -813,7 +824,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/hist4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img src="tutorial_4_files/figure-html/hist4-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/hist4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="tutorial_4_files/figure-html/hist4-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -827,8 +838,8 @@ Tip
 <div style="page-break-after: always;"></div>
 </section>
 </section>
-<section id="univariate-graphs-bar-graphs" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="univariate-graphs-bar-graphs"><span class="header-section-number">3.5</span> Univariate graphs: Bar graphs</h2>
+<section id="univariate-graphs-bar-graphs" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="univariate-graphs-bar-graphs"><span class="header-section-number">4.5</span> Univariate graphs: Bar graphs</h2>
 <p>Next to histograms, bar graphs are another type of univariate graph to show the distribution of a single variable. Bar graphs are suited for categorical or ordinal variables — variables with a few distinct categories.</p>
 <p>The code below produces a bar graph of the gender variable (<code>gndr</code>) — and it shows the number of men and women in the dataset:</p>
 <div class="cell">
@@ -838,7 +849,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/bar1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img src="tutorial_4_files/figure-html/bar1-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/bar1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="tutorial_4_files/figure-html/bar1-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -860,7 +871,7 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/bar2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img src="tutorial_4_files/figure-html/bar2-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/bar2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="tutorial_4_files/figure-html/bar2-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
@@ -868,8 +879,8 @@ Tip
 <div style="page-break-after: always;"></div>
 </section>
 </section>
-<section id="linking-data-management-and-visualization" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Linking data management and visualization</h1>
+<section id="linking-data-management-and-visualization" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Linking data management and visualization</h1>
 <p>The previous tutorial on <em>Data cleaning &amp; management</em> showed how you can use the pipe operator (<code>%&gt;%</code>) to link different data management steps together, and it also mentioned that you can directly visualize the result of such a “data cleaning pipeline” with <code>ggplot2</code>.</p>
 <p>Now that you know both how to clean data and how to visualize them, you have what you need to be able to understand how both parts can be linked together. This is important to know because it gives you <em>a lot of flexibility</em>: Whatever summary statistics you want to show, you can calculate them and then directly put them into a neat-looking graph.</p>
 <p>To illustrate this, let’s go back to the issue of gender and body height. The boxplots above showed you that men are typically taller than women (surprise, surprise…) with a number of summary statistics (the median, the 1st and 3rd quartiles, etc). What a boxplot does not show you, however, is <em>averages</em>.</p>
@@ -879,8 +890,8 @@ Tip
 <li>You calculate the average body heights of men and women using the tools you learned in the previous tutorial;</li>
 <li>Then you take the result of the previous step and directly “feed” it into a <code>ggplot</code> graph using the pipe operator (<code>%&gt;%</code>); </li>
 </ol>
-<section id="calculating-summary-statistics" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="calculating-summary-statistics"><span class="header-section-number">4.1</span> Calculating summary statistics</h2>
+<section id="calculating-summary-statistics" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="calculating-summary-statistics"><span class="header-section-number">5.1</span> Calculating summary statistics</h2>
 <p>You may remember that you can use <code>group_by()</code> and <code>summarize()</code> to get summary statistics such as the average over groups of a categorical variable, but just to refresh your memory here is how you calculate the average body height for men and women in the <code>ess</code> dataset:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> <span class="co"># 1.</span></span>
@@ -898,11 +909,11 @@ Tip
 <li>“…group the data by gender (<code>gndr</code>),…”</li>
 <li>“…calculate the average body height for each gender, and store the result as a new variable (called <code>avg_height</code>).”</li>
 </ol>
-<p>If you look carefully at the output, you can see that the result of the calculation is a so-called <code>tibble</code>. A <code>tibble</code> is a type of <code>data.frame</code>-object in <code>R</code> — i.e., a dataset.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> This means that the result you are looking at is, basically, a mini dataset that includes two observations (<code>Male</code> and <code>Female</code>) and two variables (<code>gndr</code> and <code>avg_height</code>). <code>avg_height</code> is here the average body height for men and women as identified by <code>gndr</code>. <em>Important</em>: Because the result is essentially a dataset, you can directly visualize it with <code>ggplot</code>!</p>
+<p>If you look carefully at the output, you can see that the result of the calculation is a so-called <code>tibble</code>. A <code>tibble</code> is a type of <code>data.frame</code>-object in <code>R</code> — i.e., a dataset.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> This means that the result you are looking at is, basically, a mini dataset that includes two observations (<code>Male</code> and <code>Female</code>) and two variables (<code>gndr</code> and <code>avg_height</code>). <code>avg_height</code> is here the average body height for men and women as identified by <code>gndr</code>. <em>Important</em>: Because the result is essentially a dataset, you can directly visualize it with <code>ggplot</code>!</p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="visualizing-the-result" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="visualizing-the-result"><span class="header-section-number">4.2</span> Visualizing the result</h2>
+<section id="visualizing-the-result" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="visualizing-the-result"><span class="header-section-number">5.2</span> Visualizing the result</h2>
 <p>Now that you have the numbers you want to show in your graph, all you need to do is to use the <code>%&gt;%</code> operator to directly feed the numbers – the ‘mini dataset’ – into a graph:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>ess <span class="sc">%&gt;%</span> </span>
@@ -913,18 +924,18 @@ Tip
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><a href="tutorial_4_files/figure-html/pipegraph2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img src="tutorial_4_files/figure-html/pipegraph2-1.png" class="img-fluid figure-img" width="672"></a></p>
+<p><a href="tutorial_4_files/figure-html/pipegraph2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img src="tutorial_4_files/figure-html/pipegraph2-1.png" class="img-fluid figure-img" width="672"></a></p>
 </figure>
 </div>
 </div>
 </div>
 <p>You see that the first part is just the code for the calculation from above: <code>group_by()</code>, then <code>summarize()</code>. We then add another pipe at the end to feed the result directly into a <code>ggplot</code> graph. In this graph, <code>gndr</code> is on the x-axis and the y-axis shows the average height for each gender. You then visualize the height per gender with a simple bar graph using <code>geom_bar()</code>.</p>
 <p><strong>One thing is worth noticing:</strong> In this case, we need to tell <code>R</code> that <code>geom_bar()</code> should only show the pure numbers that we got from the previous step (the content of the new <code>avg_height</code> variable in the mini dataset), and not the number of observations or other statistics. We do this by specifying <code>stat = "identity"</code> within <code>geom_bar()</code>.</p>
-<p>Linking data cleaning and visualization can be very handy when want to visualize specific summary statistics (the average, the standard deviation,…), but especially when you want to create some more complicated graphs such as grouped bar graphs showing percentages.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+<p>Linking data cleaning and visualization can be very handy when want to visualize specific summary statistics (the average, the standard deviation,…), but especially when you want to create some more complicated graphs such as grouped bar graphs showing percentages.<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a></p>
 </section>
 </section>
-<section id="exporting-graphs-with-ggsave" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Exporting graphs with <code>ggsave()</code></h1>
+<section id="exporting-graphs-with-ggsave" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Exporting graphs with <code>ggsave()</code></h1>
 <p>When you make graphs in <code>R</code>, you usually don’t do that because it is so much fun (not yet at least…) but because you want to present these graphs somewhere — in a course paper, thesis, report, presentation, etc. And to be able to include whatever graph you have created, you need to export it from <code>R</code> to an image file (e.g., PDF, JPEG, or PNG) that you can open in Word, PowerPoint, or any other software you use.</p>
 <p>Exporting <code>ggplot</code> graphs is easy with the <code>ggsave()</code> function. This function simply exports the last graph you created and saves it under a name and in a file format that you decide. In practice, you create your graph with <code>ggplot()</code> and all the other functions and, once you are happy with the result, you run <code>ggsave()</code>.</p>
 <p>For example, let’s say you wanted to export the last bar graph from earlier, which was created with this code:</p>
@@ -952,8 +963,8 @@ Tip
 <p>To see which file formats you can export to and how you can further customize the file, see the official documentation: <a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="uri">https://ggplot2.tidyverse.org/reference/ggsave.html</a></p>
 <div style="page-break-after: always;"></div>
 </section>
-<section id="conclusion" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Conclusion</h1>
+<section id="conclusion" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Conclusion</h1>
 <p>Congrats, you now know the basics of data visualization with <code>ggplot2</code>! You can now directly practice your new skills by doing the de-bugging exercises (<em>Tutorials</em>, then “Data visualization”).</p>
 <!-- # Exercises -->
 <!-- It's time to solidify that knowledge with some exercises --- and you move again from the small `ess` practice dataset to the full ESS. -->
@@ -985,20 +996,21 @@ Tip
 </section>
 
 
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-Solbakken2019" class="csl-entry" role="listitem">
-Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Bergen: Fagbokforlaget.
+Solbakken, Simen Sørbøe. 2019. <em>Statistikk for Nybegynnere</em>. Fagbokforlaget.
 </div>
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Others are the basic graphing tools that are built into <code>R</code> or the <code>lattice</code> package.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>See <a href="https://youtu.be/jbkSRLYSojo" class="uri">https://youtu.be/jbkSRLYSojo</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>It is also generally not ideal to have a gray background because it may make it unnecessarily difficult to read finer details in more complex graphs (see Schneider &amp; Jacoby 2018, “Graphical displays for public opinion research”, in Atkinson &amp; Alvarez, <em>The Oxford Handbook of Polling and Survey Methods</em>, pages 439–479. Oxford: Oxford University Press.).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>See also <code>?cor()</code> for the help file.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Alternatively, you can also change how wide the bins are with the <code>binwidth</code> option.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>See <a href="https://tibble.tidyverse.org/" class="uri">https://tibble.tidyverse.org/</a> in case you want to learn more.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>See for example here: <a href="https://sebastiansauer.github.io/percentage_plot_ggplot2_V2/" class="uri">https://sebastiansauer.github.io/percentage_plot_ggplot2_V2/</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>See also <a href="https://support.microsoft.com/en-us/office/reduce-the-file-size-of-a-picture-in-microsoft-office-8db7211c-d958-457c-babd-194109eb9535" class="uri">https://support.microsoft.com/en-us/office/reduce-the-file-size-of-a-picture-in-microsoft-office-8db7211c-d958-457c-babd-194109eb9535</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>See <a href="https://youtu.be/jbkSRLYSojo" class="uri">https://youtu.be/jbkSRLYSojo</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>It is also generally not ideal to have a gray background because it may make it unnecessarily difficult to read finer details in more complex graphs (see Schneider &amp; Jacoby 2018, “Graphical displays for public opinion research”, in Atkinson &amp; Alvarez, <em>The Oxford Handbook of Polling and Survey Methods</em>, pages 439–479. Oxford: Oxford University Press.).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>See also <code>?cor()</code> for the help file.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Alternatively, you can also change how wide the bins are with the <code>binwidth</code> option.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>See <a href="https://tibble.tidyverse.org/" class="uri">https://tibble.tidyverse.org/</a> in case you want to learn more.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>See for example here: <a href="https://sebastiansauer.github.io/percentage_plot_ggplot2_V2/" class="uri">https://sebastiansauer.github.io/percentage_plot_ggplot2_V2/</a>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
